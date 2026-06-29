@@ -55,10 +55,10 @@ const PRODUCTOS = [
 
 // Kits de bordado (incluyen insumos + manual)
 const KITS = [
-  { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:22990, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.jpg',
+  { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:30000, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.jpg',
     desc:'Todo lo que necesitas para bordar un ramo de flores silvestres, paso a paso. Ideal para empezar.',
     incluye:['Diseño','6 hilos','Agujas','Bastidor','Tela','Guía paso a paso'], insignia:'Principiantes' },
-  { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:26990, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.jpg',
+  { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:35000, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.jpg',
     desc:'Borda una calavera floral llena de color sobre tela negra. Para principiantes y avanzados.',
     incluye:['Diseño','10 hilos','6 agujas','Bastidor 15 cm','Tela negra','Guía de puntos'], insignia:'Todo nivel' }
 ];
