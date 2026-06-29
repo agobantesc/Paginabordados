@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Alma Bordado — Bordados hechos con amor</title>
+<meta name="description" content="Alma Bordado: bordados listos para venta, pedidos personalizados, kits de bordado y talleres presenciales y virtuales. Hecho a mano, con cariño.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#fbfaf6">
+<link rel="icon" type="image/png" href="iconobordados192.png">
+<link rel="apple-touch-icon" href="iconobordados180.png">
+<meta name="apple-mobile-web-app-title" content="Alma Bordado">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Alma Bordado — Bordados hechos con amor">
+<meta property="og:description" content="Bordados listos, pedidos personalizados, kits y talleres. Hecho a mano con cariño.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ Biblioteca de motivos botánicos (SVG, heredada de la marca) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <!-- espiga de trigo -->
+  <g id="espiga">
+    <path d="M0 8 C 0 -20 0 -48 0 -86" stroke="#c2a877" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M0 -98 C 6 -92 6 -80 0 -74 C -6 -80 -6 -92 0 -98 Z" fill="#cbb088"/>
+    <g transform="translate(0,-80)"><path d="M0 0 C 9 -3 13 -13 11 -22 C 2 -19 -2 -9 0 0 Z" fill="#d8c4a0"/></g>
+    <g transform="translate(0,-80) scale(-1,1)"><path d="M0 0 C 9 -3 13 -13 11 -22 C 2 -19 -2 -9 0 0 Z" fill="#d8c4a0"/></g>
+    <g transform="translate(0,-65)"><path d="M0 0 C 10 -3 14 -14 12 -24 C 2 -20 -2 -10 0 0 Z" fill="#cbb088"/></g>
+    <g transform="translate(0,-65) scale(-1,1)"><path d="M0 0 C 10 -3 14 -14 12 -24 C 2 -20 -2 -10 0 0 Z" fill="#cbb088"/></g>
+    <g transform="translate(0,-50)"><path d="M0 0 C 11 -3 15 -15 13 -26 C 2 -21 -2 -11 0 0 Z" fill="#cbb088"/></g>
+    <g transform="translate(0,-50) scale(-1,1)"><path d="M0 0 C 11 -3 15 -15 13 -26 C 2 -21 -2 -11 0 0 Z" fill="#cbb088"/></g>
+    <g transform="translate(0,-35)"><path d="M0 0 C 11 -3 15 -15 13 -26 C 2 -21 -2 -11 0 0 Z" fill="#b89a6a"/></g>
+    <g transform="translate(0,-35) scale(-1,1)"><path d="M0 0 C 11 -3 15 -15 13 -26 C 2 -21 -2 -11 0 0 Z" fill="#b89a6a"/></g>
+  </g>
+  <!-- rama de eucalipto -->
+  <g id="euca">
+    <path d="M0 0 C 30 -8 62 -14 92 -26" stroke="#8d9c8f" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <g fill="#9aab9c">
+      <ellipse cx="20" cy="-6" rx="12" ry="8" transform="rotate(-18 20 -6)"/>
+      <ellipse cx="20" cy="-6" rx="12" ry="8" transform="rotate(34 20 -6)"/>
+      <ellipse cx="46" cy="-13" rx="11" ry="7.5" transform="rotate(-16 46 -13)"/>
+      <ellipse cx="46" cy="-13" rx="11" ry="7.5" transform="rotate(36 46 -13)"/>
+      <ellipse cx="72" cy="-21" rx="10" ry="7" transform="rotate(-14 72 -21)" fill="#b7c2b1"/>
+      <ellipse cx="72" cy="-21" rx="10" ry="7" transform="rotate(38 72 -21)" fill="#b7c2b1"/>
+      <ellipse cx="92" cy="-27" rx="8" ry="5.5" fill="#b7c2b1"/>
+    </g>
+  </g>
+  <!-- margarita -->
+  <g id="margarita">
+    <g fill="#f2ece0" stroke="#e3d8c4" stroke-width=".8">
+      <ellipse rx="7" ry="15" cy="-16"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(45)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(90)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(135)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(180)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(225)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(270)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(315)"/>
+    </g>
+    <circle r="9" fill="#d8c4a0"/><circle r="5" fill="#b89a6a"/>
+  </g>
+  <!-- margarita rosa pastel -->
+  <g id="margaritaRosa">
+    <g fill="#eccccc" stroke="#dfb6b6" stroke-width=".8">
+      <ellipse rx="7" ry="15" cy="-16"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(45)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(90)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(135)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(180)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(225)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(270)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(315)"/>
+    </g>
+    <circle r="9" fill="#ecd9ad"/><circle r="5" fill="#cf9b6a"/>
+  </g>
+  <!-- margarita salvia pastel -->
+  <g id="margaritaSalvia">
+    <g fill="#cdd8c6" stroke="#b6c4ad" stroke-width=".8">
+      <ellipse rx="7" ry="15" cy="-16"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(45)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(90)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(135)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(180)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(225)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(270)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(315)"/>
+    </g>
+    <circle r="9" fill="#ecd9ad"/><circle r="5" fill="#cf9b6a"/>
+  </g>
+  <!-- margarita azul pastel -->
+  <g id="margaritaAzul">
+    <g fill="#c9d5e0" stroke="#b3c3d2" stroke-width=".8">
+      <ellipse rx="7" ry="15" cy="-16"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(45)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(90)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(135)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(180)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(225)"/>
+      <ellipse rx="7" ry="15" cy="-16" transform="rotate(270)"/><ellipse rx="7" ry="15" cy="-16" transform="rotate(315)"/>
+    </g>
+    <circle r="9" fill="#ecd9ad"/><circle r="5" fill="#cf9b6a"/>
+  </g>
+  <!-- ramo "Alma": trío de espigas + eucalipto + margaritas -->
+  <g id="ramoAlma">
+    <use href="#euca" transform="translate(118,150) rotate(8)"/>
+    <use href="#euca" transform="translate(122,150) scale(-1,1) rotate(8)"/>
+    <use href="#espiga" transform="translate(95,150) scale(0.8) rotate(-12)"/>
+    <use href="#espiga" transform="translate(120,150) scale(0.95)"/>
+    <use href="#espiga" transform="translate(145,150) scale(0.8) rotate(12)"/>
+    <use href="#margarita" transform="translate(120,150) scale(0.85)"/>
+    <use href="#margaritaRosa" transform="translate(151,137) scale(0.5)"/>
+    <use href="#margaritaAzul" transform="translate(91,140) scale(0.42)"/>
+  </g>
+  <!-- divisor botánico simétrico -->
+  <g id="divisorBot">
+    <use href="#euca" transform="translate(80,11) scale(0.45)"/>
+    <use href="#euca" transform="translate(80,11) scale(-0.45,0.45)"/>
+    <circle cx="80" cy="11" r="2.6" fill="#cbb088"/>
+  </g>
+  <!-- logo: bastidor con flor (igual al ícono de la app) -->
+  <g id="logoAro">
+    <circle cx="40" cy="42" r="33" fill="none" stroke="#cf8f8f" stroke-width="8"/>
+    <rect x="35.5" y="2" width="9" height="16" rx="2.5" fill="#b97777"/>
+    <g transform="translate(40,44) scale(1.02)">
+      <g fill="#8a9a7e">
+        <circle cx="0" cy="-13" r="9.5"/><circle cx="12.4" cy="-4" r="9.5"/>
+        <circle cx="7.6" cy="10.5" r="9.5"/><circle cx="-7.6" cy="10.5" r="9.5"/>
+        <circle cx="-12.4" cy="-4" r="9.5"/>
+      </g>
+      <path d="M0 -3 L5 1 L3 7 L-3 7 L-5 1 Z" fill="#e3c860"/>
+    </g>
+  </g>
+</defs></svg>
+
+<div class="deco-bg" aria-hidden="true">
+  <svg class="flor-deco flor-tr" viewBox="0 0 240 180"><use href="#ramoAlma"/></svg>
+  <svg class="flor-deco flor-bl" viewBox="0 0 240 180"><use href="#ramoAlma"/></svg>
+  <svg class="flor-deco flor-md" viewBox="0 0 240 180"><use href="#ramoAlma"/></svg>
+</div>
+
+<!-- ============ Barra superior ============ -->
+<header class="appbar">
+  <div class="appbar-inner">
+    <svg class="appbar-deco" viewBox="0 0 240 175" aria-hidden="true"><use href="#ramoAlma"/></svg>
+    <a class="marca" href="#inicio" aria-label="Alma Bordado, ir al inicio">
+      <svg class="logo" viewBox="0 0 80 80" aria-hidden="true"><use href="#logoAro"/></svg>
+      <div>
+        <h1>Alma Bordado</h1>
+        <p class="lema">Bordados hechos con amor</p>
+      </div>
+    </a>
+    <nav class="nav" id="nav" aria-label="Navegación principal">
+      <a href="#tienda">Tienda</a>
+      <a href="#kits">Kits</a>
+      <a href="#personalizado">Personalizado</a>
+      <a href="#talleres">Talleres</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <button class="icono-btn menu-toggle" id="btnMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">☰</button>
+    <button class="icono-btn" id="btnCarrito" aria-label="Abrir carrito de compras">
+      🛒<span class="carrito-badge" id="carritoBadge" aria-hidden="true">0</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- ============ Hero ============ -->
+  <section class="hero contenedor" id="inicio">
+    <div class="hero-inner">
+      <div class="hero-txt">
+        <span class="eyebrow">🌸 Hecho a mano, con cariño</span>
+        <h2>El arte de bordar, <span class="resalte">con alma</span></h2>
+        <p>Diseños propios, pedidos a tu medida y kits completos para que tú también te enamores del bordado. Cada puntada lleva dedicación, calma y amor.</p>
+        <div class="hero-cta">
+          <a href="#tienda" class="btn btn-primario btn-grande">Ver la tienda</a>
+          <a href="#personalizado" class="btn btn-fantasma btn-grande">Pedir algo a medida</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-aro">
+          <svg viewBox="0 0 240 180"><use href="#ramoAlma"/></svg>
+        </div>
+        <div class="hero-chip c1"><span class="ico">🧵</span> Diseños propios</div>
+        <div class="hero-chip c2"><span class="ico">🎁</span> Kits completos</div>
+        <div class="hero-chip c3"><span class="ico">💌</span> A tu medida</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Banner de destacados ============ -->
+  <section class="destacados contenedor" aria-label="Productos destacados">
+    <div class="banner-dest">
+      <div class="estrella" aria-hidden="true">✨</div>
+      <div class="dest-txt">
+        <div class="dest-kicker">Producto destacado</div>
+        <div class="dest-nombre" id="destNombre">—</div>
+        <div class="dest-desc" id="destDesc">—</div>
+        <div class="dest-precio" id="destPrecio"></div>
+      </div>
+      <div class="dest-acciones">
+        <button class="btn btn-rosa" id="destAgregar">Agregar al carrito</button>
+        <a class="btn btn-sec" id="destVer" href="#tienda">Ver más</a>
+      </div>
+    </div>
+    <div class="dest-puntos" id="destPuntos" role="tablist" aria-label="Cambiar destacado"></div>
+  </section>
+
+  <!-- ============ Pilares ============ -->
+  <section class="bloque contenedor" id="pilares">
+    <div class="seccion-cab">
+      <span class="eyebrow">Lo que hacemos</span>
+      <h2>Tres formas de vivir el bordado</h2>
+      <svg class="divisor" viewBox="0 0 160 22"><use href="#divisorBot"/></svg>
+    </div>
+    <div class="pilares">
+      <article class="tarjeta pilar-1">
+        <svg class="flor-tarjeta" viewBox="0 0 80 80"><use href="#margaritaRosa" transform="translate(40,40)"/></svg>
+        <div class="pilar-ico" aria-hidden="true">🪡</div>
+        <h3>Bordados listos</h3>
+        <p>Diseños propios de Alma Bordado, terminados y listos para llegar a tu casa. Piezas únicas, hechas a mano.</p>
+        <a href="#tienda" class="pilar-link">Ver la tienda →</a>
+      </article>
+      <article class="tarjeta pilar-2">
+        <svg class="flor-tarjeta" viewBox="0 0 80 80"><use href="#margaritaSalvia" transform="translate(40,40)"/></svg>
+        <div class="pilar-ico" aria-hidden="true">💌</div>
+        <h3>Pedidos personalizados</h3>
+        <p>Bordamos lo que tú quieras. Cuéntanos tu proyecto y lo hacemos a medida. Te enviamos la propuesta antes de empezar.</p>
+        <a href="#personalizado" class="pilar-link">Enviar requerimiento →</a>
+      </article>
+      <article class="tarjeta pilar-3">
+        <svg class="flor-tarjeta" viewBox="0 0 80 80"><use href="#margaritaAzul" transform="translate(40,40)"/></svg>
+        <div class="pilar-ico" aria-hidden="true">🎁</div>
+        <h3>Kits de bordado</h3>
+        <p>Kits listos con el diseño y todos los insumos —hilos, aguja, bastidor— más un manual detallado para bordar paso a paso.</p>
+        <a href="#kits" class="pilar-link">Ver los kits →</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ Tienda (bordados listos) ============ -->
+  <section class="bloque contenedor" id="tienda">
+    <div class="seccion-cab">
+      <span class="eyebrow">Bordados listos para venta</span>
+      <h2>Nuestra tienda</h2>
+      <p>Diseños propios terminados a mano. Agrégalos al carrito y completa tu compra con envío a domicilio o retiro.</p>
+      <svg class="divisor" viewBox="0 0 160 22"><use href="#divisorBot"/></svg>
+    </div>
+    <div class="filtros" id="filtrosTienda" role="group" aria-label="Filtrar productos"></div>
+    <div class="grilla" id="grillaTienda"></div>
+  </section>
+
+  <!-- ============ Kits ============ -->
+  <section class="bloque contenedor" id="kits">
+    <div class="seccion-cab">
+      <span class="eyebrow">Kits de bordado</span>
+      <h2>Todo lo que necesitas en una cajita</h2>
+      <p>Cada kit incluye el diseño, los hilos, la aguja, el bastidor y un manual de bordado específico y detallado. Ideales para empezar o regalar.</p>
+      <svg class="divisor" viewBox="0 0 160 22"><use href="#divisorBot"/></svg>
+    </div>
+    <div class="grilla" id="grillaKits"></div>
+  </section>
+
+  <!-- ============ Pedido personalizado / requerimiento ============ -->
+  <section class="bloque contenedor" id="personalizado">
+    <div class="seccion-cab">
+      <span class="eyebrow">Pedidos personalizados</span>
+      <h2>Bordamos lo que tú quieras</h2>
+      <p>Describe tu proyecto con el mayor detalle posible. Revisamos tu requerimiento y te enviamos una propuesta con precio y plazo antes de empezar. Nada se borda sin tu confirmación.</p>
+      <svg class="divisor" viewBox="0 0 160 22"><use href="#divisorBot"/></svg>
+    </div>
+
+    <form class="tarjeta-grande" id="formReq" novalidate>
+      <div class="aviso-info">
+        <span class="ico">🌷</span>
+        <span>Cuéntanos tu idea sin compromiso. Te respondemos con una propuesta a medida; recién con tu visto bueno comenzamos a bordar.</span>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="reqNombre">Tu nombre <span class="req">*</span></label>
+          <input type="text" id="reqNombre" name="nombre" autocomplete="name" placeholder="Ej: Camila Soto">
+          <div class="msg-error">Cuéntanos tu nombre.</div>
+        </div>
+        <div class="campo">
+          <label for="reqContacto">Email o teléfono <span class="req">*</span></label>
+          <input type="text" id="reqContacto" name="contacto" autocomplete="email" placeholder="correo@ejemplo.com o +56 9 1234 5678">
+          <div class="msg-error">Déjanos un medio para responderte.</div>
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="reqTipo">¿Qué te gustaría bordar?</label>
+          <select id="reqTipo" name="tipo">
+            <option value="Cuadro / bastidor decorativo">Cuadro / bastidor decorativo</option>
+            <option value="Prenda (polera, jeans, gorro…)">Prenda (polera, jeans, gorro…)</option>
+            <option value="Accesorio (bolso, mochila, estuche…)">Accesorio (bolso, mochila, estuche…)</option>
+            <option value="Ajuar / regalo de nacimiento">Ajuar / regalo de nacimiento</option>
+            <option value="Recuerdo de evento (matrimonio, bautizo…)">Recuerdo de evento (matrimonio, bautizo…)</option>
+            <option value="Otro / no estoy segura">Otro / no estoy segura</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="reqFecha">¿Para cuándo lo necesitas?</label>
+          <input type="date" id="reqFecha" name="fecha">
+          <div class="ayuda">Opcional. Nos ayuda a planificar tu pedido.</div>
+        </div>
+      </div>
+
+      <div class="campo full">
+        <label for="reqDescripcion">Describe tu proyecto <span class="req">*</span></label>
+        <textarea id="reqDescripcion" name="descripcion" placeholder="Colores, tamaño aproximado, texto o nombre a bordar, sobre qué tela o prenda, el estilo que imaginas…"></textarea>
+        <div class="msg-error">Cuéntanos un poco más de lo que imaginas.</div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="reqPresupuesto">Presupuesto aproximado</label>
+          <input type="text" id="reqPresupuesto" name="presupuesto" placeholder="Opcional, ej: $20.000 – $40.000">
+        </div>
+        <div class="campo">
+          <label for="reqArchivo">Imagen de referencia</label>
+          <input type="file" id="reqArchivo" name="archivo" accept="image/*">
+          <div class="ayuda">Opcional. Una foto o boceto nos ayuda muchísimo.</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primario btn-bloque btn-grande" style="margin-top:8px;">💌 Enviar requerimiento</button>
+      <p class="ayuda" style="text-align:center; margin-top:10px;">Al enviar, abriremos tu app de correo o WhatsApp con el resumen listo para que llegue a Alma Bordado.</p>
+    </form>
+  </section>
+
+  <!-- ============ Talleres ============ -->
+  <section class="bloque contenedor" id="talleres">
+    <div class="seccion-cab">
+      <span class="eyebrow">Talleres de bordado</span>
+      <h2>Aprende y comparte bordando</h2>
+      <p>Cada cierto tiempo organizamos talleres presenciales y virtuales para aprender, desarrollar habilidades y pasar un momento lindo entre bordadoras. Reserva tu cupo.</p>
+      <svg class="divisor" viewBox="0 0 160 22"><use href="#divisorBot"/></svg>
+    </div>
+    <div class="talleres" id="listaTalleres"></div>
+  </section>
+
+  <!-- ============ Contacto ============ -->
+  <section class="bloque contenedor" id="contacto">
+    <div class="seccion-cab">
+      <span class="eyebrow">Hablemos</span>
+      <h2>Escríbenos</h2>
+      <p>Estamos felices de ayudarte con tu pedido, resolver dudas o contarte de los próximos talleres.</p>
+      <svg class="divisor" viewBox="0 0 160 22"><use href="#divisorBot"/></svg>
+    </div>
+    <div class="contacto-grid">
+      <a class="contacto-card ig" id="cardIg" href="#" target="_blank" rel="noopener">
+        <span class="c-ico" aria-hidden="true">📸</span>
+        <span class="c-tit">Instagram</span>
+        <span class="c-val" id="valIg">@alma.bordado</span>
+      </a>
+      <a class="contacto-card mail" id="cardMail" href="#">
+        <span class="c-ico" aria-hidden="true">✉️</span>
+        <span class="c-tit">Correo</span>
+        <span class="c-val" id="valMail">contacto@almabordado.cl</span>
+      </a>
+      <a class="contacto-card tel" id="cardTel" href="#">
+        <span class="c-ico" aria-hidden="true">📱</span>
+        <span class="c-tit">WhatsApp / Teléfono</span>
+        <span class="c-val" id="valTel">+56 9 1234 5678</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- ============ Footer ============ -->
+<footer class="pie">
+  <div class="contenedor pie-inner">
+    <div class="marca-pie">
+      <svg viewBox="0 0 80 80" aria-hidden="true"><use href="#logoAro"/></svg>
+      <div>
+        <strong>Alma Bordado</strong>
+        <p>Bordados hechos con amor 🌸</p>
+      </div>
+    </div>
+    <nav class="pie-links" aria-label="Enlaces del pie">
+      <a href="#tienda">Tienda</a>
+      <a href="#kits">Kits</a>
+      <a href="#personalizado">Personalizado</a>
+      <a href="#talleres">Talleres</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+  <p class="copy">© <span id="anio"></span> Alma Bordado · Hecho a mano, con cariño.</p>
+</footer>
+
+<!-- ============ Carrito (panel lateral) ============ -->
+<div class="overlay" id="overlay"></div>
+<aside class="carrito-panel" id="carritoPanel" aria-label="Carrito de compras" aria-hidden="true">
+  <div class="carrito-cab">
+    <h2>Tu carrito</h2>
+    <button class="carrito-cerrar" id="cerrarCarrito" aria-label="Cerrar carrito">✕</button>
+  </div>
+  <div class="carrito-items" id="carritoItems"></div>
+  <div class="carrito-pie" id="carritoPie" hidden>
+    <div class="carrito-total">
+      <span>Subtotal</span>
+      <strong id="carritoSubtotal">$0</strong>
+    </div>
+    <button class="btn btn-primario btn-bloque btn-grande" id="btnPagar">Finalizar compra</button>
+  </div>
+</aside>
+
+<!-- ============ Modal de checkout ============ -->
+<div class="modal" id="modalCheckout" role="dialog" aria-modal="true" aria-labelledby="checkoutTitulo">
+  <div class="modal-caja ancha">
+    <button class="modal-cerrar" id="cerrarCheckout" aria-label="Cerrar">✕</button>
+    <h2 id="checkoutTitulo">Finalizar compra</h2>
+    <p class="sub">Simulación de compra — practica todo el proceso sin pagar de verdad.</p>
+
+    <div class="pasos" id="pasosInd">
+      <div class="paso-ind activo" data-paso="1"><span class="bolita">1</span><span class="et">Datos</span><span class="linea"></span></div>
+      <div class="paso-ind" data-paso="2"><span class="bolita">2</span><span class="et">Envío</span><span class="linea"></span></div>
+      <div class="paso-ind" data-paso="3"><span class="bolita">3</span><span class="et">Pago</span><span class="linea"></span></div>
+      <div class="paso-ind" data-paso="4"><span class="bolita">4</span><span class="et">Listo</span></div>
+    </div>
+
+    <!-- Paso 1: datos -->
+    <div class="checkout-paso activo" data-paso="1">
+      <div class="fila">
+        <div class="campo">
+          <label for="coNombre">Nombre completo <span class="req">*</span></label>
+          <input type="text" id="coNombre" autocomplete="name" placeholder="Camila Soto">
+          <div class="msg-error">Ingresa tu nombre.</div>
+        </div>
+        <div class="campo">
+          <label for="coEmail">Email <span class="req">*</span></label>
+          <input type="email" id="coEmail" autocomplete="email" placeholder="correo@ejemplo.com">
+          <div class="msg-error">Ingresa un email válido.</div>
+        </div>
+      </div>
+      <div class="campo full">
+        <label for="coTel">Teléfono / WhatsApp <span class="req">*</span></label>
+        <input type="tel" id="coTel" autocomplete="tel" placeholder="+56 9 1234 5678">
+        <div class="msg-error">Ingresa un teléfono de contacto.</div>
+      </div>
+      <div class="modal-acciones">
+        <button class="btn btn-fantasma" id="coCancelar">Seguir comprando</button>
+        <button class="btn btn-primario" data-ir="2">Continuar al envío</button>
+      </div>
+    </div>
+
+    <!-- Paso 2: envío -->
+    <div class="checkout-paso" data-paso="2">
+      <div id="envioOpciones"></div>
+      <div id="bloqueDireccion">
+        <div class="campo full">
+          <label for="coDir">Dirección <span class="req">*</span></label>
+          <input type="text" id="coDir" autocomplete="street-address" placeholder="Calle, número, depto…">
+          <div class="msg-error">Ingresa tu dirección de despacho.</div>
+        </div>
+        <div class="fila">
+          <div class="campo">
+            <label for="coComuna">Comuna / Ciudad <span class="req">*</span></label>
+            <input type="text" id="coComuna" autocomplete="address-level2" placeholder="Providencia">
+            <div class="msg-error">Ingresa tu comuna o ciudad.</div>
+          </div>
+          <div class="campo">
+            <label for="coRegion">Región</label>
+            <select id="coRegion"></select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-acciones">
+        <button class="btn btn-fantasma" data-ir="1">Volver</button>
+        <button class="btn btn-primario" data-ir="3">Continuar al pago</button>
+      </div>
+    </div>
+
+    <!-- Paso 3: pago -->
+    <div class="checkout-paso" data-paso="3">
+      <ul class="resumen-lineas" id="resumenPago"></ul>
+      <div class="metodo-pago" id="metodoPago"></div>
+      <div id="bloqueTarjeta" class="tarjeta-falsa" style="margin-top:6px;">
+        <div class="campo full">
+          <label for="coTarjeta">Número de tarjeta</label>
+          <input type="text" id="coTarjeta" inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19">
+        </div>
+        <div class="fila">
+          <div class="campo">
+            <label for="coVenc">Vencimiento</label>
+            <input type="text" id="coVenc" placeholder="MM/AA" maxlength="5">
+          </div>
+          <div class="campo">
+            <label for="coCvv">CVV</label>
+            <input type="text" id="coCvv" inputmode="numeric" placeholder="123" maxlength="4">
+          </div>
+        </div>
+        <p class="ayuda">🔒 Es una simulación: no ingreses datos reales ni se procesa ningún cobro.</p>
+      </div>
+      <div class="modal-acciones">
+        <button class="btn btn-fantasma" data-ir="2">Volver</button>
+        <button class="btn btn-primario" id="coPagar">Pagar (simulado)</button>
+      </div>
+    </div>
+
+    <!-- Paso 4: confirmación -->
+    <div class="checkout-paso" data-paso="4">
+      <div class="confirma">
+        <div class="check-grande" aria-hidden="true">✓</div>
+        <h2>¡Gracias por tu compra! 🌸</h2>
+        <p class="sub">Tu pedido fue registrado en esta simulación.</p>
+        <div class="pedido-num" id="pedidoNum"></div>
+        <ul class="resumen-lineas detalle" id="resumenFinal"></ul>
+        <p class="ayuda">Para que tu pedido llegue de verdad a Alma Bordado, envíanoslo por WhatsApp o correo con el botón de abajo.</p>
+        <div class="modal-acciones">
+          <button class="btn btn-rosa" id="coEnviarPedido">Enviar pedido a Alma Bordado</button>
+          <button class="btn btn-fantasma" id="coTerminar">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Modal genérico (talleres / pedido personalizado confirmación) ============ -->
+<div class="modal" id="modalGenerico" role="dialog" aria-modal="true" aria-labelledby="genTitulo">
+  <div class="modal-caja">
+    <button class="modal-cerrar" id="cerrarGenerico" aria-label="Cerrar">✕</button>
+    <div id="genContenido"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
