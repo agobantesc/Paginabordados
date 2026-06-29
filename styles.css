@@ -45,7 +45,7 @@
 
 /* Accesibilidad: foco visible y respeto a "reducir movimiento" */
 :where(button, a, select, textarea, input, [role="button"], [tabindex]):focus-visible {
-  outline: 3px solid var(--trigo-osc);
+  outline: 3px solid var(--marron-osc);
   outline-offset: 2px;
   border-radius: 8px;
 }
@@ -111,7 +111,8 @@ img { max-width: 100%; display: block; }
 }
 /* El ramo decorativo se recorta solo a sí mismo, sin afectar al menú móvil */
 .appbar-deco-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-.appbar-deco { position: absolute; top: -30px; right: 64px; width: 180px; height: auto; opacity: .5; pointer-events: none; }
+.appbar-deco { position: absolute; top: -28px; right: 150px; width: 170px; height: auto; opacity: .42; pointer-events: none; }
+@media (max-width: 900px) { .appbar-deco-wrap { display: none; } }
 .marca { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; text-decoration: none; position: relative; z-index: 2; }
 .logo {
   width: 102px; height: 102px; flex-shrink: 0; object-fit: contain; border-radius: 50%;
@@ -120,8 +121,8 @@ img { max-width: 100%; display: block; }
 }
 .marca h1 { font-size: 2.3rem; font-weight: 700; color: var(--titulo); line-height: 1; letter-spacing: .3px; }
 .marca .lema { font-size: .95rem; color: var(--tinta-suave); margin-top: 4px; letter-spacing: .2px; }
-@media (max-width: 620px) { .appbar-deco-wrap { display: none; } }
-@media (max-width: 520px) { .marca .lema { display: none; } .marca h1 { font-size: 1.7rem; } .logo { width: 64px; height: 64px; border-width: 2px; } }
+@media (max-width: 860px) { .logo { width: 78px; height: 78px; } .marca h1 { font-size: 1.95rem; } html { scroll-padding-top: 106px; } section { scroll-margin-top: 106px; } }
+@media (max-width: 520px) { .marca .lema { display: none; } .marca h1 { font-size: 1.7rem; } .logo { width: 64px; height: 64px; border-width: 2px; } html { scroll-padding-top: 92px; } section { scroll-margin-top: 92px; } }
 
 .nav { display: flex; align-items: center; gap: 4px; position: relative; z-index: 2; }
 .nav a {
@@ -199,11 +200,12 @@ section { scroll-margin-top: 124px; }
 .hero-art { position: relative; display: grid; place-items: center; }
 .hero-aro {
   width: min(380px, 88%); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
-  background: radial-gradient(circle at 50% 40%, #fff 0%, var(--papel-2) 78%, #efe7d6 100%);
+  background: radial-gradient(circle at 50% 42%, #fffdf8 0%, #faf4ea 72%, #f2e7d5 100%);
   border: 12px solid #ecd2da;
-  box-shadow: inset 0 0 0 5px #fff, var(--sombra-media);
+  box-shadow: var(--sombra-media);
   display: grid; place-items: center; position: relative;
 }
+/* Usa el trigo del logo (sin texto) para llenar el bastidor sin duplicar el nombre */
 .hero-logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: saturate(1.08); }
 @media (max-width: 800px) {
   .hero-inner { grid-template-columns: 1fr; gap: 22px; }
@@ -245,11 +247,12 @@ section { scroll-margin-top: 124px; }
 .destacados { padding: 10px 0 4px; }
 .dest-titulo {
   text-align: center; font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.5rem; font-weight: 700;
-  color: var(--titulo); margin: 4px 0 12px; letter-spacing: .3px;
+  color: var(--titulo); margin: 4px 0 12px; letter-spacing: .3px; padding: 0 18px;
 }
+.dest-controles { padding: 0 18px; }
 .banner-dest {
   position: relative; overflow: hidden;
-  left: 50%; right: 50%; width: 100vw; margin-left: -50vw; margin-right: -50vw;  /* full-bleed: a todo el ancho */
+  width: 100%;  /* a todo el ancho del documento (excluye la barra de scroll: sin desbordes) */
   border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde); box-shadow: var(--sombra); min-height: 134px;
   --banner-accent: var(--rosa-texto);
   background: linear-gradient(135deg, #f7ede2, #f3e2e8 60%, #eef0e6);
@@ -261,7 +264,7 @@ section { scroll-margin-top: 124px; }
   background: radial-gradient(520px 260px at 86% 8%, rgba(231,201,201,.55), transparent 60%), linear-gradient(135deg, #f9e9ef, #f3dde6 58%, #f7efe2); }
 .banner-dest.tipo-kit { --banner-accent: var(--azul-texto);
   background: radial-gradient(520px 260px at 86% 8%, rgba(196,209,222,.45), transparent 60%), linear-gradient(135deg, #eef3f6, #e6eef3 58%, #f2efe6); }
-.banner-dest.tipo-nuevo { --banner-accent: #5f7f57;
+.banner-dest.tipo-nuevo { --banner-accent: #4d6a46;
   background: radial-gradient(520px 260px at 86% 8%, rgba(190,200,182,.5), transparent 60%), linear-gradient(135deg, #eef3ea, #e2ece0 58%, #f5efe2); }
 .banner-dest.tipo-envio { --banner-accent: var(--trigo-texto);
   background: radial-gradient(520px 260px at 86% 8%, rgba(216,196,160,.45), transparent 60%), linear-gradient(135deg, #f6efe0, #f3e6d1 58%, #f4e3e9); }
@@ -441,7 +444,7 @@ section { scroll-margin-top: 124px; }
 }
 .campo .ayuda { font-size: .8rem; color: var(--tinta-suave); margin-top: 6px; }
 .campo.error input, .campo.error select, .campo.error textarea { border-color: var(--rosa-osc); box-shadow: 0 0 0 3px rgba(176,122,146,.16); }
-.campo .msg-error { display: none; color: var(--rosa-osc); font-size: .8rem; margin-top: 5px; font-weight: 600; }
+.campo .msg-error { display: none; color: var(--rosa-texto); font-size: .8rem; margin-top: 5px; font-weight: 600; }
 .campo.error .msg-error { display: block; }
 
 .opciones-pilar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 4px; }
@@ -458,7 +461,7 @@ section { scroll-margin-top: 124px; }
 
 .aviso-info {
   display: flex; gap: 12px; align-items: flex-start; background: #f7efe0; border: 1px solid #e0cda3;
-  color: #8a6a32; padding: 14px 16px; border-radius: var(--radio-sm); font-size: .92rem; line-height: 1.5; margin: 4px 0 18px;
+  color: #7a5d28; padding: 14px 16px; border-radius: var(--radio-sm); font-size: .92rem; line-height: 1.5; margin: 4px 0 18px;
 }
 .aviso-info .ico { font-size: 1.2rem; flex-shrink: 0; }
 
@@ -663,7 +666,6 @@ section { scroll-margin-top: 124px; }
    --------------------------------------------------------------------- */
 .flor-md2 { top: 16%; right: -70px; width: 200px; opacity: .12; transform: rotate(36deg); }
 .flor-bl2 { bottom: 24%; left: -64px; width: 190px; opacity: .12; transform: rotate(-40deg); }
-.seccion-cab h2 { position: relative; }
 /* florcita junto a la marca del footer y acentos suaves */
 .tarjeta-grande .flor-tarjeta { width: 80px; height: 80px; opacity: .18; }
 .contacto-card .c-ico { box-shadow: inset 0 0 0 1px rgba(255,255,255,.5); }
