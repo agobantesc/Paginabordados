@@ -59,7 +59,7 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 118px; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 124px; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -107,21 +107,21 @@ img { max-width: 100%; display: block; }
 .appbar-inner {
   position: relative;
   display: flex; align-items: center; gap: 14px;
-  max-width: var(--max); margin: 0 auto; padding: 12px 18px;
+  max-width: var(--max); margin: 0 auto; padding: 10px 18px;
 }
 /* El ramo decorativo se recorta solo a sí mismo, sin afectar al menú móvil */
 .appbar-deco-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
 .appbar-deco { position: absolute; top: -30px; right: 64px; width: 180px; height: auto; opacity: .5; pointer-events: none; }
 .marca { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; text-decoration: none; position: relative; z-index: 2; }
 .logo {
-  width: 92px; height: 92px; flex-shrink: 0; object-fit: contain; border-radius: 50%;
+  width: 102px; height: 102px; flex-shrink: 0; object-fit: contain; border-radius: 50%;
   background: #fffdf8; border: 2.5px solid #cbb088;
   box-shadow: 0 4px 14px rgba(111,97,81,.22); filter: saturate(1.12) contrast(1.05);
 }
 .marca h1 { font-size: 2.3rem; font-weight: 700; color: var(--titulo); line-height: 1; letter-spacing: .3px; }
 .marca .lema { font-size: .95rem; color: var(--tinta-suave); margin-top: 4px; letter-spacing: .2px; }
 @media (max-width: 620px) { .appbar-deco-wrap { display: none; } }
-@media (max-width: 520px) { .marca .lema { display: none; } .marca h1 { font-size: 1.8rem; } .logo { width: 68px; height: 68px; } }
+@media (max-width: 520px) { .marca .lema { display: none; } .marca h1 { font-size: 1.7rem; } .logo { width: 64px; height: 64px; border-width: 2px; } }
 
 .nav { display: flex; align-items: center; gap: 4px; position: relative; z-index: 2; }
 .nav a {
@@ -163,7 +163,7 @@ img { max-width: 100%; display: block; }
 /* ---------------------------------------------------------------------
    Secciones genéricas
    --------------------------------------------------------------------- */
-section { scroll-margin-top: 118px; }
+section { scroll-margin-top: 124px; }
 .bloque { padding: 52px 0 18px; }
 .seccion-cab { text-align: center; max-width: 660px; margin: 0 auto 26px; }
 .seccion-cab .eyebrow {
@@ -188,29 +188,31 @@ section { scroll-margin-top: 118px; }
 .hero-txt h2 .resalte { color: var(--rosa-osc); font-style: italic; }
 .hero-txt p { font-size: 1.1rem; color: var(--tinta-suave); max-width: 30em; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
-.hero-art { position: relative; display: grid; place-items: center; min-height: 280px; }
+/* Pills de características (reemplazan los chips flotantes; limpio y consistente) */
+.hero-features { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 0; padding: 0; }
+.hero-features li {
+  display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 600; color: var(--titulo);
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: 999px; padding: 9px 15px; box-shadow: var(--sombra-sutil);
+}
+.hero-features .ico { font-size: 1.1rem; }
+
+.hero-art { position: relative; display: grid; place-items: center; }
 .hero-aro {
-  width: min(360px, 80%); aspect-ratio: 1; border-radius: 50%;
-  background: radial-gradient(circle at 50% 40%, #fff 0%, var(--papel-2) 70%, #efe7d6 100%);
-  border: 14px solid #e7c9c9;
+  width: min(380px, 88%); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #fff 0%, var(--papel-2) 78%, #efe7d6 100%);
+  border: 12px solid #ecd2da;
   box-shadow: inset 0 0 0 5px #fff, var(--sombra-media);
   display: grid; place-items: center; position: relative;
 }
-.hero-aro svg { width: 64%; height: 64%; }
-.hero-chip {
-  position: absolute; background: var(--superficie); border: 1px solid var(--borde);
-  border-radius: 14px; padding: 10px 14px; box-shadow: var(--sombra-media); font-size: .86rem; font-weight: 600; color: var(--titulo);
-  display: flex; align-items: center; gap: 8px;
-}
-.hero-chip .ico { font-size: 1.15rem; }
-.hero-chip.c1 { top: 6%; left: -2%; }
-.hero-chip.c2 { bottom: 12%; right: -4%; }
-.hero-chip.c3 { bottom: -2%; left: 16%; }
+.hero-logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: saturate(1.08); }
 @media (max-width: 800px) {
-  .hero-inner { grid-template-columns: 1fr; gap: 18px; }
-  .hero-art { min-height: 230px; order: -1; }
-  .hero-chip.c1 { left: 2%; }
-  .hero-chip.c2 { right: 2%; }
+  .hero-inner { grid-template-columns: 1fr; gap: 22px; }
+  .hero-art { order: -1; }
+  .hero-aro { width: min(300px, 74%); border-width: 10px; }
+  .hero-features { justify-content: center; }
+  .hero-txt { text-align: center; }
+  .hero-txt p { margin-left: auto; margin-right: auto; }
+  .hero-cta { justify-content: center; }
 }
 
 /* ---------------------------------------------------------------------
@@ -246,8 +248,9 @@ section { scroll-margin-top: 118px; }
   color: var(--titulo); margin: 4px 0 12px; letter-spacing: .3px;
 }
 .banner-dest {
-  position: relative; overflow: hidden; border-radius: var(--radio-lg);
-  border: 1px solid var(--borde); box-shadow: var(--sombra); min-height: 134px;
+  position: relative; overflow: hidden;
+  left: 50%; right: 50%; width: 100vw; margin-left: -50vw; margin-right: -50vw;  /* full-bleed: a todo el ancho */
+  border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde); box-shadow: var(--sombra); min-height: 134px;
   --banner-accent: var(--rosa-texto);
   background: linear-gradient(135deg, #f7ede2, #f3e2e8 60%, #eef0e6);
 }
@@ -263,7 +266,7 @@ section { scroll-margin-top: 118px; }
 .banner-dest.tipo-envio { --banner-accent: var(--trigo-texto);
   background: radial-gradient(520px 260px at 86% 8%, rgba(216,196,160,.45), transparent 60%), linear-gradient(135deg, #f6efe0, #f3e6d1 58%, #f4e3e9); }
 
-.banner-slide { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 22px 50px; position: relative; z-index: 2; }
+.banner-slide { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 22px 50px; position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; }
 .banner-slide.entra { animation: bannerEntra .5s cubic-bezier(.2,.7,.3,1); }
 @keyframes bannerEntra { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; } }
 
@@ -302,8 +305,8 @@ section { scroll-margin-top: 118px; }
 /* Banner con afiche propio a todo el ancho (imagen llena el banner) */
 .banner-link { display: block; width: 100%; height: 100%; line-height: 0; }
 .banner-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-.banner-dest.con-afiche { min-height: 0; aspect-ratio: 5 / 2; }
-.banner-dest.con-afiche .banner-slide { padding: 0; display: block; height: 100%; }
+.banner-dest.con-afiche { min-height: 0; aspect-ratio: 5 / 2; max-height: 580px; }
+.banner-dest.con-afiche .banner-slide { padding: 0; display: block; height: 100%; max-width: none; margin: 0; }
 .banner-dest.con-afiche .banner-flor { display: none; }
 
 .dest-controles { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 14px; }
@@ -664,5 +667,22 @@ section { scroll-margin-top: 118px; }
 /* florcita junto a la marca del footer y acentos suaves */
 .tarjeta-grande .flor-tarjeta { width: 80px; height: 80px; opacity: .18; }
 .contacto-card .c-ico { box-shadow: inset 0 0 0 1px rgba(255,255,255,.5); }
+
+/* ---------------------------------------------------------------------
+   Optimización móvil (espaciado más cómodo, nada cortado)
+   --------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  .contenedor { padding: 0 14px; }
+  .bloque { padding: 34px 0 10px; }
+  .hero { padding: 24px 0 14px; }
+  .hero-txt h2 { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .seccion-cab { margin-bottom: 20px; }
+  .seccion-cab h2 { font-size: 1.75rem; }
+  .seccion-cab p { font-size: .95rem; }
+  .dest-titulo { font-size: 1.3rem; }
+  .tarjeta-grande { padding: 22px 16px; }
+  .modal-caja { padding: 20px 16px; }
+  .pie-inner { justify-content: center; text-align: center; }
+}
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
