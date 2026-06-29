@@ -237,6 +237,10 @@ section { scroll-margin-top: 88px; }
    Banner de destacados
    --------------------------------------------------------------------- */
 .destacados { padding: 10px 0 4px; }
+.dest-titulo {
+  text-align: center; font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.5rem; font-weight: 700;
+  color: var(--titulo); margin: 4px 0 12px; letter-spacing: .3px;
+}
 .banner-dest {
   position: relative; overflow: hidden; border-radius: var(--radio-lg);
   border: 1px solid var(--borde); box-shadow: var(--sombra); min-height: 134px;
@@ -293,11 +297,11 @@ section { scroll-margin-top: 88px; }
 
 /* Banner con afiche propio (imagen completa, centrada y con alto limitado) */
 .banner-link { display: inline-block; line-height: 0; max-width: 100%; }
-.banner-img { max-width: 100%; max-height: 380px; width: auto; height: auto; display: block; margin: 0 auto; border-radius: var(--radio); box-shadow: var(--sombra-sutil); }
+.banner-img { max-width: 100%; max-height: 300px; width: auto; height: auto; display: block; margin: 0 auto; border-radius: var(--radio); box-shadow: var(--sombra-sutil); }
 .banner-dest.con-afiche { min-height: 0; }
-.banner-dest.con-afiche .banner-slide { padding: 16px; display: block; text-align: center; }
+.banner-dest.con-afiche .banner-slide { padding: 14px; display: block; text-align: center; }
 .banner-dest.con-afiche .banner-flor { display: none; }
-@media (max-width: 680px) { .banner-img { max-height: 240px; } }
+@media (max-width: 680px) { .banner-img { max-height: 200px; } }
 
 .dest-controles { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 14px; }
 .dest-puntos { display: flex; gap: 6px; justify-content: center; }

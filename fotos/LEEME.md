@@ -6,7 +6,6 @@ mostrarlas apenas existan, usando exactamente estos nombres de archivo:
 | Archivo (nombre exacto) | Qué es                                   |
 |-------------------------|-------------------------------------------|
 | `logo.png`              | Logo de Alma Bordado (las espigas)        |
-| `cumple-mes.png`        | «Cumple mes bebé» (la foto del arcoíris)  |
 | `maggie.png`            | Bordado de Maggie                         |
 | `pantera-rosa.png`      | Bordado de la Pantera Rosa                |
 | `ballenas.png`          | Bordado «Mar y ballenas»                  |

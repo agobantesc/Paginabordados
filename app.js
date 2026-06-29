@@ -37,8 +37,6 @@ const REGIONES = [
 // Bordados listos para venta
 // (cada producto admite "img": 'fotos/archivo.png' para mostrar una foto real en vez del emoji)
 const PRODUCTOS = [
-  { id:'p_cumplemes', nombre:'«Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', cat:'Bebé', img:'fotos/cumple-mes.png',
-    desc:'Set de 12 bordados listos para registrar mes a mes el primer año del bebé, del 1 al 12. Hechos a mano: el regalo perfecto para un nacimiento.', destacado:true, insignia:'Destacado' },
   { id:'r1', nombre:'Bastidor «Maggie»', precio:14990, emoji:'💛', tono:'trigo', cat:'Cuadros', img:'fotos/maggie.png',
     desc:'Bordado a mano de Maggie en bastidor de 10 cm. Un guiño tierno y divertido para tu pared.' },
   { id:'r2', nombre:'Bastidor «Pantera Rosa»', precio:19990, emoji:'🐾', tono:'rosa', cat:'Cuadros', img:'fotos/pantera-rosa.png',
@@ -56,11 +54,11 @@ const PRODUCTOS = [
 // Kits de bordado (incluyen insumos + manual)
 const KITS = [
   { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:30000, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.png',
-    desc:'Todo lo que necesitas para bordar un ramo de flores silvestres, paso a paso. Ideal para empezar.',
-    incluye:['Diseño','6 hilos','Agujas','Bastidor','Tela','Guía paso a paso'], insignia:'Principiantes' },
+    desc:'Todo lo necesario para bordar un ramo de flores silvestres. Ideal para principiantes.',
+    incluye:['Diseño','6 hilos','Agujas','Bastidor','Tela','Manual'], insignia:'Principiantes' },
   { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:35000, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.png',
-    desc:'Borda una calavera floral llena de color sobre tela negra. Para principiantes y avanzados.',
-    incluye:['Diseño','10 hilos','6 agujas','Bastidor 15 cm','Tela negra','Guía de puntos'], insignia:'Todo nivel' }
+    desc:'Todo lo necesario para bordar una calavera floral sobre tela negra. Para todo nivel.',
+    incluye:['Diseño','10 hilos','Agujas','Bastidor','Tela','Manual'], insignia:'Todo nivel' }
 ];
 
 const CATALOGO = [...PRODUCTOS, ...KITS];
@@ -252,6 +250,8 @@ function pintarTienda(cat = 'Todos') {
 }
 function pintarFiltros() {
   const cats = ['Todos', ...Array.from(new Set(PRODUCTOS.map(p => p.cat)))];
+  // Si solo hay una categoría, el filtro no aporta: lo ocultamos
+  if (cats.length <= 2) { $('#filtrosTienda').innerHTML = ''; return; }
   $('#filtrosTienda').innerHTML = cats.map((c, i) =>
     `<button class="chip${i === 0 ? ' activo' : ''}" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
 }
@@ -341,7 +341,7 @@ function rotarBanner() {
   clearTimeout(bannerTimer);
   // El autoavance se detiene con la pausa manual o el hover/foco (control de WCAG 2.2.2)
   if (bannerPausaManual || bannerHover || BANNERS.length <= 1) return;
-  bannerTimer = setTimeout(() => { pintarBanner(bannerIdx + 1); rotarBanner(); }, 5000);
+  bannerTimer = setTimeout(() => { pintarBanner(bannerIdx + 1); rotarBanner(); }, 3500);
 }
 function alternarPausaBanner() {
   bannerPausaManual = !bannerPausaManual;
