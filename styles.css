@@ -474,13 +474,8 @@ section { scroll-margin-top: 124px; }
 .afiche-bar-cta .precio { font-size: 1.35rem; font-weight: 700; color: var(--titulo); }
 .afiche-bar-cta .nota { font-size: .78rem; color: var(--tinta-suave); max-width: 26ch; }
 @media (max-width: 600px) {
-  /* En celular el afiche completo encoge demasiado el bordado y su texto se vuelve
-     ilegible: enfocamos el bordado (que está a la derecha/centro de cada afiche)
-     con un recorte cómodo, para que se vea grande y claro como un producto. */
-  .afiche-card .afiche-img-wrap { aspect-ratio: 1 / 1; }
-  .afiche-card .afiche-img { object-position: 74% center; }
-  .afiche-card.taller-afiche .afiche-img-wrap { aspect-ratio: 4 / 3; }
-  .afiche-card.taller-afiche .afiche-img { object-position: 50% center; }
+  /* En celular se muestra el afiche/cuadro COMPLETO (sin recortar): se ve más
+     pequeño pero entero, como pidió la clienta. */
   .afiche-bar { flex-direction: column; align-items: stretch; }
   .afiche-bar-cta { justify-content: space-between; }
   .afiche-card.taller-afiche .afiche-bar-cta { flex-direction: column; align-items: stretch; gap: 8px; }

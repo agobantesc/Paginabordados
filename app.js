@@ -102,7 +102,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '11';
+const ASSET_V = '12';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
