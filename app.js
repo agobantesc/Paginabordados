@@ -37,19 +37,23 @@ const REGIONES = [
 // Bordados listos para venta
 // (cada producto admite "img": 'fotos/archivo.png' para mostrar una foto real en vez del emoji)
 const PRODUCTOS = [
-  { id:'r1', nombre:'Bastidor «Maggie»', precio:14990, emoji:'💛', tono:'trigo', cat:'Cuadros', img:'fotos/maggie.png',
-    desc:'Bordado a mano de Maggie en bastidor de 10 cm. Un guiño tierno y divertido para tu pared.' },
-  { id:'r2', nombre:'Bastidor «Pantera Rosa»', precio:19990, emoji:'🐾', tono:'rosa', cat:'Cuadros', img:'fotos/pantera-rosa.png',
-    desc:'La Pantera Rosa bordada a mano con mucho detalle, en bastidor rosado. Pieza única.' },
-  { id:'r4', nombre:'Bastidor «Calavera mexicana»', precio:29990, emoji:'💀', tono:'trigo', cat:'Cuadros', img:'fotos/calavera.png',
-    desc:'Calavera estilo Día de Muertos, llena de color y flores, bordada sobre tela negra. Una pieza vibrante y única.' },
   { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.png',
     desc:'Mandala de flores y hojas bordada a mano con mucho detalle. Delicada y llena de vida.' },
+  { id:'r3', nombre:'Bastidor «Girasoles»', precio:24990, emoji:'🌻', tono:'trigo', cat:'Cuadros', img:'fotos/girasoles.png',
+    desc:'Girasoles bordados a mano en tonos cálidos. Un rincón de sol para alegrar cualquier pared.' },
   { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.png',
-    desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' },
-  { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros', img:'fotos/ballenas.png',
-    desc:'Trío de ballenas bordadas a mano en azules suaves. Una escena marina llena de calma.' }
+    desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' }
 ];
+
+// Bordados en pausa "por ahora". Para reactivar uno, muévelo al arreglo PRODUCTOS de arriba.
+// { id:'r1', nombre:'Bastidor «Maggie»', precio:14990, emoji:'💛', tono:'trigo', cat:'Cuadros', img:'fotos/maggie.png',
+//   desc:'Bordado a mano de Maggie en bastidor de 10 cm. Un guiño tierno y divertido para tu pared.' },
+// { id:'r2', nombre:'Bastidor «Pantera Rosa»', precio:19990, emoji:'🐾', tono:'rosa', cat:'Cuadros', img:'fotos/pantera-rosa.png',
+//   desc:'La Pantera Rosa bordada a mano con mucho detalle, en bastidor rosado. Pieza única.' },
+// { id:'r4', nombre:'Bastidor «Calavera mexicana»', precio:29990, emoji:'💀', tono:'trigo', cat:'Cuadros', img:'fotos/calavera.png',
+//   desc:'Calavera estilo Día de Muertos, llena de color y flores, bordada sobre tela negra. Una pieza vibrante y única.' },
+// { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros', img:'fotos/ballenas.png',
+//   desc:'Trío de ballenas bordadas a mano en azules suaves. Una escena marina llena de calma.' }
 
 // Kits de bordado (incluyen insumos + manual)
 const KITS = [
@@ -98,7 +102,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '8';
+const ASSET_V = '9';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
