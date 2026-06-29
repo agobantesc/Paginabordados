@@ -17,6 +17,7 @@ mostrarlas apenas existan, usando exactamente estos nombres de archivo:
 | `banner1.png`           | Afiche del banner 1 (rota en el carrusel) |
 | `banner2.png`           | Afiche del banner 2 (rota en el carrusel) |
 | `banner3.png`           | Afiche del banner 3 (rota en el carrusel) |
+| `taller-nuevas-mamas.png` | Afiche del taller «Nuevas Mamás»        |
 
 Los afiches del banner: ideal todos del mismo tamaño, ~1200 × 450 px (apaisados).
 

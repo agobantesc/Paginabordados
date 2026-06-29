@@ -12,12 +12,15 @@ de Bordados: paleta pastel, motivos botánicos y tipografía Cormorant Garamond.
 - **Tres pilares**: bordados listos, pedidos personalizados y kits de bordado.
 - **Tienda** de bordados listos con filtros por categoría (admite fotos reales).
 - **Kits de bordado** con el detalle de lo que incluye cada uno.
+- **Talleres de bordado** con temática (personales o en grupo) y reserva de cupo
+  que llega por WhatsApp o correo.
 - **Carrito de compras** con persistencia y **checkout simulado** de 4 pasos
   (datos → envío → pago → confirmación), incluyendo gestión de envío
   (retiro en taller o despacho a domicilio por región, con envío gratis sobre un monto).
 - **Pedido personalizado**: formulario "Enviar requerimiento" con confirmación cálida en
   pantalla (y opción de adelantarlo por WhatsApp o correo).
 - **Chatbot guía** que orienta al cliente por la página (sin IA externa).
+- **Botón flotante de WhatsApp** para escribir directo al número de Alma Bordado.
 - **Contacto**: Instagram, correo y WhatsApp/teléfono.
 
 > El carrito, los pedidos, los requerimientos y las reservas se guardan en el navegador

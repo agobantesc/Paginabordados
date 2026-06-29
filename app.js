@@ -61,6 +61,16 @@ const KITS = [
     incluye:['Diseño','10 hilos','Agujas','Bastidor','Tela','Manual'], insignia:'Todo nivel' }
 ];
 
+// Talleres de bordado: cada uno tiene una TEMÁTICA. Se pueden hacer en grupo o
+// personales; el cupo se coordina por WhatsApp/correo (no se cobra en la web).
+// Para mostrar el afiche real, sube la imagen con el nombre indicado en "img".
+const TALLERES = [
+  { id:'t_mamas', tema:'Nuevas Mamás', nombre:'Taller «Nuevas Mamás»', emoji:'🤍', tono:'rosa',
+    img:'fotos/taller-nuevas-mamas.png', modalidad:'Personal o en grupo',
+    desc:'Borda algo único para tu bebé recién nacido. Un espacio cálido para crear, a tu ritmo, un recuerdo hecho a mano que durará para siempre.',
+    incluye:['Materiales incluidos','Técnicas básicas','Proyecto personalizado','Un momento para ti'] }
+];
+
 const CATALOGO = [...PRODUCTOS, ...KITS];
 const porId = (id) => CATALOGO.find(p => p.id === id);
 
@@ -88,7 +98,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '7';
+const ASSET_V = '8';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
@@ -270,6 +280,33 @@ function pintarKits() {
     return;
   }
   $('#grillaKits').innerHTML = KITS.map(tarjetaProducto).join('');
+}
+
+/* Talleres de bordado (tarjetas con temática + reserva de cupo) */
+function tarjetaTaller(t) {
+  const incluye = t.incluye ? `<ul class="incluye">${t.incluye.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  const foto = t.img
+    ? `<img class="foto-img" src="${esc(ver(t.img))}" alt="Afiche del ${esc(t.nombre)}" loading="lazy" data-emoji="${t.emoji}" onerror="fotoFallback(this)">`
+    : `<span class="foto-emoji" aria-hidden="true">${t.emoji}</span>`;
+  const modalidad = t.modalidad
+    ? `<p class="taller-modalidad"><span class="ico" aria-hidden="true">👭</span>${esc(t.modalidad)}</p>` : '';
+  return `<article class="producto taller tono-${t.tono}${t.img ? ' con-foto' : ''}">
+      <div class="foto"><span class="tema">🌷 ${esc(t.tema)}</span>${foto}</div>
+      <div class="cuerpo">
+        <h3>${esc(t.nombre)}</h3>
+        ${modalidad}
+        <p class="desc">${esc(t.desc)}</p>
+        ${incluye}
+        <div class="pie-prod">
+          <button class="btn btn-primario btn-bloque" data-taller="${t.id}">Reservar mi cupo 🌸</button>
+          <span class="nota">Cupos limitados · coordinamos la fecha contigo</span>
+        </div>
+      </div>
+    </article>`;
+}
+function pintarTalleres() {
+  if (!TALLERES.length) { $('#grillaTalleres').innerHTML = ''; return; }
+  $('#grillaTalleres').innerHTML = TALLERES.map(tarjetaTaller).join('');
 }
 
 /* Banner / carrusel rotativo (ofertas, destacados, novedades…) */
@@ -675,20 +712,120 @@ function enviarRequerimiento(e) {
 }
 
 /* ----------------------------------------------------------------------
+   10b) RESERVA DE TALLERES (formulario en el modal genérico)
+   ---------------------------------------------------------------------- */
+function abrirReservaTaller(id) {
+  const t = TALLERES.find(x => x.id === id);
+  if (!t) return;
+  abrirGenerico(`
+    <h2>Reservar cupo 🌸</h2>
+    <p class="sub">Taller «${esc(t.tema)}». Déjanos tus datos y coordinamos la fecha contigo.</p>
+    <form id="formReserva" novalidate>
+      <div class="aviso-info">
+        <span class="ico">🌷</span>
+        <span>Cupos limitados. Recibimos tu reserva y te confirmamos fecha, lugar y valor por WhatsApp o correo.</span>
+      </div>
+      <div class="fila">
+        <div class="campo">
+          <label for="rtNombre">Tu nombre <span class="req">*</span></label>
+          <input type="text" id="rtNombre" name="nombre" autocomplete="name" placeholder="Ej: Camila Soto">
+          <div class="msg-error">Cuéntanos tu nombre.</div>
+        </div>
+        <div class="campo">
+          <label for="rtContacto">Email o teléfono <span class="req">*</span></label>
+          <input type="text" id="rtContacto" name="contacto" autocomplete="off" placeholder="correo@ejemplo.com o +56 9 1234 5678">
+          <div class="msg-error">Déjanos un email o teléfono válido para responderte.</div>
+        </div>
+      </div>
+      <div class="fila">
+        <div class="campo">
+          <label for="rtModalidad">Modalidad</label>
+          <select id="rtModalidad" name="modalidad">
+            <option value="Personal (individual)">Personal (individual)</option>
+            <option value="En grupo">En grupo</option>
+            <option value="Aún no lo sé">Aún no lo sé</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="rtPersonas">¿Cuántas personas?</label>
+          <input type="number" id="rtPersonas" name="personas" min="1" max="20" value="1">
+          <div class="ayuda">Opcional. Útil si vienes con amigas.</div>
+        </div>
+      </div>
+      <div class="campo full">
+        <label for="rtComentario">Comentario</label>
+        <textarea id="rtComentario" name="comentario" placeholder="¿Tienes una fecha en mente, alguna duda o algo especial que quieras bordar?"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primario btn-bloque btn-grande" style="margin-top:8px;">🌸 Reservar mi cupo</button>
+    </form>`);
+  $('#formReserva').addEventListener('submit', (e) => { e.preventDefault(); enviarReservaTaller(t); });
+}
+
+function enviarReservaTaller(t) {
+  const nombre = $('#rtNombre'), contacto = $('#rtContacto'), desc = $('#rtComentario');
+  const ok = [validoTexto(nombre), validoContacto(contacto)].every(Boolean);
+  if (!ok) { toast('Completa los campos marcados con *'); enfocarPrimerInvalido($('#formReserva')); return; }
+
+  const datos = {
+    fecha: new Date().toISOString(),
+    taller: t.tema,
+    nombre: nombre.value.trim(),
+    contacto: contacto.value.trim(),
+    modalidad: $('#rtModalidad').value,
+    personas: $('#rtPersonas').value || '1',
+    comentario: desc.value.trim() || 'Sin comentarios'
+  };
+  const reservas = leer('ab_reservas', []);
+  reservas.push(datos);
+  guardar('ab_reservas', reservas);
+
+  const texto = `¡Hola Alma Bordado! 🌸 Quiero reservar un cupo para el taller:\n\n`
+    + `Taller: ${datos.taller}\nNombre: ${datos.nombre}\nContacto: ${datos.contacto}\n`
+    + `Modalidad: ${datos.modalidad}\nPersonas: ${datos.personas}\n\n`
+    + `Comentario:\n${datos.comentario}`;
+  const asunto = `Reserva taller «${datos.taller}» — Alma Bordado`;
+  const nombrePila = datos.nombre.split(' ')[0];
+
+  abrirGenerico(`
+    <div class="confirma">
+      <div class="check-grande" aria-hidden="true">✓</div>
+      <h2>¡Tu reserva fue enviada! 🌸</h2>
+      <p class="sub">Gracias, ${esc(nombrePila)}. Te contactaremos pronto para confirmar fecha, lugar y valor del taller «${esc(datos.taller)}». 💛</p>
+      <p class="confirma-extra">¿Quieres adelantárnoslo? También puedes escribirnos directo:</p>
+      <div class="modal-acciones">
+        <button class="btn btn-sec" id="rtWa">Por WhatsApp</button>
+        <button class="btn btn-sec" id="rtMail">Por correo</button>
+        <button class="btn btn-sec" id="rtCopiar">Copiar mensaje</button>
+      </div>
+      <button class="btn btn-primario btn-bloque" id="rtCerrar" style="margin-top:12px;">Listo 🌷</button>
+    </div>`);
+  $('#rtWa').onclick = () => abrirWhatsApp(texto);
+  $('#rtMail').onclick = () => abrirCorreo(asunto, texto);
+  $('#rtCopiar').onclick = () => copiarTexto(texto);
+  $('#rtCerrar').onclick = () => cerrarModal('#modalGenerico');
+
+  toast('¡Reserva enviada! 🌸', 'ok');
+}
+
+/* ----------------------------------------------------------------------
    11) CHATBOT GUÍA (scripted, sin IA externa)
    ---------------------------------------------------------------------- */
 const CHAT_RESPUESTAS = {
   inicio: {
     msg: '¡Hola! 🌸 Soy Alma, te ayudo a encontrar lo que buscas. ¿Qué te gustaría hacer?',
-    opciones: ['Ver bordados listos', 'Ver kits', 'Pedido personalizado', 'Envíos y pagos', 'Contacto']
+    opciones: ['Ver bordados listos', 'Ver kits', 'Talleres', 'Pedido personalizado', 'Envíos y pagos', 'Contacto']
   },
   'ver bordados listos': {
     msg: 'Tenemos bordados hechos a mano listos para enviar 🪡 Te llevo a la tienda. Puedes filtrarlos por categoría y agregarlos al carrito.',
-    accion: { tipo: 'scroll', destino: '#tienda' }, opciones: ['Ver kits', 'Envíos y pagos', 'Contacto']
+    accion: { tipo: 'scroll', destino: '#tienda' }, opciones: ['Ver kits', 'Talleres', 'Contacto']
   },
   'ver kits': {
     msg: 'Los kits traen el diseño + todos los insumos (hilos, aguja, bastidor) y un manual detallado 🎁 Ideales para empezar o regalar. ¡Te llevo!',
-    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Ver bordados listos', 'Pedido personalizado', 'Contacto']
+    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Ver bordados listos', 'Talleres', 'Contacto']
+  },
+  talleres: {
+    msg: 'Hacemos talleres de bordado con una temática especial 🌷 personales o en grupo, sin necesidad de experiencia. Te llevo para que veas el detalle y reserves tu cupo.',
+    accion: { tipo: 'scroll', destino: '#talleres' }, opciones: ['Ver bordados listos', 'Ver kits', 'Contacto']
   },
   'pedido personalizado': {
     msg: 'Bordamos lo que tú imagines 💌 Cuéntanos tu idea en el formulario y te enviamos una propuesta con precio antes de empezar. Nada se borda sin tu confirmación.',
@@ -705,7 +842,8 @@ const CHAT_RESPUESTAS = {
 };
 const CHAT_PALABRAS = [
   { claves: ['hola', 'buenas', 'saludos', 'hey'], key: 'inicio' },
-  { claves: ['kit', 'kits', 'insumo', 'material', 'aprender', 'empezar'], key: 'ver kits' },
+  { claves: ['kit', 'kits', 'insumo', 'material'], key: 'ver kits' },
+  { claves: ['taller', 'talleres', 'clase', 'clases', 'curso', 'aprender', 'empezar', 'grupo', 'tematica', 'temática'], key: 'talleres' },
   { claves: ['personaliz', 'medida', 'encargo', 'pedido especial', 'a pedido', 'quiero bordar', 'requerimiento'], key: 'pedido personalizado' },
   { claves: ['envio', 'envío', 'despacho', 'entrega', 'pago', 'pagar', 'precio', 'cuanto', 'cuánto', 'retiro'], key: 'envíos y pagos' },
   { claves: ['contacto', 'instagram', 'correo', 'mail', 'telefono', 'teléfono', 'whatsapp', 'escribir'], key: 'contacto' },
@@ -770,6 +908,10 @@ function aplicarContacto() {
   $('#cardTel').href = 'https://wa.me/' + CONFIG.telWhatsapp;
   $('#cardTel').target = '_blank';
   $('#cardTel').rel = 'noopener';
+  // Botón flotante de WhatsApp: escribe directo al número de Alma Bordado
+  const wa = $('#waFab');
+  if (wa) wa.href = 'https://wa.me/' + CONFIG.telWhatsapp
+    + '?text=' + encodeURIComponent('¡Hola Alma Bordado! 🌸 Me gustaría hacerles una consulta.');
   if (CONFIG.email === 'contacto@almabordado.cl' || CONFIG.telWhatsapp === '56912345678') {
     console.info('%cAlma Bordado:%c recuerda reemplazar los datos de contacto de ejemplo (Instagram, correo y teléfono) en el objeto CONFIG de app.js.',
       'font-weight:bold;color:#9a567a', 'color:inherit');
@@ -781,6 +923,7 @@ function init() {
   pintarFiltros();
   pintarTienda();
   pintarKits();
+  pintarTalleres();
   pintarPuntosBanner();
   pintarBanner(0);
   rotarBanner();
@@ -805,6 +948,10 @@ function init() {
     // Agregar al carrito (productos, kits y banner)
     const ag = t.closest('[data-agregar]');
     if (ag) { agregarAlCarrito(ag.dataset.agregar); return; }
+
+    // Reservar cupo de un taller
+    const tlr = t.closest('[data-taller]');
+    if (tlr) { abrirReservaTaller(tlr.dataset.taller); return; }
 
     // Filtros tienda
     const chip = t.closest('#filtrosTienda .chip');

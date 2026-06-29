@@ -417,6 +417,23 @@ section { scroll-margin-top: 124px; }
 .producto .precio { font-size: 1.2rem; font-weight: 700; color: var(--titulo); }
 .producto .precio small { font-size: .8rem; color: var(--tinta-suave); font-weight: 600; }
 
+/* Talleres: tarjetas con temática (reusan la base .producto) */
+.producto.taller .foto { aspect-ratio: 4 / 3; }
+.producto.taller .tema {
+  position: absolute; top: 10px; left: 10px; z-index: 1;
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px;
+  font-size: .76rem; font-weight: 700; letter-spacing: .2px; color: #fff;
+  background: linear-gradient(135deg, var(--rosa), var(--rosa-osc));
+  border-radius: 999px; box-shadow: 0 4px 12px rgba(176,122,146,.32);
+}
+.producto.taller .taller-modalidad {
+  display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 600;
+  color: var(--salvia-texto, var(--tinta-suave)); margin-bottom: 12px;
+}
+.producto.taller .taller-modalidad .ico { font-size: .95rem; }
+.producto.taller .pie-prod { flex-direction: column; align-items: stretch; gap: 8px; }
+.producto.taller .pie-prod .nota { font-size: .76rem; color: var(--tinta-suave); text-align: center; }
+
 /* ---------------------------------------------------------------------
    Tarjetas grandes / formularios
    --------------------------------------------------------------------- */
@@ -630,6 +647,21 @@ section { scroll-margin-top: 124px; }
 .chat-fab .chat-fab-ico { font-size: 1.25rem; }
 .chat-fab.oculto { opacity: 0; pointer-events: none; transform: scale(.8); }
 @media (max-width: 480px) { .chat-fab .chat-fab-txt { display: none; } .chat-fab { padding: 14px; } }
+
+/* ---------------------------------------------------------------------
+   Botón flotante de WhatsApp (abajo a la izquierda, lejos del chat)
+   --------------------------------------------------------------------- */
+.wa-fab {
+  position: fixed; left: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 50;
+  display: inline-flex; align-items: center; gap: 9px; padding: 12px 18px 12px 15px;
+  border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 700; font-size: .95rem;
+  text-decoration: none; background: linear-gradient(135deg, #2bd566, #1aa85a);
+  box-shadow: 0 8px 24px rgba(20,140,75,.4); transition: transform .15s, box-shadow .15s;
+}
+.wa-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(20,140,75,.48); }
+.wa-fab:focus-visible { outline: 3px solid var(--marron-osc); outline-offset: 3px; }
+.wa-fab-ico { width: 24px; height: 24px; flex-shrink: 0; }
+@media (max-width: 480px) { .wa-fab .wa-fab-txt { display: none; } .wa-fab { padding: 14px; } }
 
 .chatbot {
   position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 58;
