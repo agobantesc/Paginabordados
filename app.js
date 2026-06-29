@@ -37,11 +37,11 @@ const REGIONES = [
 // Bordados listos para venta
 // (cada producto admite "img": 'fotos/archivo.png' para mostrar una foto real en vez del emoji)
 const PRODUCTOS = [
-  { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.png',
+  { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.webp', afiche:true,
     desc:'Mandala de flores y hojas bordada a mano con mucho detalle. Delicada y llena de vida.' },
-  { id:'r3', nombre:'Bastidor «Girasoles»', precio:24990, emoji:'🌻', tono:'trigo', cat:'Cuadros', img:'fotos/girasoles.png',
-    desc:'Girasoles bordados a mano en tonos cálidos. Un rincón de sol para alegrar cualquier pared.' },
-  { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.png',
+  { id:'r3', nombre:'Bastidor «Girasoles y lavanda»', precio:24990, emoji:'🌻', tono:'trigo', cat:'Cuadros', img:'fotos/girasoles.webp', afiche:true,
+    desc:'Campo de girasoles y lavanda bordado a mano en tonos cálidos. Un rincón de sol para alegrar cualquier pared.' },
+  { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.webp', afiche:true,
     desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' }
 ];
 
@@ -70,7 +70,7 @@ const KITS = [
 // Para mostrar el afiche real, sube la imagen con el nombre indicado en "img".
 const TALLERES = [
   { id:'t_mamas', tema:'Nuevas Mamás', nombre:'Taller «Nuevas Mamás»', emoji:'🤍', tono:'rosa',
-    img:'fotos/taller-nuevas-mamas.png', modalidad:'Personal o en grupo',
+    img:'fotos/taller-nuevas-mamas.webp', modalidad:'Personal o en grupo',
     desc:'Borda algo único para tu bebé recién nacido. Un espacio cálido para crear, a tu ritmo, un recuerdo hecho a mano que durará para siempre.',
     incluye:['Materiales incluidos','Técnicas básicas','Proyecto personalizado','Un momento para ti'] }
 ];
@@ -102,7 +102,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '9';
+const ASSET_V = '10';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
@@ -238,7 +238,29 @@ function cerrarCarrito() {
 /* ----------------------------------------------------------------------
    5) RENDER DE CATÁLOGO Y SECCIONES
    ---------------------------------------------------------------------- */
+// Afiche/banner como producto: muestra la imagen completa (sin recortar) + una
+// barra de acción con nombre, precio y "Agregar". Ideal para los afiches de la tienda.
+function tarjetaAfiche(p) {
+  const foto = p.img
+    ? `<img class="afiche-img" src="${esc(ver(p.img))}" alt="${esc(p.nombre)}" loading="lazy" data-emoji="${p.emoji}" onerror="fotoFallback(this)">`
+    : `<span class="foto-emoji" aria-hidden="true">${p.emoji}</span>`;
+  return `<article class="afiche-card tono-${p.tono}">
+      <div class="afiche-img-wrap">${foto}</div>
+      <div class="afiche-bar">
+        <div class="afiche-bar-info">
+          ${p.cat ? `<span class="etiqueta-inline">${esc(p.cat)}</span>` : ''}
+          <h3>${esc(p.nombre)}</h3>
+        </div>
+        <div class="afiche-bar-cta">
+          <span class="precio">${precio(p.precio)}</span>
+          <button class="btn btn-primario" data-agregar="${p.id}">Agregar 🛒</button>
+        </div>
+      </div>
+    </article>`;
+}
+
 function tarjetaProducto(p) {
+  if (p.afiche) return tarjetaAfiche(p);
   const incluye = p.incluye ? `<ul class="incluye">${p.incluye.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
   const insignia = p.insignia ? `<span class="insignia">${esc(p.insignia)}</span>` : '';
   const foto = p.img
@@ -260,7 +282,9 @@ function tarjetaProducto(p) {
 
 function pintarTienda(cat = 'Todos') {
   const items = cat === 'Todos' ? PRODUCTOS : PRODUCTOS.filter(p => p.cat === cat);
-  $('#grillaTienda').innerHTML = items.map(tarjetaProducto).join('');
+  const grilla = $('#grillaTienda');
+  grilla.classList.toggle('es-afiches', items.length > 0 && items.every(p => p.afiche));
+  grilla.innerHTML = items.map(tarjetaProducto).join('');
 }
 function pintarFiltros() {
   const cats = ['Todos', ...Array.from(new Set(PRODUCTOS.map(p => p.cat)))];
@@ -286,16 +310,33 @@ function pintarKits() {
   $('#grillaKits').innerHTML = KITS.map(tarjetaProducto).join('');
 }
 
-/* Talleres de bordado (tarjetas con temática + reserva de cupo) */
+/* Talleres de bordado: el afiche (completo) ya trae la temática, la descripción
+   y lo que incluye; abajo solo va la acción de reservar. Si el afiche aún no se
+   sube, se muestra una tarjeta de texto de respaldo con los datos del taller. */
 function tarjetaTaller(t) {
+  if (t.img) {
+    return `<article class="afiche-card taller-afiche tono-${t.tono}">
+        <div class="afiche-img-wrap">
+          <img class="afiche-img" src="${esc(ver(t.img))}" alt="Afiche del ${esc(t.nombre)}" loading="lazy" data-emoji="${t.emoji}" onerror="fotoFallback(this)">
+        </div>
+        <div class="afiche-bar">
+          <div class="afiche-bar-info">
+            <span class="tema-inline">🌷 ${esc(t.tema)}</span>
+            <h3>${esc(t.nombre)}</h3>
+          </div>
+          <div class="afiche-bar-cta">
+            <span class="nota">Cupos limitados · coordinamos la fecha contigo</span>
+            <button class="btn btn-primario" data-taller="${t.id}">Reservar mi cupo 🌸</button>
+          </div>
+        </div>
+      </article>`;
+  }
+  // Respaldo sin afiche: tarjeta de texto con la temática
   const incluye = t.incluye ? `<ul class="incluye">${t.incluye.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
-  const foto = t.img
-    ? `<img class="foto-img" src="${esc(ver(t.img))}" alt="Afiche del ${esc(t.nombre)}" loading="lazy" data-emoji="${t.emoji}" onerror="fotoFallback(this)">`
-    : `<span class="foto-emoji" aria-hidden="true">${t.emoji}</span>`;
   const modalidad = t.modalidad
     ? `<p class="taller-modalidad"><span class="ico" aria-hidden="true">👭</span>${esc(t.modalidad)}</p>` : '';
-  return `<article class="producto taller tono-${t.tono}${t.img ? ' con-foto' : ''}">
-      <div class="foto"><span class="tema">🌷 ${esc(t.tema)}</span>${foto}</div>
+  return `<article class="producto taller tono-${t.tono}">
+      <div class="foto"><span class="tema">🌷 ${esc(t.tema)}</span><span class="foto-emoji" aria-hidden="true">${t.emoji}</span></div>
       <div class="cuerpo">
         <h3>${esc(t.nombre)}</h3>
         ${modalidad}
@@ -309,8 +350,10 @@ function tarjetaTaller(t) {
     </article>`;
 }
 function pintarTalleres() {
-  if (!TALLERES.length) { $('#grillaTalleres').innerHTML = ''; return; }
-  $('#grillaTalleres').innerHTML = TALLERES.map(tarjetaTaller).join('');
+  const grilla = $('#grillaTalleres');
+  if (!TALLERES.length) { grilla.innerHTML = ''; return; }
+  grilla.classList.toggle('es-afiches', TALLERES.every(t => t.img));
+  grilla.innerHTML = TALLERES.map(tarjetaTaller).join('');
 }
 
 /* Banner / carrusel rotativo (ofertas, destacados, novedades…) */

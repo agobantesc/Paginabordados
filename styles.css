@@ -434,6 +434,53 @@ section { scroll-margin-top: 124px; }
 .producto.taller .pie-prod { flex-direction: column; align-items: stretch; gap: 8px; }
 .producto.taller .pie-prod .nota { font-size: .76rem; color: var(--tinta-suave); text-align: center; }
 
+/* Afiches como producto/taller: imagen completa (sin recortar) + barra de acción.
+   La grilla pasa a una columna centrada para que el afiche se luzca grande. */
+.grilla.es-afiches {
+  display: flex; flex-direction: column; gap: 26px;
+  grid-template-columns: none; max-width: 880px; margin: 0 auto;
+}
+.afiche-card {
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio-lg);
+  box-shadow: var(--sombra); transition: box-shadow .18s, transform .18s;
+}
+.afiche-card:hover { box-shadow: var(--sombra-media); transform: translateY(-2px); }
+.afiche-img-wrap {
+  aspect-ratio: 3 / 2; display: grid; place-items: center; font-size: 3.4rem;
+  background: linear-gradient(135deg, var(--papel-2), #efe7d6);
+}
+.afiche-card.tono-rosa .afiche-img-wrap { background: linear-gradient(135deg, #f7e7ec, #f0d6df); }
+.afiche-card.tono-salvia .afiche-img-wrap { background: linear-gradient(135deg, #eef2ea, #dde6d6); }
+.afiche-card.tono-trigo .afiche-img-wrap { background: linear-gradient(135deg, #f6eede, #ecdcbb); }
+.afiche-card.taller-afiche .afiche-img-wrap { aspect-ratio: 1600 / 640; }
+.afiche-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.afiche-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px 20px;
+  flex-wrap: wrap; padding: 15px 20px;
+}
+.afiche-bar-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.afiche-bar-info h3 { font-size: 1.4rem; color: var(--titulo); line-height: 1.1; }
+.etiqueta-inline {
+  align-self: flex-start; font-size: .68rem; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+  color: var(--trigo-texto); background: var(--papel-2); border: 1px solid var(--borde); border-radius: 999px; padding: 3px 10px;
+}
+.tema-inline {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 5px;
+  font-size: .74rem; font-weight: 700; letter-spacing: .2px; color: #fff; padding: 4px 11px;
+  background: linear-gradient(135deg, var(--rosa), var(--rosa-osc)); border-radius: 999px;
+}
+.afiche-bar-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.afiche-bar-cta .precio { font-size: 1.35rem; font-weight: 700; color: var(--titulo); }
+.afiche-bar-cta .nota { font-size: .78rem; color: var(--tinta-suave); max-width: 26ch; }
+@media (max-width: 600px) {
+  .afiche-bar { flex-direction: column; align-items: stretch; }
+  .afiche-bar-cta { justify-content: space-between; }
+  .afiche-card.taller-afiche .afiche-bar-cta { flex-direction: column; align-items: stretch; gap: 8px; }
+  .afiche-card.taller-afiche .afiche-bar-cta .nota { text-align: center; max-width: none; }
+  .afiche-bar-cta .btn { flex: 1; }
+}
+
 /* ---------------------------------------------------------------------
    Tarjetas grandes / formularios
    --------------------------------------------------------------------- */
