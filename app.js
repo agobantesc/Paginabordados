@@ -87,6 +87,10 @@ const precio = (n) => fmt.format(n);
 
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+// Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
+const ASSET_V = '3';
+const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
+
 function leer(clave, def) {
   try { const v = localStorage.getItem(clave); return v ? JSON.parse(v) : def; }
   catch (e) { return def; }
@@ -182,7 +186,7 @@ function pintarCarrito() {
     const p = porId(i.id);
     if (!p) return '';
     return `<div class="ci">
-        <div class="ci-foto">${p.img ? `<img src="${esc(p.img)}" alt="" data-emoji="${p.emoji}" onerror="fotoFallback(this)">` : `<span aria-hidden="true">${p.emoji}</span>`}</div>
+        <div class="ci-foto">${p.img ? `<img src="${esc(ver(p.img))}" alt="" data-emoji="${p.emoji}" onerror="fotoFallback(this)">` : `<span aria-hidden="true">${p.emoji}</span>`}</div>
         <div class="ci-info">
           <strong>${esc(p.nombre)}</strong>
           <div class="ci-precio">${precio(p.precio)} c/u</div>
@@ -224,7 +228,7 @@ function tarjetaProducto(p) {
   const incluye = p.incluye ? `<ul class="incluye">${p.incluye.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
   const insignia = p.insignia ? `<span class="insignia">${esc(p.insignia)}</span>` : '';
   const foto = p.img
-    ? `<img class="foto-img" src="${esc(p.img)}" alt="${esc(p.nombre)}" loading="lazy" data-emoji="${p.emoji}" onerror="fotoFallback(this)">`
+    ? `<img class="foto-img" src="${esc(ver(p.img))}" alt="${esc(p.nombre)}" loading="lazy" data-emoji="${p.emoji}" onerror="fotoFallback(this)">`
     : `<span class="foto-emoji" aria-hidden="true">${p.emoji}</span>`;
   return `<article class="producto tono-${p.tono}${p.img ? ' con-foto' : ''}">
       <div class="foto">${foto}<span class="etiqueta">${esc(p.cat || (p.kit ? 'Kit' : ''))}</span>${insignia}</div>
@@ -313,7 +317,7 @@ function pintarBanner(i) {
   const slide = $('#bannerSlide');
   if (b.afiche) {
     slide.innerHTML = `<a class="banner-link" href="${b.href || '#tienda'}">`
-      + `<img class="banner-img" src="${esc(b.afiche)}" alt="${esc(b.alt || b.titulo || 'Banner de Alma Bordado')}" onerror="bannerFallback(this, ${bannerIdx})"></a>`;
+      + `<img class="banner-img" src="${esc(ver(b.afiche))}" alt="${esc(b.alt || b.titulo || 'Banner de Alma Bordado')}" onerror="bannerFallback(this, ${bannerIdx})"></a>`;
   } else {
     slide.innerHTML = slideTextoHTML(b);
   }
