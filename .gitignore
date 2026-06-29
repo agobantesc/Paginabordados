@@ -1,5 +1,5 @@
 node_modules/
 package.json
 package-lock.json
-_verify.mjs
-_shot-*.png
+_*.mjs
+_shot*.png

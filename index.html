@@ -18,7 +18,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -132,7 +132,9 @@
 <!-- ============ Barra superior ============ -->
 <header class="appbar">
   <div class="appbar-inner">
-    <svg class="appbar-deco" viewBox="0 0 240 175" aria-hidden="true"><use href="#ramoAlma"/></svg>
+    <div class="appbar-deco-wrap" aria-hidden="true">
+      <svg class="appbar-deco" viewBox="0 0 240 175"><use href="#ramoAlma"/></svg>
+    </div>
     <a class="marca" href="#inicio" aria-label="Alma Bordado, ir al inicio">
       <svg class="logo" viewBox="0 0 80 80" aria-hidden="true"><use href="#logoAro"/></svg>
       <div>
@@ -149,7 +151,7 @@
     </nav>
     <button class="icono-btn menu-toggle" id="btnMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">☰</button>
     <button class="icono-btn" id="btnCarrito" aria-label="Abrir carrito de compras">
-      🛒<span class="carrito-badge" id="carritoBadge" aria-hidden="true">0</span>
+      🛒<span class="carrito-badge" id="carritoBadge">0</span>
     </button>
   </div>
 </header>
@@ -193,7 +195,10 @@
         <a class="btn btn-sec" id="destVer" href="#tienda">Ver más</a>
       </div>
     </div>
-    <div class="dest-puntos" id="destPuntos" role="tablist" aria-label="Cambiar destacado"></div>
+    <div class="dest-controles">
+      <button class="dest-pausa" id="destPausa" aria-pressed="false" aria-label="Pausar el cambio automático de destacados">⏸</button>
+      <div class="dest-puntos" id="destPuntos" role="group" aria-label="Elegir destacado"></div>
+    </div>
   </section>
 
   <!-- ============ Pilares ============ -->
@@ -274,8 +279,8 @@
         </div>
         <div class="campo">
           <label for="reqContacto">Email o teléfono <span class="req">*</span></label>
-          <input type="text" id="reqContacto" name="contacto" autocomplete="email" placeholder="correo@ejemplo.com o +56 9 1234 5678">
-          <div class="msg-error">Déjanos un medio para responderte.</div>
+          <input type="text" id="reqContacto" name="contacto" autocomplete="off" placeholder="correo@ejemplo.com o +56 9 1234 5678">
+          <div class="msg-error">Déjanos un email o teléfono válido para responderte.</div>
         </div>
       </div>
 
@@ -312,7 +317,7 @@
         <div class="campo">
           <label for="reqArchivo">Imagen de referencia</label>
           <input type="file" id="reqArchivo" name="archivo" accept="image/*">
-          <div class="ayuda">Opcional. Una foto o boceto nos ayuda muchísimo.</div>
+          <div class="ayuda">Opcional. Una foto o boceto nos ayuda muchísimo. Recuerda adjuntarla al abrir WhatsApp o el correo (no se envía sola).</div>
         </div>
       </div>
 
@@ -388,7 +393,7 @@
     <h2>Tu carrito</h2>
     <button class="carrito-cerrar" id="cerrarCarrito" aria-label="Cerrar carrito">✕</button>
   </div>
-  <div class="carrito-items" id="carritoItems"></div>
+  <div class="carrito-items" id="carritoItems" aria-live="polite"></div>
   <div class="carrito-pie" id="carritoPie" hidden>
     <div class="carrito-total">
       <span>Subtotal</span>
@@ -399,7 +404,7 @@
 </aside>
 
 <!-- ============ Modal de checkout ============ -->
-<div class="modal" id="modalCheckout" role="dialog" aria-modal="true" aria-labelledby="checkoutTitulo">
+<div class="modal" id="modalCheckout" role="dialog" aria-modal="true" aria-labelledby="checkoutTitulo" aria-hidden="true">
   <div class="modal-caja ancha">
     <button class="modal-cerrar" id="cerrarCheckout" aria-label="Cerrar">✕</button>
     <h2 id="checkoutTitulo">Finalizar compra</h2>
@@ -499,18 +504,19 @@
         <p class="sub">Tu pedido fue registrado en esta simulación.</p>
         <div class="pedido-num" id="pedidoNum"></div>
         <ul class="resumen-lineas detalle" id="resumenFinal"></ul>
-        <p class="ayuda">Para que tu pedido llegue de verdad a Alma Bordado, envíanoslo por WhatsApp o correo con el botón de abajo.</p>
+        <p class="ayuda">Para que tu pedido llegue de verdad a Alma Bordado, envíanoslo por WhatsApp o correo con un botón de abajo.</p>
         <div class="modal-acciones">
-          <button class="btn btn-rosa" id="coEnviarPedido">Enviar pedido a Alma Bordado</button>
-          <button class="btn btn-fantasma" id="coTerminar">Cerrar</button>
+          <button class="btn btn-rosa" id="coEnviarPedido">Enviar por WhatsApp</button>
+          <button class="btn btn-sec" id="coEnviarCorreo">Enviar por correo</button>
         </div>
+        <button class="btn btn-fantasma btn-bloque" id="coTerminar" style="margin-top:10px;">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ============ Modal genérico (talleres / pedido personalizado confirmación) ============ -->
-<div class="modal" id="modalGenerico" role="dialog" aria-modal="true" aria-labelledby="genTitulo">
+<div class="modal" id="modalGenerico" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="modal-caja">
     <button class="modal-cerrar" id="cerrarGenerico" aria-label="Cerrar">✕</button>
     <div id="genContenido"></div>

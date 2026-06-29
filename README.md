@@ -21,7 +21,13 @@ de Bordados: paleta pastel, motivos botánicos y tipografía Cormorant Garamond.
 
 > El carrito, los pedidos, los requerimientos y las reservas se guardan en el navegador
 > (`localStorage`) y, al confirmar, se envían a la empresa abriendo WhatsApp o el correo
-> con el mensaje ya redactado. Es una simulación: **no se procesan cobros reales**.
+> con el mensaje ya redactado (con un botón extra para **copiar** el mensaje si esos
+> enlaces no abren). Es una simulación: **no se procesan cobros reales** y la imagen de
+> referencia del requerimiento debe adjuntarse a mano al abrir WhatsApp/correo.
+>
+> ¿Quieres que el requerimiento llegue **solo**, sin ese paso manual? Conecta el
+> formulario a un servicio de formularios (Formspree, Getform, Google Forms) o a un
+> pequeño backend que envíe el correo a `CONFIG.email` automáticamente al hacer *submit*.
 
 ## Personalizar
 

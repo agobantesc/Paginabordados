@@ -145,7 +145,14 @@ function fechaCorta(iso) {
 /* ----------------------------------------------------------------------
    4) CARRITO
    ---------------------------------------------------------------------- */
-let carrito = leer('ab_carrito', []);   // [{id, cant}]
+// Sanea lo leído desde localStorage: descarta basura, ids inexistentes y cantidades inválidas
+function sanearCarrito(arr) {
+  if (!Array.isArray(arr)) return [];
+  return arr
+    .filter(i => i && porId(i.id) && Number.isFinite(i.cant) && i.cant > 0)
+    .map(i => ({ id: i.id, cant: Math.min(99, Math.floor(i.cant)) }));
+}
+let carrito = sanearCarrito(leer('ab_carrito', []));   // [{id, cant}]
 
 function guardarCarrito() { guardar('ab_carrito', carrito); }
 function totalItems() { return carrito.reduce((s, i) => s + i.cant, 0); }
@@ -182,6 +189,8 @@ function pintarBadge() {
   const b = $('#carritoBadge');
   b.textContent = n;
   b.classList.toggle('ver', n > 0);
+  $('#btnCarrito').setAttribute('aria-label',
+    n > 0 ? `Abrir carrito de compras, ${n} ${n === 1 ? 'artículo' : 'artículos'}` : 'Abrir carrito de compras');
 }
 
 function pintarCarrito() {
@@ -220,16 +229,19 @@ function pintarCarrito() {
 
 /* Panel del carrito */
 function abrirCarrito() {
+  recordarFoco();
   $('#carritoPanel').classList.add('ver');
   $('#carritoPanel').setAttribute('aria-hidden', 'false');
   $('#overlay').classList.add('ver');
+  setFondoInerte(true);
   document.body.style.overflow = 'hidden';
+  setTimeout(() => $('#cerrarCarrito').focus(), 60);
 }
 function cerrarCarrito() {
   $('#carritoPanel').classList.remove('ver');
   $('#carritoPanel').setAttribute('aria-hidden', 'true');
   if (!$('#modalCheckout').classList.contains('ver')) $('#overlay').classList.remove('ver');
-  if (!hayModalAbierto()) document.body.style.overflow = '';
+  if (!hayModalAbierto()) { setFondoInerte(false); document.body.style.overflow = ''; restaurarFoco(); }
 }
 
 /* ----------------------------------------------------------------------
@@ -266,7 +278,8 @@ function pintarKits() {
 }
 
 /* Banner de destacados rotativo */
-let destIdx = 0, destTimer;
+let destIdx = 0, destTimer, destPausaManual = false, destHover = false;
+const prefiereMenosMovimiento = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 function pintarDestacado(i) {
   if (!DESTACADOS.length) return;
   destIdx = (i + DESTACADOS.length) % DESTACADOS.length;
@@ -276,21 +289,38 @@ function pintarDestacado(i) {
   $('#destPrecio').textContent = precio(p.precio);
   $('#destAgregar').dataset.id = p.id;
   $('#destVer').setAttribute('href', p.kit ? '#kits' : '#tienda');
-  $$('#destPuntos .dest-punto').forEach((b, idx) => b.classList.toggle('activo', idx === destIdx));
+  $$('#destPuntos .dest-punto').forEach((b, idx) => {
+    const act = idx === destIdx;
+    b.classList.toggle('activo', act);
+    b.setAttribute('aria-current', act ? 'true' : 'false');
+  });
 }
 function pintarPuntosDestacado() {
   $('#destPuntos').innerHTML = DESTACADOS.map((p, i) =>
-    `<button class="dest-punto" role="tab" data-idx="${i}" aria-label="Destacado ${i + 1}: ${esc(p.nombre)}"></button>`).join('');
+    `<button class="dest-punto" data-idx="${i}" aria-current="false" aria-label="Ver destacado ${i + 1}: ${esc(p.nombre)}"></button>`).join('');
 }
 function rotarDestacado() {
   clearTimeout(destTimer);
-  destTimer = setTimeout(() => { pintarDestacado(destIdx + 1); rotarDestacado(); }, 5500);
+  // Respeta "reducir movimiento", la pausa manual, el hover/foco y los casos sin contenido que rotar
+  if (prefiereMenosMovimiento || destPausaManual || destHover || DESTACADOS.length <= 1) return;
+  destTimer = setTimeout(() => { pintarDestacado(destIdx + 1); rotarDestacado(); }, 6000);
+}
+function alternarPausaDestacado() {
+  destPausaManual = !destPausaManual;
+  const b = $('#destPausa');
+  b.setAttribute('aria-pressed', String(destPausaManual));
+  b.textContent = destPausaManual ? '▶' : '⏸';
+  b.setAttribute('aria-label', (destPausaManual ? 'Reanudar' : 'Pausar') + ' el cambio automático de destacados');
+  rotarDestacado();
 }
 
 /* Talleres */
+function inscritosTalleres() {
+  const v = leer('ab_talleres_inscritos', {});
+  return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
+}
 function cuposDisponibles(t) {
-  const inscritos = leer('ab_talleres_inscritos', {});
-  const usados = inscritos[t.id] || 0;
+  const usados = Number(inscritosTalleres()[t.id]) || 0;
   return Math.max(0, t.cupos - usados);
 }
 function pintarTalleres() {
@@ -340,18 +370,36 @@ function hayModalAbierto() {
          $('#modalGenerico').classList.contains('ver') ||
          $('#carritoPanel').classList.contains('ver');
 }
+// Foco e inertización del fondo mientras hay un diálogo abierto
+let ultimoFoco = null;
+function fondoElems() { return [$('header.appbar'), $('main'), $('footer.pie')]; }
+function setFondoInerte(activo) {
+  fondoElems().forEach(el => {
+    if (!el) return;
+    if (activo) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
+    else { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+  });
+}
+function recordarFoco() { if (!ultimoFoco) ultimoFoco = document.activeElement; }
+function restaurarFoco() {
+  const el = ultimoFoco; ultimoFoco = null;
+  if (el && typeof el.focus === 'function') { try { el.focus(); } catch (e) { /* no-op */ } }
+}
+
 function abrirModal(id) {
+  recordarFoco();
   $(id).classList.add('ver');
   $(id).setAttribute('aria-hidden', 'false');
+  setFondoInerte(true);
   document.body.style.overflow = 'hidden';
-  const foco = $(id).querySelector('input, select, textarea, button');
+  const foco = $(id).querySelector('input:not([type="file"]), select, textarea, button');
   if (foco) setTimeout(() => foco.focus(), 60);
 }
 function cerrarModal(id) {
   $(id).classList.remove('ver');
   $(id).setAttribute('aria-hidden', 'true');
   if (id === '#modalCheckout' && !$('#carritoPanel').classList.contains('ver')) $('#overlay').classList.remove('ver');
-  if (!hayModalAbierto()) document.body.style.overflow = '';
+  if (!hayModalAbierto()) { setFondoInerte(false); document.body.style.overflow = ''; restaurarFoco(); }
 }
 function abrirGenerico(html) {
   $('#genContenido').innerHTML = html;
@@ -364,11 +412,21 @@ function abrirGenerico(html) {
 function marcar(input, ok) {
   const campo = input.closest('.campo');
   if (campo) campo.classList.toggle('error', !ok);
+  input.setAttribute('aria-invalid', String(!ok));
   return ok;
 }
 function validoTexto(input) { return marcar(input, input.value.trim().length > 0); }
 function validoEmail(input) { return marcar(input, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())); }
 function validoTel(input) { return marcar(input, input.value.replace(/\D/g, '').length >= 7); }
+function validoContacto(input) {
+  const v = input.value.trim();
+  return marcar(input, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || v.replace(/\D/g, '').length >= 7);
+}
+// Lleva el foco (y la atención del lector de pantalla) al primer campo con error
+function enfocarPrimerInvalido(scope) {
+  const el = (scope || document).querySelector('.campo.error input, .campo.error select, .campo.error textarea');
+  if (el) el.focus();
+}
 
 /* ----------------------------------------------------------------------
    8) ENVÍO DE MENSAJES A LA EMPRESA (WhatsApp / correo)
@@ -379,6 +437,17 @@ function abrirWhatsApp(texto) {
 function abrirCorreo(asunto, cuerpo) {
   window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
 }
+function copiarTexto(texto) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(() => toast('Mensaje copiado 📋', 'ok'), () => toast('No se pudo copiar.'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = texto; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); toast('Mensaje copiado 📋', 'ok'); } catch (err) { toast('No se pudo copiar.'); }
+    document.body.removeChild(ta);
+  }
+}
 
 /* ----------------------------------------------------------------------
    9) CHECKOUT
@@ -387,6 +456,7 @@ const checkout = {
   paso: 1,
   envio: 'retiro',          // 'retiro' | 'domicilio'
   pago: 'tarjeta',          // 'tarjeta' | 'transferencia' | 'efectivo'
+  region: CONFIG.envio.rmNombre,
   datos: {}, ultimoPedido: null
 };
 
@@ -394,7 +464,7 @@ function costoEnvio() {
   if (checkout.envio === 'retiro') return 0;
   const sub = subtotalCarrito();
   if (sub >= CONFIG.envio.gratisDesde) return 0;
-  const region = $('#coRegion').value;
+  const region = checkout.region || $('#coRegion').value;
   return region === CONFIG.envio.rmNombre ? CONFIG.envio.montoRM : CONFIG.envio.montoRegiones;
 }
 function totalCheckout() { return subtotalCarrito() + costoEnvio(); }
@@ -405,23 +475,23 @@ function pintarOpcionesEnvio() {
   const rm = gratis ? 'Gratis' : precio(CONFIG.envio.montoRM);
   const reg = gratis ? 'Gratis' : precio(CONFIG.envio.montoRegiones);
   $('#envioOpciones').innerHTML = `
-    <div class="opcion-radio envio-opcion${checkout.envio === 'retiro' ? ' elegida' : ''}" data-envio="retiro">
-      <input type="radio" name="envio" ${checkout.envio === 'retiro' ? 'checked' : ''} id="envRetiro">
+    <label class="opcion-radio envio-opcion${checkout.envio === 'retiro' ? ' elegida' : ''}">
+      <input type="radio" name="envio" value="retiro" ${checkout.envio === 'retiro' ? 'checked' : ''}>
       <div><strong>Retiro en el taller — Gratis</strong>
       <small>${esc(CONFIG.tallerLugar)}. Coordinamos día y hora contigo.</small></div>
-    </div>
-    <div class="opcion-radio envio-opcion${checkout.envio === 'domicilio' ? ' elegida' : ''}" data-envio="domicilio">
-      <input type="radio" name="envio" ${checkout.envio === 'domicilio' ? 'checked' : ''} id="envDom">
+    </label>
+    <label class="opcion-radio envio-opcion${checkout.envio === 'domicilio' ? ' elegida' : ''}">
+      <input type="radio" name="envio" value="domicilio" ${checkout.envio === 'domicilio' ? 'checked' : ''}>
       <div><strong>Despacho a domicilio</strong>
       <small>Región Metropolitana ${rm} · otras regiones ${reg}. ${gratis ? '🎉 ¡Tu compra tiene envío gratis!' : 'Envío gratis sobre ' + precio(CONFIG.envio.gratisDesde) + '.'}</small></div>
-    </div>`;
+    </label>`;
   $('#bloqueDireccion').style.display = checkout.envio === 'domicilio' ? 'block' : 'none';
 }
 
 function pintarResumenPago() {
   const sub = subtotalCarrito();
   const env = costoEnvio();
-  const lineas = carrito.map(i => {
+  const lineas = carrito.filter(i => porId(i.id)).map(i => {
     const p = porId(i.id);
     return `<li><span>${esc(p.nombre)} ×${i.cant}</span><span>${precio(p.precio * i.cant)}</span></li>`;
   }).join('');
@@ -439,10 +509,10 @@ function pintarResumenPago() {
   if (checkout.envio === 'retiro') metodos.push({ v:'efectivo', t:'Pago al retirar', s:'Pagas en efectivo o transferencia al retirar tu pedido.' });
   if (!metodos.some(m => m.v === checkout.pago)) checkout.pago = 'tarjeta';
   $('#metodoPago').innerHTML = metodos.map(m => `
-    <div class="opcion-radio${checkout.pago === m.v ? ' elegida' : ''}" data-pago="${m.v}">
-      <input type="radio" name="pago" ${checkout.pago === m.v ? 'checked' : ''}>
+    <label class="opcion-radio${checkout.pago === m.v ? ' elegida' : ''}">
+      <input type="radio" name="pago" value="${m.v}" ${checkout.pago === m.v ? 'checked' : ''}>
       <div><strong>${esc(m.t)}</strong><small>${esc(m.s)}</small></div>
-    </div>`).join('');
+    </label>`).join('');
   $('#bloqueTarjeta').style.display = checkout.pago === 'tarjeta' ? 'grid' : 'none';
 }
 
@@ -466,13 +536,13 @@ function mostrarPaso(n) {
 
 function validarPaso1() {
   const ok = [validoTexto($('#coNombre')), validoEmail($('#coEmail')), validoTel($('#coTel'))].every(Boolean);
-  if (!ok) toast('Revisa tus datos de contacto.');
+  if (!ok) { toast('Revisa tus datos de contacto.'); enfocarPrimerInvalido($('.checkout-paso[data-paso="1"]')); }
   return ok;
 }
 function validarPaso2() {
   if (checkout.envio !== 'domicilio') return true;
   const ok = [validoTexto($('#coDir')), validoTexto($('#coComuna'))].every(Boolean);
-  if (!ok) toast('Completa tu dirección de despacho.');
+  if (!ok) { toast('Completa tu dirección de despacho.'); enfocarPrimerInvalido($('.checkout-paso[data-paso="2"]')); }
   return ok;
 }
 
@@ -488,14 +558,20 @@ function finalizarPago() {
   if (!validarPaso2()) { mostrarPaso(2); return; }
   if (checkout.pago === 'tarjeta') {
     const num = $('#coTarjeta').value.replace(/\s/g, '');
-    if (num.length < 13) { toast('Ingresa un número de tarjeta (simulado).'); $('#coTarjeta').focus(); return; }
+    const venc = $('#coVenc').value.trim();
+    const cvv = $('#coCvv').value.trim();
+    const mVenc = venc.match(/^(\d{2})\/(\d{2})$/);
+    const okNum = marcar($('#coTarjeta'), /^\d{13,16}$/.test(num));
+    const okVenc = marcar($('#coVenc'), !!(mVenc && +mVenc[1] >= 1 && +mVenc[1] <= 12));
+    const okCvv = marcar($('#coCvv'), /^\d{3,4}$/.test(cvv));
+    if (!(okNum && okVenc && okCvv)) { toast('Revisa los datos de la tarjeta (simulado).'); enfocarPrimerInvalido($('#bloqueTarjeta')); return; }
   }
   // Construir pedido
   const num = 'AB-' + Date.now().toString().slice(-6);
   const pedido = {
     num,
     fecha: new Date().toISOString(),
-    items: carrito.map(i => { const p = porId(i.id); return { nombre:p.nombre, cant:i.cant, precio:p.precio }; }),
+    items: carrito.filter(i => porId(i.id)).map(i => { const p = porId(i.id); return { nombre:p.nombre, cant:i.cant, precio:p.precio }; }),
     subtotal: subtotalCarrito(),
     envio: checkout.envio,
     costoEnvio: costoEnvio(),
@@ -544,10 +620,14 @@ function mensajePedido(p) {
 function abrirCheckout() {
   if (!carrito.length) { toast('Tu carrito está vacío.'); return; }
   checkout.paso = 1; checkout.envio = 'retiro'; checkout.pago = 'tarjeta';
+  checkout.region = CONFIG.envio.rmNombre;
   // Llenar regiones
   $('#coRegion').innerHTML = REGIONES.map(r =>
     `<option ${r === CONFIG.envio.rmNombre ? 'selected' : ''}>${esc(r)}</option>`).join('');
-  $$('.campo.error').forEach(c => c.classList.remove('error'));
+  // Limpiar datos sensibles/antiguos del intento anterior
+  ['#coDir', '#coComuna', '#coTarjeta', '#coVenc', '#coCvv'].forEach(s => { $(s).value = ''; });
+  $$('#modalCheckout .campo.error').forEach(c => c.classList.remove('error'));
+  $$('#modalCheckout [aria-invalid="true"]').forEach(i => i.setAttribute('aria-invalid', 'false'));
   cerrarCarrito();
   $('#overlay').classList.add('ver');
   mostrarPaso(1);
@@ -560,8 +640,8 @@ function abrirCheckout() {
 function enviarRequerimiento(e) {
   e.preventDefault();
   const nombre = $('#reqNombre'), contacto = $('#reqContacto'), desc = $('#reqDescripcion');
-  const ok = [validoTexto(nombre), validoTexto(contacto), validoTexto(desc)].every(Boolean);
-  if (!ok) { toast('Completa los campos marcados con *'); return; }
+  const ok = [validoTexto(nombre), validoContacto(contacto), validoTexto(desc)].every(Boolean);
+  if (!ok) { toast('Completa los campos marcados con *'); enfocarPrimerInvalido($('#formReq')); return; }
 
   const datos = {
     fecha: new Date().toISOString(),
@@ -592,10 +672,14 @@ function enviarRequerimiento(e) {
         <button class="btn btn-rosa" id="reqWa">Enviar por WhatsApp</button>
         <button class="btn btn-sec" id="reqMail">Enviar por correo</button>
       </div>
-      <button class="btn btn-fantasma btn-bloque" id="reqCerrar" style="margin-top:10px;">Cerrar</button>
+      <div class="modal-acciones" style="margin-top:10px;">
+        <button class="btn btn-fantasma" id="reqCopiar">📋 Copiar mensaje</button>
+        <button class="btn btn-fantasma" id="reqCerrar">Cerrar</button>
+      </div>
     </div>`);
   $('#reqWa').onclick = () => abrirWhatsApp(texto);
   $('#reqMail').onclick = () => abrirCorreo(asunto, texto);
+  $('#reqCopiar').onclick = () => copiarTexto(texto);
   $('#reqCerrar').onclick = () => cerrarModal('#modalGenerico');
 
   $('#formReq').reset();
@@ -640,30 +724,43 @@ function abrirTaller(id) {
     e.preventDefault();
     const n = $('#tNombre'), em = $('#tEmail'), tel = $('#tTel');
     const ok = [validoTexto(n), validoEmail(em), validoTel(tel)].every(Boolean);
-    if (!ok) { toast('Revisa tus datos.'); return; }
+    if (!ok) { toast('Revisa tus datos.'); enfocarPrimerInvalido($('#formTaller')); return; }
     const cant = Number($('#tCupos').value);
-    const inscritos = leer('ab_talleres_inscritos', {});
-    inscritos[t.id] = (inscritos[t.id] || 0) + cant;
-    guardar('ab_talleres_inscritos', inscritos);
-    pintarTalleres();
+    const disp = cuposDisponibles(t);   // revalida por si cambió mientras llenaba el formulario
+    if (cant > disp) { toast(disp > 0 ? `Solo quedan ${disp} cupo(s).` : 'Ya no quedan cupos.'); pintarTalleres(); return; }
 
     const texto = `¡Hola Alma Bordado! 🌸 Quiero reservar ${cant} cupo(s) para el taller "${t.titulo}" del ${fechaLarga(t.fecha)} (${t.modo}).\n\n`
       + `Nombre: ${n.value.trim()}\nEmail: ${em.value.trim()}\nTeléfono: ${tel.value.trim()}\nTotal: ${precio(t.precio * cant)}`;
+
+    // El cupo solo se descuenta cuando la persona realmente avisa a la empresa
+    let reservado = false;
+    function confirmarReserva() {
+      if (reservado) return;
+      reservado = true;
+      const inscritos = inscritosTalleres();
+      inscritos[t.id] = (inscritos[t.id] || 0) + cant;
+      guardar('ab_talleres_inscritos', inscritos);
+      pintarTalleres();
+      toast('¡Cupo reservado! 🌼', 'ok');
+    }
     abrirGenerico(`
       <div class="confirma">
         <div class="check-grande" aria-hidden="true">✓</div>
-        <h2>¡Cupo reservado! 🌼</h2>
-        <p class="sub">Confirma tu reserva con Alma Bordado por WhatsApp o correo para coordinar el pago.</p>
+        <h2>Confirma tu reserva 🌼</h2>
+        <p class="sub">Para guardar tu cupo, avísale a Alma Bordado por WhatsApp o correo. Coordinaremos el pago contigo.</p>
         <div class="modal-acciones">
           <button class="btn btn-rosa" id="tWa">Confirmar por WhatsApp</button>
           <button class="btn btn-sec" id="tMail">Confirmar por correo</button>
         </div>
-        <button class="btn btn-fantasma btn-bloque" id="tCerrar" style="margin-top:10px;">Cerrar</button>
+        <div class="modal-acciones" style="margin-top:10px;">
+          <button class="btn btn-fantasma" id="tCopiar">📋 Copiar mensaje</button>
+          <button class="btn btn-fantasma" id="tCerrar">Cerrar</button>
+        </div>
       </div>`);
-    $('#tWa').onclick = () => abrirWhatsApp(texto);
-    $('#tMail').onclick = () => abrirCorreo('Reserva de taller — Alma Bordado', texto);
+    $('#tWa').onclick = () => { confirmarReserva(); abrirWhatsApp(texto); };
+    $('#tMail').onclick = () => { confirmarReserva(); abrirCorreo('Reserva de taller — Alma Bordado', texto); };
+    $('#tCopiar').onclick = () => { confirmarReserva(); copiarTexto(texto); };
     $('#tCerrar').onclick = () => cerrarModal('#modalGenerico');
-    toast('Reserva registrada 🌼', 'ok');
   });
 }
 
@@ -680,6 +777,10 @@ function aplicarContacto() {
   $('#cardTel').href = 'https://wa.me/' + CONFIG.telWhatsapp;
   $('#cardTel').target = '_blank';
   $('#cardTel').rel = 'noopener';
+  if (CONFIG.email === 'contacto@almabordado.cl' || CONFIG.telWhatsapp === '56912345678') {
+    console.info('%cAlma Bordado:%c recuerda reemplazar los datos de contacto de ejemplo (Instagram, correo y teléfono) en el objeto CONFIG de app.js.',
+      'font-weight:bold;color:#9a567a', 'color:inherit');
+  }
 }
 
 function init() {
@@ -693,6 +794,17 @@ function init() {
   pintarTalleres();
   pintarBadge();
   pintarCarrito();
+
+  // Banner: pausa al pasar el cursor o enfocar dentro; oculta el botón si no hay autoavance
+  const banner = $('.banner-dest');
+  if (prefiereMenosMovimiento || DESTACADOS.length <= 1) $('#destPausa').style.display = 'none';
+  banner.addEventListener('mouseenter', () => { destHover = true; clearTimeout(destTimer); });
+  banner.addEventListener('mouseleave', () => { destHover = false; rotarDestacado(); });
+  banner.addEventListener('focusin', () => { destHover = true; clearTimeout(destTimer); });
+  banner.addEventListener('focusout', () => { destHover = false; rotarDestacado(); });
+
+  // No permitir fechas pasadas en el requerimiento personalizado
+  $('#reqFecha').min = new Date().toISOString().slice(0, 10);
 
   // Delegación global de clicks
   document.addEventListener('click', (e) => {
@@ -730,11 +842,24 @@ function init() {
     const ir = t.closest('[data-ir]');
     if (ir) { irPaso(Number(ir.dataset.ir)); return; }
 
-    // Opciones de envío / pago
-    const envOpt = t.closest('[data-envio]');
-    if (envOpt) { checkout.envio = envOpt.dataset.envio; pintarOpcionesEnvio(); return; }
-    const pagoOpt = t.closest('[data-pago]');
-    if (pagoOpt) { checkout.pago = pagoOpt.dataset.pago; pintarResumenPago(); return; }
+    // Pausa/reanuda del banner de destacados
+    if (t.closest('#destPausa')) { alternarPausaDestacado(); return; }
+  });
+
+  // Selección de envío / pago / región (funciona con teclado vía labels + radios)
+  document.addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.name === 'envio') {
+      checkout.envio = t.value;
+      $$('#envioOpciones .opcion-radio').forEach(l => l.classList.toggle('elegida', l.querySelector('input').value === t.value));
+      $('#bloqueDireccion').style.display = checkout.envio === 'domicilio' ? 'block' : 'none';
+    } else if (t.name === 'pago') {
+      checkout.pago = t.value;
+      $$('#metodoPago .opcion-radio').forEach(l => l.classList.toggle('elegida', l.querySelector('input').value === t.value));
+      $('#bloqueTarjeta').style.display = checkout.pago === 'tarjeta' ? 'grid' : 'none';
+    } else if (t.id === 'coRegion') {
+      checkout.region = t.value;
+    }
   });
 
   // Carrito abrir/cerrar
@@ -754,6 +879,9 @@ function init() {
   $('#coEnviarPedido').addEventListener('click', () => {
     if (checkout.ultimoPedido) abrirWhatsApp(mensajePedido(checkout.ultimoPedido));
   });
+  $('#coEnviarCorreo').addEventListener('click', () => {
+    if (checkout.ultimoPedido) abrirCorreo('Nuevo pedido ' + checkout.ultimoPedido.num + ' — Alma Bordado', mensajePedido(checkout.ultimoPedido));
+  });
 
   // Modal genérico
   $('#cerrarGenerico').addEventListener('click', () => cerrarModal('#modalGenerico'));
@@ -768,15 +896,33 @@ function init() {
   btnMenu.addEventListener('click', () => {
     const abierto = nav.classList.toggle('abierto');
     btnMenu.setAttribute('aria-expanded', String(abierto));
+    if (abierto) { const a = nav.querySelector('a'); if (a) setTimeout(() => a.focus(), 40); }
   });
   nav.addEventListener('click', (e) => { if (e.target.tagName === 'A') { nav.classList.remove('abierto'); btnMenu.setAttribute('aria-expanded', 'false'); } });
 
   // Tecla Escape cierra lo que esté abierto
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    if ($('#modalGenerico').classList.contains('ver')) cerrarModal('#modalGenerico');
+    if (nav.classList.contains('abierto')) { nav.classList.remove('abierto'); btnMenu.setAttribute('aria-expanded', 'false'); btnMenu.focus(); }
+    else if ($('#modalGenerico').classList.contains('ver')) cerrarModal('#modalGenerico');
     else if ($('#modalCheckout').classList.contains('ver')) cerrarModal('#modalCheckout');
     else if ($('#carritoPanel').classList.contains('ver')) cerrarCarrito();
+  });
+
+  // Trampa de foco dentro del diálogo activo (Tab / Shift+Tab)
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    let cont = null;
+    if ($('#modalGenerico').classList.contains('ver')) cont = $('#modalGenerico .modal-caja');
+    else if ($('#modalCheckout').classList.contains('ver')) cont = $('#modalCheckout .modal-caja');
+    else if ($('#carritoPanel').classList.contains('ver')) cont = $('#carritoPanel');
+    if (!cont) return;
+    const foco = $$('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])', cont)
+      .filter(el => el.offsetParent !== null);
+    if (!foco.length) return;
+    const primero = foco[0], ultimo = foco[foco.length - 1];
+    if (e.shiftKey && document.activeElement === primero) { e.preventDefault(); ultimo.focus(); }
+    else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primero.focus(); }
   });
 
   // Formateo amistoso del número de tarjeta (simulado)
