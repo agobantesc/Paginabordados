@@ -13,6 +13,8 @@ mostrarlas apenas existan, usando exactamente estos nombres de archivo:
 | `calavera.jpg`          | Bordado «Calavera mexicana»               |
 | `mandala.jpg`           | Bordado «Mandala floral»                  |
 | `hongos.jpg`            | Bordado «Hongos de colores»               |
+| `kit-flores.jpg`        | Kit «Flores Silvestres»                   |
+| `kit-calavera.jpg`      | Kit «Calavera Floral»                     |
 
 Sugerencias:
 - Usa JPG o PNG. Si una foto pesa mucho, ideal reducirla a ~1200 px de ancho.

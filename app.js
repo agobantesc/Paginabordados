@@ -53,8 +53,15 @@ const PRODUCTOS = [
     desc:'Trío de ballenas bordadas a mano en azules suaves. Una escena marina llena de calma.' }
 ];
 
-// Kits de bordado (incluyen insumos + manual). Aún sin productos reales cargados.
-const KITS = [];
+// Kits de bordado (incluyen insumos + manual)
+const KITS = [
+  { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:22990, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.jpg',
+    desc:'Todo lo que necesitas para bordar un ramo de flores silvestres, paso a paso. Ideal para empezar.',
+    incluye:['Diseño','6 hilos','Agujas','Bastidor','Tela','Guía paso a paso'], insignia:'Principiantes' },
+  { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:26990, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.jpg',
+    desc:'Borda una calavera floral llena de color sobre tela negra. Para principiantes y avanzados.',
+    incluye:['Diseño','10 hilos','6 agujas','Bastidor 15 cm','Tela negra','Guía de puntos'], insignia:'Todo nivel' }
+];
 
 const CATALOGO = [...PRODUCTOS, ...KITS];
 const porId = (id) => CATALOGO.find(p => p.id === id);
@@ -65,8 +72,9 @@ const porId = (id) => CATALOGO.find(p => p.id === id);
 //  - "precioAntes" muestra el precio tachado para ofertas.
 const BANNERS = [
   { tipo:'destacado', kicker:'Bordado destacado', icono:'🌼', productId:'p_cumplemes' },
-  { tipo:'nuevo', kicker:'Recién llegado', icono:'✨', productId:'r4' },   // Calavera
-  { tipo:'oferta', kicker:'Favorito', icono:'💗', productId:'r5' },        // Mandala floral
+  { tipo:'nuevo', kicker:'Recién llegado', icono:'✨', productId:'r4' },     // Calavera
+  { tipo:'kit', kicker:'Kit destacado', icono:'🎁', productId:'k_flores' },  // Kit Flores Silvestres
+  { tipo:'oferta', kicker:'Favorito', icono:'💗', productId:'r5' },          // Mandala floral
   { tipo:'envio', kicker:'Envío gratis', icono:'🚚', titulo:'Envío gratis sobre $50.000',
     desc:'En tus compras con despacho a domicilio. ¡Date un gusto! 🌸', cta:'Ver la tienda', href:'#tienda' }
 ];
