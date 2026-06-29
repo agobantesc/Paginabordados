@@ -113,7 +113,7 @@ img { max-width: 100%; display: block; }
 .appbar-deco-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
 .appbar-deco { position: absolute; top: -30px; right: 64px; width: 180px; height: auto; opacity: .5; pointer-events: none; }
 .marca { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; text-decoration: none; position: relative; z-index: 2; }
-.logo { width: 52px; height: 52px; flex-shrink: 0; }
+.logo { width: 52px; height: 52px; flex-shrink: 0; object-fit: contain; border-radius: 50%; }
 .marca h1 { font-size: 1.7rem; font-weight: 700; color: var(--titulo); line-height: 1; letter-spacing: .3px; }
 .marca .lema { font-size: .78rem; color: var(--tinta-suave); margin-top: 3px; letter-spacing: .2px; }
 @media (max-width: 620px) { .appbar-deco-wrap { display: none; } }
@@ -464,7 +464,8 @@ section { scroll-margin-top: 88px; }
 }
 .pie-inner { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; padding: 30px 0 18px; }
 .pie .marca-pie { display: flex; align-items: center; gap: 12px; }
-.pie .marca-pie svg { width: 44px; height: 44px; }
+.pie .marca-pie svg, .pie .marca-pie img.logo-pie { width: 44px; height: 44px; }
+.pie .marca-pie img.logo-pie { object-fit: contain; border-radius: 50%; }
 .pie .marca-pie strong { font-family: "Cormorant Garamond", serif; font-size: 1.3rem; color: var(--titulo); }
 .pie .marca-pie p { font-size: .82rem; color: var(--tinta-suave); }
 .pie-links { display: flex; flex-wrap: wrap; gap: 16px; }
@@ -610,7 +611,7 @@ section { scroll-margin-top: 88px; }
 .chatbot.ver { opacity: 1; visibility: visible; transform: none; }
 .chat-cab { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: linear-gradient(135deg, #f7ede2, #f3e2e8); border-bottom: 1px solid var(--borde); }
 .chat-cab-info { display: flex; align-items: center; gap: 10px; }
-.chat-logo { width: 40px; height: 40px; flex-shrink: 0; }
+.chat-logo { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; border-radius: 50%; }
 .chat-cab-txt strong { display: block; font-family: "Cormorant Garamond", serif; font-size: 1.25rem; color: var(--titulo); line-height: 1; }
 .chat-cab-txt span { font-size: .78rem; color: var(--tinta-suave); }
 .chat-cerrar { background: none; border: none; font-size: 1.3rem; color: var(--tinta-suave); cursor: pointer; line-height: 1; padding: 4px; }

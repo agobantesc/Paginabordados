@@ -39,10 +39,16 @@ const REGIONES = [
 const PRODUCTOS = [
   { id:'p_cumplemes', nombre:'«Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', cat:'Bebé',
     desc:'Set de 12 bordados listos para registrar mes a mes el primer año del bebé, del 1 al 12. Hechos a mano: el regalo perfecto para un nacimiento.', destacado:true, insignia:'Destacado' },
+  { id:'r1', nombre:'Bastidor «Maggie»', precio:14990, emoji:'💛', tono:'trigo', cat:'Cuadros', img:'fotos/maggie.jpg',
+    desc:'Bordado a mano de Maggie en bastidor de 10 cm. Un guiño tierno y divertido para tu pared.' },
+  { id:'r2', nombre:'Bastidor «Pantera Rosa»', precio:19990, emoji:'🐾', tono:'rosa', cat:'Cuadros', img:'fotos/pantera-rosa.jpg',
+    desc:'La Pantera Rosa bordada a mano con mucho detalle, en bastidor rosado. Pieza única.' },
+  { id:'r3', nombre:'Cuadro «Nombre en flores»', precio:34990, emoji:'🌷', tono:'salvia', cat:'Cuadros', img:'fotos/nombre-flores.jpg',
+    desc:'Cuadro enmarcado con el nombre que tú quieras, rodeado de flores silvestres. Personalizable: nos dices el nombre al comprar.', insignia:'Personalizable' },
   { id:'b1', nombre:'Bastidor «Jardín de primavera»', precio:24990, emoji:'🌷', tono:'rosa', cat:'Cuadros',
     desc:'Cuadro circular de 20 cm con flores silvestres bordadas a mano, listo para colgar.', destacado:true, insignia:'' },
-  { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros',
-    desc:'Escena marina en tonos suaves, ideal para la pieza de un bebé o tu rincón favorito.' },
+  { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros', img:'fotos/ballenas.jpg',
+    desc:'Trío de ballenas bordadas a mano en azules suaves. Una escena marina llena de calma.' },
   { id:'b3', nombre:'Polera «Ramo silvestre»', precio:27990, emoji:'👕', tono:'salvia', cat:'Prendas',
     desc:'Polera de algodón con un ramito bordado en el pecho. Tallas S a XL.' },
   { id:'b4', nombre:'Tote bag «Flores de campo»', precio:18990, emoji:'👜', tono:'trigo', cat:'Accesorios',
@@ -199,7 +205,7 @@ function pintarCarrito() {
     const p = porId(i.id);
     if (!p) return '';
     return `<div class="ci">
-        <div class="ci-foto">${p.img ? `<img src="${esc(p.img)}" alt="">` : `<span aria-hidden="true">${p.emoji}</span>`}</div>
+        <div class="ci-foto">${p.img ? `<img src="${esc(p.img)}" alt="" data-emoji="${p.emoji}" onerror="fotoFallback(this)">` : `<span aria-hidden="true">${p.emoji}</span>`}</div>
         <div class="ci-info">
           <strong>${esc(p.nombre)}</strong>
           <div class="ci-precio">${precio(p.precio)} c/u</div>
@@ -241,7 +247,7 @@ function tarjetaProducto(p) {
   const incluye = p.incluye ? `<ul class="incluye">${p.incluye.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
   const insignia = p.insignia ? `<span class="insignia">${esc(p.insignia)}</span>` : '';
   const foto = p.img
-    ? `<img class="foto-img" src="${esc(p.img)}" alt="${esc(p.nombre)}" loading="lazy">`
+    ? `<img class="foto-img" src="${esc(p.img)}" alt="${esc(p.nombre)}" loading="lazy" data-emoji="${p.emoji}" onerror="fotoFallback(this)">`
     : `<span class="foto-emoji" aria-hidden="true">${p.emoji}</span>`;
   return `<article class="producto tono-${p.tono}${p.img ? ' con-foto' : ''}">
       <div class="foto">${foto}<span class="etiqueta">${esc(p.cat || (p.kit ? 'Kit' : ''))}</span>${insignia}</div>
