@@ -53,10 +53,10 @@ const PRODUCTOS = [
 
 // Kits de bordado (incluyen insumos + manual)
 const KITS = [
-  { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:30000, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.png',
+  { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:30000, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.webp',
     desc:'Todo lo necesario para bordar un ramo de flores silvestres. Ideal para principiantes.',
     incluye:['Diseño','6 hilos','Agujas','Bastidor','Tela','Manual'], insignia:'Principiantes' },
-  { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:35000, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.png',
+  { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:35000, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.webp',
     desc:'Todo lo necesario para bordar una calavera floral sobre tela negra. Para todo nivel.',
     incluye:['Diseño','10 hilos','Agujas','Bastidor','Tela','Manual'], insignia:'Todo nivel' }
 ];
@@ -64,19 +64,15 @@ const KITS = [
 const CATALOGO = [...PRODUCTOS, ...KITS];
 const porId = (id) => CATALOGO.find(p => p.id === id);
 
-// Banners rotativos del carrusel.
-//  - "tipo" define el color y la etiqueta (kicker).
-//  - Pueden destacar un producto (productId) u ofrecer info (titulo/desc/cta/href).
-//  - "precioAntes" muestra el precio tachado para ofertas.
 // Banner = 3 afiches propios que rotan. Cada uno muestra una imagen completa
-// (fotos/bannerN.png) y enlaza a una sección. Mientras no se suba el afiche, se
-// muestra el texto de respaldo (kicker/titulo/desc/cta).
+// (fotos/bannerN.webp) y enlaza a una sección. Mientras no se suba el afiche,
+// se muestra el texto de respaldo (kicker/titulo/desc/cta).
 const BANNERS = [
-  { tipo:'destacado', afiche:'fotos/banner1.png', href:'#tienda', icono:'🌼', alt:'Bordados destacados',
+  { tipo:'destacado', afiche:'fotos/banner1.webp', href:'#tienda', icono:'🌼', alt:'Bordados destacados',
     kicker:'Bordado destacado', titulo:'Bordados hechos a mano', desc:'Descubre nuestras piezas únicas.', cta:'Ver la tienda' },
-  { tipo:'oferta', afiche:'fotos/banner2.png', href:'#tienda', icono:'🏷️', alt:'Ofertas de Alma Bordado',
+  { tipo:'oferta', afiche:'fotos/banner2.webp', href:'#tienda', icono:'🏷️', alt:'Ofertas de Alma Bordado',
     kicker:'Ofertas', titulo:'Ofertas de Alma Bordado', desc:'Aprovecha nuestros precios especiales.', cta:'Ver la tienda' },
-  { tipo:'kit', afiche:'fotos/banner3.png', href:'#kits', icono:'🎁', alt:'Kits y novedades',
+  { tipo:'kit', afiche:'fotos/banner3.webp', href:'#kits', icono:'🎁', alt:'Kits y novedades',
     kicker:'Novedades', titulo:'Kits y novedades', desc:'Todo listo para bordar en casa.', cta:'Ver los kits' }
 ];
 

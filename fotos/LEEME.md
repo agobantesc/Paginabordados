@@ -21,7 +21,10 @@ mostrarlas apenas existan, usando exactamente estos nombres de archivo:
 Los afiches del banner: ideal todos del mismo tamaño, ~1200 × 450 px (apaisados).
 
 Sugerencias:
-- Usa JPG o PNG. Si una foto pesa mucho, ideal reducirla a ~1200 px de ancho.
+- Sube las fotos en PNG o JPG; luego se **optimizan a .webp** para que carguen
+  rápido (las que ya subiste quedaron ~15× más livianas).
 - Mientras un archivo no exista, el sitio muestra un emoji o el logo dibujado
   como respaldo (no se rompe nada).
 - Si subes una foto con otro nombre, no pasa nada: avísame el nombre y lo conecto.
+- Afiches del banner: para que llenen el ancho **sin recortarse**, hazlos
+  apaisados ~1500 × 600 px (proporción 5:2).
