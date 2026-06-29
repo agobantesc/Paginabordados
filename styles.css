@@ -368,6 +368,16 @@ section { scroll-margin-top: 88px; }
 .producto .foto-emoji { font-size: 3.4rem; line-height: 1; }
 .producto .foto-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .producto.con-foto .foto { background: var(--papel-2); }
+
+/* Bloque "próximamente" (sección sin productos cargados aún) */
+.proximamente {
+  grid-column: 1 / -1; text-align: center; background: var(--superficie);
+  border: 1px dashed var(--borde-fuerte); border-radius: var(--radio-lg); padding: 38px 24px; box-shadow: var(--sombra);
+}
+.proximamente svg { width: 66px; height: 66px; opacity: .85; margin: 0 auto 4px; display: block; }
+.proximamente h3 { font-size: 1.7rem; color: var(--titulo); margin-bottom: 8px; }
+.proximamente p { color: var(--tinta-suave); max-width: 48ch; margin: 0 auto 18px; line-height: 1.5; }
+.proximamente-acciones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .producto .etiqueta {
   position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,.85); color: var(--titulo);
   font-size: .72rem; font-weight: 700; padding: 5px 10px; border-radius: 999px; letter-spacing: .3px;

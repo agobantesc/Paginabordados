@@ -49,43 +49,12 @@ const PRODUCTOS = [
     desc:'Mandala de flores y hojas bordada a mano con mucho detalle. Delicada y llena de vida.' },
   { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.jpg',
     desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' },
-  { id:'b1', nombre:'Bastidor «Jardín de primavera»', precio:24990, emoji:'🌷', tono:'rosa', cat:'Cuadros',
-    desc:'Cuadro circular de 20 cm con flores silvestres bordadas a mano, listo para colgar.', destacado:true, insignia:'' },
   { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros', img:'fotos/ballenas.jpg',
-    desc:'Trío de ballenas bordadas a mano en azules suaves. Una escena marina llena de calma.' },
-  { id:'b3', nombre:'Polera «Ramo silvestre»', precio:27990, emoji:'👕', tono:'salvia', cat:'Prendas',
-    desc:'Polera de algodón con un ramito bordado en el pecho. Tallas S a XL.' },
-  { id:'b4', nombre:'Tote bag «Flores de campo»', precio:18990, emoji:'👜', tono:'trigo', cat:'Accesorios',
-    desc:'Bolso de tela resistente con bordado floral. Para llevar tus cosas con estilo.' },
-  { id:'b5', nombre:'Mini bastidor «Abeja feliz»', precio:12990, emoji:'🐝', tono:'trigo', cat:'Cuadros',
-    desc:'Bordado pequeñito de 10 cm, perfecto para regalar o empezar tu colección.', insignia:'Nuevo' },
-  { id:'b6', nombre:'Cojín «Hojas de eucalipto»', precio:29990, emoji:'🛋️', tono:'salvia', cat:'Hogar',
-    desc:'Funda de cojín 40×40 cm con ramas de eucalipto bordadas. Suave y acogedora.' },
-  { id:'b7', nombre:'Gorro «Margaritas»', precio:16990, emoji:'🧢', tono:'rosa', cat:'Prendas',
-    desc:'Gorro de algodón con margaritas bordadas a mano. Talla única.' },
-  { id:'b8', nombre:'Bastidor «Inicial floral»', precio:19990, emoji:'🌼', tono:'trigo', cat:'Cuadros',
-    desc:'La inicial que elijas, rodeada de flores. Dinos la letra al comprar.' }
+    desc:'Trío de ballenas bordadas a mano en azules suaves. Una escena marina llena de calma.' }
 ];
 
-// Kits de bordado (incluyen insumos + manual)
-const KITS = [
-  { id:'k2', nombre:'Kit «Bolsitas de Halloween»', precio:19990, emoji:'🎃', tono:'trigo', kit:true,
-    desc:'Borda dos bolsitas temáticas para dulces y sustos. Edición de temporada.',
-    incluye:['Diseño','Hilos','Aguja','Bastidor','2 bolsitas','Manual'],
-    destacado:true, insignia:'Temporada' },
-  { id:'k3', nombre:'Kit «Primeras puntadas»', precio:15990, emoji:'🌼', tono:'salvia', kit:true,
-    desc:'Pensado para quienes empiezan: aprende las puntadas básicas con un diseño tierno.',
-    incluye:['Diseño','Hilos','Aguja','Bastidor','Manual ilustrado'], destacado:true, insignia:'' },
-  { id:'k4', nombre:'Kit «Ramo silvestre»', precio:21990, emoji:'🌸', tono:'rosa', kit:true,
-    desc:'Un ramo de flores de campo para enmarcar. Nivel intermedio, muy relajante.',
-    incluye:['Diseño','Hilos DMC','Aguja','Bastidor 20 cm','Tela','Manual'] },
-  { id:'k5', nombre:'Kit «Mar de ballenas»', precio:20990, emoji:'🐳', tono:'azul', kit:true,
-    desc:'Olas suaves y ballenitas para un cuadro lleno de calma.',
-    incluye:['Diseño','Hilos','Aguja','Bastidor','Tela','Manual'] },
-  { id:'k6', nombre:'Kit «Inicial floral»', precio:17990, emoji:'✒️', tono:'trigo', kit:true,
-    desc:'Borda tu inicial entre flores. Incluye plantillas de la A a la Z.',
-    incluye:['Plantillas A–Z','Hilos','Aguja','Bastidor','Manual'] }
-];
+// Kits de bordado (incluyen insumos + manual). Aún sin productos reales cargados.
+const KITS = [];
 
 const CATALOGO = [...PRODUCTOS, ...KITS];
 const porId = (id) => CATALOGO.find(p => p.id === id);
@@ -96,12 +65,12 @@ const porId = (id) => CATALOGO.find(p => p.id === id);
 //  - "precioAntes" muestra el precio tachado para ofertas.
 const BANNERS = [
   { tipo:'destacado', kicker:'Bordado destacado', icono:'🌼', productId:'p_cumplemes' },
-  { tipo:'oferta', kicker:'Oferta', icono:'🏷️', productId:'b5', precioAntes:15990 },
-  { tipo:'kit', kicker:'Kit destacado', icono:'🎁', productId:'k2' },
-  { tipo:'nuevo', kicker:'Recién llegado', icono:'✨', productId:'b8' },
+  { tipo:'nuevo', kicker:'Recién llegado', icono:'✨', productId:'r4' },   // Calavera
+  { tipo:'oferta', kicker:'Favorito', icono:'💗', productId:'r5' },        // Mandala floral
   { tipo:'envio', kicker:'Envío gratis', icono:'🚚', titulo:'Envío gratis sobre $50.000',
     desc:'En tus compras con despacho a domicilio. ¡Date un gusto! 🌸', cta:'Ver la tienda', href:'#tienda' }
 ];
+// Para una OFERTA real con precio tachado: { tipo:'oferta', kicker:'Oferta', icono:'🏷️', productId:'<id>', precioAntes:<precio anterior> }
 
 /* ----------------------------------------------------------------------
    3) HELPERS
@@ -277,6 +246,19 @@ function pintarFiltros() {
     `<button class="chip${i === 0 ? ' activo' : ''}" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
 }
 function pintarKits() {
+  if (!KITS.length) {
+    $('#grillaKits').innerHTML = `
+      <div class="proximamente">
+        <svg viewBox="0 0 80 80" aria-hidden="true"><use href="#margaritaSalvia" transform="translate(40,40) scale(1.1)"/></svg>
+        <h3>¡Muy pronto! 🎁</h3>
+        <p>Estamos preparando nuestros kits con diseño, hilos, aguja, bastidor y un manual detallado, todo listo en una cajita. ¿Quieres que te avisemos cuando estén?</p>
+        <div class="proximamente-acciones">
+          <a class="btn btn-rosa" href="#contacto">Avísenme</a>
+          <a class="btn btn-sec" href="#personalizado">Pedir algo a medida</a>
+        </div>
+      </div>`;
+    return;
+  }
   $('#grillaKits').innerHTML = KITS.map(tarjetaProducto).join('');
 }
 
