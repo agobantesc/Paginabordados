@@ -113,7 +113,11 @@ img { max-width: 100%; display: block; }
 .appbar-deco-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
 .appbar-deco { position: absolute; top: -30px; right: 64px; width: 180px; height: auto; opacity: .5; pointer-events: none; }
 .marca { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; text-decoration: none; position: relative; z-index: 2; }
-.logo { width: 90px; height: 90px; flex-shrink: 0; object-fit: contain; border-radius: 50%; }
+.logo {
+  width: 92px; height: 92px; flex-shrink: 0; object-fit: contain; border-radius: 50%;
+  background: #fffdf8; border: 2.5px solid #cbb088;
+  box-shadow: 0 4px 14px rgba(111,97,81,.22); filter: saturate(1.12) contrast(1.05);
+}
 .marca h1 { font-size: 2.3rem; font-weight: 700; color: var(--titulo); line-height: 1; letter-spacing: .3px; }
 .marca .lema { font-size: .95rem; color: var(--tinta-suave); margin-top: 4px; letter-spacing: .2px; }
 @media (max-width: 620px) { .appbar-deco-wrap { display: none; } }
