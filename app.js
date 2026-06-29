@@ -1,7 +1,7 @@
 /* ======================================================================
    Alma Bordado — Landing · Lógica
-   Sitio estático: carrito, checkout simulado, requerimientos y talleres
-   se guardan en el navegador y se envían a la empresa por WhatsApp/correo.
+   Sitio estático: carrito, checkout simulado y requerimientos se guardan
+   en el navegador y se envían a la empresa por WhatsApp/correo.
    ====================================================================== */
 'use strict';
 
@@ -9,8 +9,8 @@
    1) CONFIGURACIÓN  ·  EDITA AQUÍ tus datos reales de contacto y envío
    ---------------------------------------------------------------------- */
 const CONFIG = {
-  instagram: 'alma.bordado',
-  instagramUrl: 'https://instagram.com/alma.bordado',
+  instagram: 'almabordado',
+  instagramUrl: 'https://instagram.com/almabordado',
   email: 'contacto@almabordado.cl',
   telDisplay: '+56 9 1234 5678',
   telWhatsapp: '56912345678',     // solo dígitos, con código país (para WhatsApp)
@@ -35,7 +35,10 @@ const REGIONES = [
    2) CATÁLOGO
    ---------------------------------------------------------------------- */
 // Bordados listos para venta
+// (cada producto admite "img": 'fotos/archivo.jpg' para mostrar una foto real en vez del emoji)
 const PRODUCTOS = [
+  { id:'p_cumplemes', nombre:'«Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', cat:'Bebé',
+    desc:'Set de 12 bordados listos para registrar mes a mes el primer año del bebé, del 1 al 12. Hechos a mano: el regalo perfecto para un nacimiento.', destacado:true, insignia:'Destacado' },
   { id:'b1', nombre:'Bastidor «Jardín de primavera»', precio:24990, emoji:'🌷', tono:'rosa', cat:'Cuadros',
     desc:'Cuadro circular de 20 cm con flores silvestres bordadas a mano, listo para colgar.', destacado:true, insignia:'' },
   { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros',
@@ -56,10 +59,6 @@ const PRODUCTOS = [
 
 // Kits de bordado (incluyen insumos + manual)
 const KITS = [
-  { id:'k1', nombre:'Kit «Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', kit:true,
-    desc:'12 mini diseños para registrar mes a mes el primer año. El regalo perfecto para un nacimiento.',
-    incluye:['12 diseños (mes 1 al 12)','Hilos DMC','Aguja','Bastidor','Tela','Manual paso a paso'],
-    destacado:true, insignia:'Destacado' },
   { id:'k2', nombre:'Kit «Bolsitas de Halloween»', precio:19990, emoji:'🎃', tono:'trigo', kit:true,
     desc:'Borda dos bolsitas temáticas para dulces y sustos. Edición de temporada.',
     incluye:['Diseño','Hilos','Aguja','Bastidor','2 bolsitas','Manual'],
@@ -81,26 +80,17 @@ const KITS = [
 const CATALOGO = [...PRODUCTOS, ...KITS];
 const porId = (id) => CATALOGO.find(p => p.id === id);
 
-// Destacados del banner (los marcados con destacado:true)
-const DESTACADOS = CATALOGO.filter(p => p.destacado);
-
-// Talleres de bordado
-const TALLERES = [
-  { id:'t1', titulo:'Iniciación al bordado: tu primer bastidor', modo:'presencial', fecha:'2026-07-12',
-    lugar:'Taller Alma Bordado · Providencia', duracion:'3 horas', nivel:'Principiante', precio:18000, cupos:8,
-    desc:'Aprende a montar el bastidor y las puntadas esenciales. Te llevas tu primer bordado terminado.' },
-  { id:'t2', titulo:'Bordando flores silvestres', modo:'virtual', fecha:'2026-07-26',
-    lugar:'Online (Zoom, con grabación)', duracion:'2 horas', nivel:'Intermedio', precio:12000, cupos:20,
-    desc:'Crea un ramo de flores con puntadas de relleno y texturas, desde la comodidad de tu casa.' },
-  { id:'t3', titulo:'Bordado en prendas: renueva tu ropa', modo:'presencial', fecha:'2026-08-09',
-    lugar:'Taller Alma Bordado · Providencia', duracion:'3,5 horas', nivel:'Intermedio', precio:22000, cupos:6,
-    desc:'Aprende a bordar sobre poleras y jeans sin dañar la tela. Trae una prenda para intervenir.' },
-  { id:'t4', titulo:'Tarde de bordado y café', modo:'presencial', fecha:'2026-08-23',
-    lugar:'Taller Alma Bordado · Providencia', duracion:'2 horas', nivel:'Todos los niveles', precio:8000, cupos:0,
-    desc:'Un encuentro relajado entre bordadoras para avanzar tus proyectos y compartir un café.' },
-  { id:'t5', titulo:'Punto de cruz moderno', modo:'virtual', fecha:'2026-09-06',
-    lugar:'Online (Zoom, con grabación)', duracion:'2 horas', nivel:'Principiante', precio:12000, cupos:15,
-    desc:'Descubre el punto de cruz con diseños frescos y actuales. Incluye patrón descargable.' }
+// Banners rotativos del carrusel.
+//  - "tipo" define el color y la etiqueta (kicker).
+//  - Pueden destacar un producto (productId) u ofrecer info (titulo/desc/cta/href).
+//  - "precioAntes" muestra el precio tachado para ofertas.
+const BANNERS = [
+  { tipo:'destacado', kicker:'Bordado destacado', icono:'🌼', productId:'p_cumplemes' },
+  { tipo:'oferta', kicker:'Oferta', icono:'🏷️', productId:'b5', precioAntes:15990 },
+  { tipo:'kit', kicker:'Kit destacado', icono:'🎁', productId:'k2' },
+  { tipo:'nuevo', kicker:'Recién llegado', icono:'✨', productId:'b8' },
+  { tipo:'envio', kicker:'Envío gratis', icono:'🚚', titulo:'Envío gratis sobre $50.000',
+    desc:'En tus compras con despacho a domicilio. ¡Date un gusto! 🌸', cta:'Ver la tienda', href:'#tienda' }
 ];
 
 /* ----------------------------------------------------------------------
@@ -209,7 +199,7 @@ function pintarCarrito() {
     const p = porId(i.id);
     if (!p) return '';
     return `<div class="ci">
-        <div class="ci-foto" aria-hidden="true">${p.emoji}</div>
+        <div class="ci-foto">${p.img ? `<img src="${esc(p.img)}" alt="">` : `<span aria-hidden="true">${p.emoji}</span>`}</div>
         <div class="ci-info">
           <strong>${esc(p.nombre)}</strong>
           <div class="ci-precio">${precio(p.precio)} c/u</div>
@@ -250,8 +240,11 @@ function cerrarCarrito() {
 function tarjetaProducto(p) {
   const incluye = p.incluye ? `<ul class="incluye">${p.incluye.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
   const insignia = p.insignia ? `<span class="insignia">${esc(p.insignia)}</span>` : '';
-  return `<article class="producto tono-${p.tono}">
-      <div class="foto" aria-hidden="true">${p.emoji}<span class="etiqueta">${esc(p.cat || (p.kit ? 'Kit' : ''))}</span>${insignia}</div>
+  const foto = p.img
+    ? `<img class="foto-img" src="${esc(p.img)}" alt="${esc(p.nombre)}" loading="lazy">`
+    : `<span class="foto-emoji" aria-hidden="true">${p.emoji}</span>`;
+  return `<article class="producto tono-${p.tono}${p.img ? ' con-foto' : ''}">
+      <div class="foto">${foto}<span class="etiqueta">${esc(p.cat || (p.kit ? 'Kit' : ''))}</span>${insignia}</div>
       <div class="cuerpo">
         <h3>${esc(p.nombre)}</h3>
         <p class="desc">${esc(p.desc)}</p>
@@ -277,90 +270,72 @@ function pintarKits() {
   $('#grillaKits').innerHTML = KITS.map(tarjetaProducto).join('');
 }
 
-/* Banner de destacados rotativo */
-let destIdx = 0, destTimer, destPausaManual = false, destHover = false;
+/* Banner / carrusel rotativo (ofertas, destacados, novedades…) */
+let bannerIdx = 0, bannerTimer, bannerPausaManual = false, bannerHover = false;
 const prefiereMenosMovimiento = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-function pintarDestacado(i) {
-  if (!DESTACADOS.length) return;
-  destIdx = (i + DESTACADOS.length) % DESTACADOS.length;
-  const p = DESTACADOS[destIdx];
-  $('#destNombre').textContent = p.nombre;
-  $('#destDesc').textContent = p.desc;
-  $('#destPrecio').textContent = precio(p.precio);
-  $('#destAgregar').dataset.id = p.id;
-  $('#destVer').setAttribute('href', p.kit ? '#kits' : '#tienda');
-  $$('#destPuntos .dest-punto').forEach((b, idx) => {
-    const act = idx === destIdx;
-    b.classList.toggle('activo', act);
-    b.setAttribute('aria-current', act ? 'true' : 'false');
+
+function pintarBanner(i) {
+  if (!BANNERS.length) return;
+  bannerIdx = (i + BANNERS.length) % BANNERS.length;
+  const b = BANNERS[bannerIdx];
+  $('#bannerDest').className = 'banner-dest tipo-' + b.tipo;
+
+  let titulo, desc, precioHtml = '', acciones;
+  if (b.productId) {
+    const p = porId(b.productId);
+    titulo = p.nombre;
+    desc = b.desc || p.desc;
+    precioHtml = (b.precioAntes && b.precioAntes > p.precio)
+      ? `<div class="dest-precio"><span class="antes">${precio(b.precioAntes)}</span> ${precio(p.precio)}</div>`
+      : `<div class="dest-precio">${precio(p.precio)}</div>`;
+    acciones = `<button class="btn btn-rosa" data-agregar="${p.id}">Agregar al carrito 🛒</button>
+                <a class="btn btn-sec" href="${p.kit ? '#kits' : '#tienda'}">Ver más</a>`;
+  } else {
+    titulo = b.titulo; desc = b.desc;
+    acciones = `<a class="btn btn-rosa" href="${b.href || '#tienda'}">${esc(b.cta || 'Ver más')}</a>`;
+  }
+
+  const slide = $('#bannerSlide');
+  slide.innerHTML = `
+    <div class="estrella" aria-hidden="true">${b.icono || '✨'}</div>
+    <div class="dest-txt">
+      <div class="dest-kicker">${esc(b.kicker)}</div>
+      <div class="dest-nombre">${esc(titulo)}</div>
+      <div class="dest-desc">${esc(desc)}</div>
+      ${precioHtml}
+    </div>
+    <div class="dest-acciones">${acciones}</div>`;
+
+  if (!prefiereMenosMovimiento) {        // efecto de entrada (se omite con "reducir movimiento")
+    slide.classList.remove('entra');
+    void slide.offsetWidth;              // reinicia la animación
+    slide.classList.add('entra');
+  }
+  $$('#destPuntos .dest-punto').forEach((d, idx) => {
+    const act = idx === bannerIdx;
+    d.classList.toggle('activo', act);
+    d.setAttribute('aria-current', act ? 'true' : 'false');
   });
 }
-function pintarPuntosDestacado() {
-  $('#destPuntos').innerHTML = DESTACADOS.map((p, i) =>
-    `<button class="dest-punto" data-idx="${i}" aria-current="false" aria-label="Ver destacado ${i + 1}: ${esc(p.nombre)}"></button>`).join('');
+function pintarPuntosBanner() {
+  $('#destPuntos').innerHTML = BANNERS.map((b, i) =>
+    `<button class="dest-punto" data-idx="${i}" aria-current="false" aria-label="Ver banner ${i + 1}: ${esc(b.kicker)}"></button>`).join('');
 }
-function rotarDestacado() {
-  clearTimeout(destTimer);
-  // Respeta "reducir movimiento", la pausa manual, el hover/foco y los casos sin contenido que rotar
-  if (prefiereMenosMovimiento || destPausaManual || destHover || DESTACADOS.length <= 1) return;
-  destTimer = setTimeout(() => { pintarDestacado(destIdx + 1); rotarDestacado(); }, 6000);
+function rotarBanner() {
+  clearTimeout(bannerTimer);
+  // El autoavance se detiene con la pausa manual o el hover/foco (control de WCAG 2.2.2)
+  if (bannerPausaManual || bannerHover || BANNERS.length <= 1) return;
+  bannerTimer = setTimeout(() => { pintarBanner(bannerIdx + 1); rotarBanner(); }, 5000);
 }
-function alternarPausaDestacado() {
-  destPausaManual = !destPausaManual;
+function alternarPausaBanner() {
+  bannerPausaManual = !bannerPausaManual;
   const b = $('#destPausa');
-  b.setAttribute('aria-pressed', String(destPausaManual));
-  b.textContent = destPausaManual ? '▶' : '⏸';
-  b.setAttribute('aria-label', (destPausaManual ? 'Reanudar' : 'Pausar') + ' el cambio automático de destacados');
-  rotarDestacado();
+  b.setAttribute('aria-pressed', String(bannerPausaManual));
+  b.textContent = bannerPausaManual ? '▶' : '⏸';
+  b.setAttribute('aria-label', (bannerPausaManual ? 'Reanudar' : 'Pausar') + ' el cambio automático del banner');
+  rotarBanner();
 }
 
-/* Talleres */
-function inscritosTalleres() {
-  const v = leer('ab_talleres_inscritos', {});
-  return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
-}
-function cuposDisponibles(t) {
-  const usados = Number(inscritosTalleres()[t.id]) || 0;
-  return Math.max(0, t.cupos - usados);
-}
-function pintarTalleres() {
-  $('#listaTalleres').innerHTML = TALLERES.map(t => {
-    const fc = fechaCorta(t.fecha);
-    const disp = cuposDisponibles(t);
-    let cuposTxt, cuposCls, btn;
-    if (disp === 0) {
-      cuposTxt = 'Cupos agotados'; cuposCls = 'agotado';
-      btn = `<button class="btn btn-sec btn-mini" disabled>Sin cupos</button>`;
-    } else if (disp <= 4) {
-      cuposTxt = `¡Últimos ${disp} cupos!`; cuposCls = 'pocos';
-      btn = `<button class="btn btn-rosa btn-mini" data-taller="${t.id}">Reservar cupo</button>`;
-    } else {
-      cuposTxt = `${disp} cupos disponibles`; cuposCls = '';
-      btn = `<button class="btn btn-primario btn-mini" data-taller="${t.id}">Reservar cupo</button>`;
-    }
-    return `<article class="taller">
-        <div class="fecha-caja" aria-hidden="true">
-          <div class="mes">${fc.mes}</div><div class="dia">${fc.dia}</div><div class="anio">${fc.anio}</div>
-        </div>
-        <div class="t-cuerpo">
-          <span class="modo ${t.modo}">${t.modo === 'virtual' ? '💻 Virtual' : '📍 Presencial'}</span>
-          <h3>${esc(t.titulo)}</h3>
-          <div class="t-meta">
-            <span>🗓️ ${fechaLarga(t.fecha)}</span>
-            <span>⏱️ ${esc(t.duracion)}</span>
-            <span>🎯 ${esc(t.nivel)}</span>
-            <span>📍 ${esc(t.lugar)}</span>
-          </div>
-          <p class="t-desc">${esc(t.desc)}</p>
-          <div class="t-pie">
-            <span class="precio">${precio(t.precio)}</span>
-            <span class="cupos ${cuposCls}">${cuposTxt}</span>
-            ${btn}
-          </div>
-        </div>
-      </article>`;
-  }).join('');
-}
 
 /* ----------------------------------------------------------------------
    6) MODALES (genérico + checkout) y foco
@@ -650,7 +625,6 @@ function enviarRequerimiento(e) {
     tipo: $('#reqTipo').value,
     para: $('#reqFecha').value || 'Sin fecha definida',
     descripcion: desc.value.trim(),
-    presupuesto: $('#reqPresupuesto').value.trim() || 'No indicado',
     adjunto: $('#reqArchivo').files.length ? $('#reqArchivo').files[0].name : 'Sin imagen'
   };
   const reqs = leer('ab_requerimientos', []);
@@ -659,109 +633,112 @@ function enviarRequerimiento(e) {
 
   const texto = `¡Hola Alma Bordado! 🌸 Quiero un pedido personalizado:\n\n`
     + `Nombre: ${datos.nombre}\nContacto: ${datos.contacto}\nTipo: ${datos.tipo}\n`
-    + `Para: ${datos.para}\nPresupuesto: ${datos.presupuesto}\nImagen de referencia: ${datos.adjunto}\n\n`
+    + `Para: ${datos.para}\nImagen de referencia: ${datos.adjunto}\n\n`
     + `Proyecto:\n${datos.descripcion}`;
   const asunto = 'Nuevo requerimiento personalizado — Alma Bordado';
+  const nombrePila = datos.nombre.split(' ')[0];
 
   abrirGenerico(`
     <div class="confirma">
       <div class="check-grande" aria-hidden="true">✓</div>
-      <h2>¡Recibimos tu idea! 🌷</h2>
-      <p class="sub">Para que tu requerimiento llegue a Alma Bordado, envíalo por WhatsApp o correo. Te responderemos con una propuesta antes de empezar.</p>
+      <h2>¡Tu requerimiento fue enviado! 🌸</h2>
+      <p class="sub">Gracias, ${esc(nombrePila)}. Lo revisaremos con mucho cariño y te enviaremos la propuesta y el precio a la brevedad. 💛</p>
+      <p class="confirma-extra">¿Quieres adelantárnoslo? También puedes escribirnos directo:</p>
       <div class="modal-acciones">
-        <button class="btn btn-rosa" id="reqWa">Enviar por WhatsApp</button>
-        <button class="btn btn-sec" id="reqMail">Enviar por correo</button>
+        <button class="btn btn-sec" id="reqWa">Por WhatsApp</button>
+        <button class="btn btn-sec" id="reqMail">Por correo</button>
       </div>
-      <div class="modal-acciones" style="margin-top:10px;">
-        <button class="btn btn-fantasma" id="reqCopiar">📋 Copiar mensaje</button>
-        <button class="btn btn-fantasma" id="reqCerrar">Cerrar</button>
-      </div>
+      <button class="btn btn-primario btn-bloque" id="reqCerrar" style="margin-top:12px;">Listo 🌷</button>
     </div>`);
   $('#reqWa').onclick = () => abrirWhatsApp(texto);
   $('#reqMail').onclick = () => abrirCorreo(asunto, texto);
-  $('#reqCopiar').onclick = () => copiarTexto(texto);
   $('#reqCerrar').onclick = () => cerrarModal('#modalGenerico');
 
   $('#formReq').reset();
-  toast('Requerimiento guardado 💌', 'ok');
+  toast('¡Requerimiento enviado! 💌', 'ok');
 }
 
 /* ----------------------------------------------------------------------
-   11) INSCRIPCIÓN A TALLERES
+   11) CHATBOT GUÍA (scripted, sin IA externa)
    ---------------------------------------------------------------------- */
-function abrirTaller(id) {
-  const t = TALLERES.find(x => x.id === id);
-  if (!t || cuposDisponibles(t) === 0) return;
-  abrirGenerico(`
-    <h2>Reservar cupo</h2>
-    <p class="sub">${esc(t.titulo)} · ${fechaLarga(t.fecha)} · ${precio(t.precio)}</p>
-    <form id="formTaller" novalidate>
-      <div class="campo full">
-        <label for="tNombre">Tu nombre <span class="req">*</span></label>
-        <input type="text" id="tNombre" autocomplete="name" placeholder="Camila Soto">
-        <div class="msg-error">Ingresa tu nombre.</div>
-      </div>
-      <div class="fila">
-        <div class="campo">
-          <label for="tEmail">Email <span class="req">*</span></label>
-          <input type="email" id="tEmail" autocomplete="email" placeholder="correo@ejemplo.com">
-          <div class="msg-error">Ingresa un email válido.</div>
-        </div>
-        <div class="campo">
-          <label for="tTel">Teléfono <span class="req">*</span></label>
-          <input type="tel" id="tTel" autocomplete="tel" placeholder="+56 9 1234 5678">
-          <div class="msg-error">Ingresa tu teléfono.</div>
-        </div>
-      </div>
-      <div class="campo full">
-        <label for="tCupos">Cantidad de cupos</label>
-        <select id="tCupos">${Array.from({ length: Math.min(4, cuposDisponibles(t)) }, (_, i) =>
-          `<option value="${i + 1}">${i + 1}</option>`).join('')}</select>
-      </div>
-      <button type="submit" class="btn btn-primario btn-bloque btn-grande" style="margin-top:6px;">Confirmar reserva</button>
-    </form>`);
-  $('#formTaller').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const n = $('#tNombre'), em = $('#tEmail'), tel = $('#tTel');
-    const ok = [validoTexto(n), validoEmail(em), validoTel(tel)].every(Boolean);
-    if (!ok) { toast('Revisa tus datos.'); enfocarPrimerInvalido($('#formTaller')); return; }
-    const cant = Number($('#tCupos').value);
-    const disp = cuposDisponibles(t);   // revalida por si cambió mientras llenaba el formulario
-    if (cant > disp) { toast(disp > 0 ? `Solo quedan ${disp} cupo(s).` : 'Ya no quedan cupos.'); pintarTalleres(); return; }
+const CHAT_RESPUESTAS = {
+  inicio: {
+    msg: '¡Hola! 🌸 Soy Alma, te ayudo a encontrar lo que buscas. ¿Qué te gustaría hacer?',
+    opciones: ['Ver bordados listos', 'Ver kits', 'Pedido personalizado', 'Envíos y pagos', 'Contacto']
+  },
+  'ver bordados listos': {
+    msg: 'Tenemos bordados hechos a mano listos para enviar 🪡 Te llevo a la tienda. Puedes filtrarlos por categoría y agregarlos al carrito.',
+    accion: { tipo: 'scroll', destino: '#tienda' }, opciones: ['Ver kits', 'Envíos y pagos', 'Contacto']
+  },
+  'ver kits': {
+    msg: 'Los kits traen el diseño + todos los insumos (hilos, aguja, bastidor) y un manual detallado 🎁 Ideales para empezar o regalar. ¡Te llevo!',
+    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Ver bordados listos', 'Pedido personalizado', 'Contacto']
+  },
+  'pedido personalizado': {
+    msg: 'Bordamos lo que tú imagines 💌 Cuéntanos tu idea en el formulario y te enviamos una propuesta con precio antes de empezar. Nada se borda sin tu confirmación.',
+    accion: { tipo: 'scroll', destino: '#personalizado' }, opciones: ['Ver bordados listos', 'Envíos y pagos', 'Contacto']
+  },
+  'envíos y pagos': {
+    msg: 'Puedes retirar en el taller (gratis) o pedir despacho a domicilio. 🚚 ¡El envío es gratis en compras sobre $50.000! El pago se simula en la web y coordinamos contigo al confirmar.',
+    opciones: ['Ver bordados listos', 'Pedido personalizado', 'Contacto']
+  },
+  contacto: {
+    msg: 'Escríbenos cuando quieras 💛 Estamos en Instagram (@' + CONFIG.instagram + '), por correo y por WhatsApp. Te llevo a la sección de contacto.',
+    accion: { tipo: 'scroll', destino: '#contacto' }, opciones: ['Ver bordados listos', 'Ver kits']
+  }
+};
+const CHAT_PALABRAS = [
+  { claves: ['hola', 'buenas', 'saludos', 'hey'], key: 'inicio' },
+  { claves: ['kit', 'kits', 'insumo', 'material', 'aprender', 'empezar'], key: 'ver kits' },
+  { claves: ['personaliz', 'medida', 'encargo', 'pedido especial', 'a pedido', 'quiero bordar', 'requerimiento'], key: 'pedido personalizado' },
+  { claves: ['envio', 'envío', 'despacho', 'entrega', 'pago', 'pagar', 'precio', 'cuanto', 'cuánto', 'retiro'], key: 'envíos y pagos' },
+  { claves: ['contacto', 'instagram', 'correo', 'mail', 'telefono', 'teléfono', 'whatsapp', 'escribir'], key: 'contacto' },
+  { claves: ['bordado', 'listo', 'tienda', 'comprar', 'producto', 'cuadro', 'bastidor', 'cojin', 'cojín', 'bebe', 'bebé'], key: 'ver bordados listos' }
+];
 
-    const texto = `¡Hola Alma Bordado! 🌸 Quiero reservar ${cant} cupo(s) para el taller "${t.titulo}" del ${fechaLarga(t.fecha)} (${t.modo}).\n\n`
-      + `Nombre: ${n.value.trim()}\nEmail: ${em.value.trim()}\nTeléfono: ${tel.value.trim()}\nTotal: ${precio(t.precio * cant)}`;
-
-    // El cupo solo se descuenta cuando la persona realmente avisa a la empresa
-    let reservado = false;
-    function confirmarReserva() {
-      if (reservado) return;
-      reservado = true;
-      const inscritos = inscritosTalleres();
-      inscritos[t.id] = (inscritos[t.id] || 0) + cant;
-      guardar('ab_talleres_inscritos', inscritos);
-      pintarTalleres();
-      toast('¡Cupo reservado! 🌼', 'ok');
+function chatBurbuja(texto, quien) {
+  const div = document.createElement('div');
+  div.className = 'chat-burbuja ' + (quien === 'yo' ? 'yo' : 'alma');
+  div.textContent = texto;
+  $('#chatCuerpo').appendChild(div);
+  $('#chatCuerpo').scrollTop = $('#chatCuerpo').scrollHeight;
+}
+function chatOpciones(opciones) {
+  $('#chatRapidas').innerHTML = (opciones || []).map(o => `<button class="chat-chip" type="button">${esc(o)}</button>`).join('');
+}
+function chatResponder(key) {
+  const r = CHAT_RESPUESTAS[key];
+  if (!r) return;
+  setTimeout(() => {
+    chatBurbuja(r.msg, 'alma');
+    chatOpciones(r.opciones);
+    if (r.accion && r.accion.tipo === 'scroll') {
+      const dest = document.querySelector(r.accion.destino);
+      if (dest) setTimeout(() => { cerrarChat(); dest.scrollIntoView({ behavior: prefiereMenosMovimiento ? 'auto' : 'smooth' }); }, 700);
     }
-    abrirGenerico(`
-      <div class="confirma">
-        <div class="check-grande" aria-hidden="true">✓</div>
-        <h2>Confirma tu reserva 🌼</h2>
-        <p class="sub">Para guardar tu cupo, avísale a Alma Bordado por WhatsApp o correo. Coordinaremos el pago contigo.</p>
-        <div class="modal-acciones">
-          <button class="btn btn-rosa" id="tWa">Confirmar por WhatsApp</button>
-          <button class="btn btn-sec" id="tMail">Confirmar por correo</button>
-        </div>
-        <div class="modal-acciones" style="margin-top:10px;">
-          <button class="btn btn-fantasma" id="tCopiar">📋 Copiar mensaje</button>
-          <button class="btn btn-fantasma" id="tCerrar">Cerrar</button>
-        </div>
-      </div>`);
-    $('#tWa').onclick = () => { confirmarReserva(); abrirWhatsApp(texto); };
-    $('#tMail').onclick = () => { confirmarReserva(); abrirCorreo('Reserva de taller — Alma Bordado', texto); };
-    $('#tCopiar').onclick = () => { confirmarReserva(); copiarTexto(texto); };
-    $('#tCerrar').onclick = () => cerrarModal('#modalGenerico');
-  });
+  }, 280);
+}
+function chatInterpretar(texto) {
+  const t = texto.toLowerCase();
+  const m = CHAT_PALABRAS.find(p => p.claves.some(c => t.includes(c)));
+  if (m) return chatResponder(m.key);
+  setTimeout(() => {
+    chatBurbuja('Puedo ayudarte con la tienda, los kits, pedidos a medida, envíos o contacto. ¿Cuál te interesa? 🌷', 'alma');
+    chatOpciones(CHAT_RESPUESTAS.inicio.opciones);
+  }, 280);
+}
+let chatIniciado = false;
+function abrirChat() {
+  $('#chatbot').classList.add('ver');
+  $('#chatbot').setAttribute('aria-hidden', 'false');
+  $('#chatFab').classList.add('oculto');
+  if (!chatIniciado) { chatIniciado = true; chatResponder('inicio'); }
+  setTimeout(() => $('#chatInput').focus(), 80);
+}
+function cerrarChat() {
+  $('#chatbot').classList.remove('ver');
+  $('#chatbot').setAttribute('aria-hidden', 'true');
+  $('#chatFab').classList.remove('oculto');
 }
 
 /* ----------------------------------------------------------------------
@@ -788,20 +765,19 @@ function init() {
   pintarFiltros();
   pintarTienda();
   pintarKits();
-  pintarPuntosDestacado();
-  pintarDestacado(0);
-  rotarDestacado();
-  pintarTalleres();
+  pintarPuntosBanner();
+  pintarBanner(0);
+  rotarBanner();
   pintarBadge();
   pintarCarrito();
 
-  // Banner: pausa al pasar el cursor o enfocar dentro; oculta el botón si no hay autoavance
-  const banner = $('.banner-dest');
-  if (prefiereMenosMovimiento || DESTACADOS.length <= 1) $('#destPausa').style.display = 'none';
-  banner.addEventListener('mouseenter', () => { destHover = true; clearTimeout(destTimer); });
-  banner.addEventListener('mouseleave', () => { destHover = false; rotarDestacado(); });
-  banner.addEventListener('focusin', () => { destHover = true; clearTimeout(destTimer); });
-  banner.addEventListener('focusout', () => { destHover = false; rotarDestacado(); });
+  // Banner: pausa al pasar el cursor o enfocar dentro; oculta el control si hay un solo banner
+  const banner = $('#bannerDest');
+  if (BANNERS.length <= 1) { $('#destPausa').style.display = 'none'; $('#bannerPrev').style.display = 'none'; $('#bannerNext').style.display = 'none'; }
+  banner.addEventListener('mouseenter', () => { bannerHover = true; clearTimeout(bannerTimer); });
+  banner.addEventListener('mouseleave', () => { bannerHover = false; rotarBanner(); });
+  banner.addEventListener('focusin', () => { bannerHover = true; clearTimeout(bannerTimer); });
+  banner.addEventListener('focusout', () => { bannerHover = false; rotarBanner(); });
 
   // No permitir fechas pasadas en el requerimiento personalizado
   $('#reqFecha').min = new Date().toISOString().slice(0, 10);
@@ -810,10 +786,9 @@ function init() {
   document.addEventListener('click', (e) => {
     const t = e.target;
 
-    // Agregar al carrito (productos, kits y destacado)
+    // Agregar al carrito (productos, kits y banner)
     const ag = t.closest('[data-agregar]');
     if (ag) { agregarAlCarrito(ag.dataset.agregar); return; }
-    if (t.closest('#destAgregar')) { agregarAlCarrito($('#destAgregar').dataset.id); return; }
 
     // Filtros tienda
     const chip = t.closest('#filtrosTienda .chip');
@@ -824,9 +799,12 @@ function init() {
       return;
     }
 
-    // Puntos del banner
+    // Banner: puntos, flechas, pausa
     const punto = t.closest('.dest-punto');
-    if (punto) { pintarDestacado(Number(punto.dataset.idx)); rotarDestacado(); return; }
+    if (punto) { pintarBanner(Number(punto.dataset.idx)); rotarBanner(); return; }
+    if (t.closest('#bannerPrev')) { pintarBanner(bannerIdx - 1); rotarBanner(); return; }
+    if (t.closest('#bannerNext')) { pintarBanner(bannerIdx + 1); rotarBanner(); return; }
+    if (t.closest('#destPausa')) { alternarPausaBanner(); return; }
 
     // Carrito: cantidades / quitar
     const cantBtn = t.closest('[data-cant]');
@@ -834,16 +812,13 @@ function init() {
     const quitar = t.closest('[data-quitar]');
     if (quitar) { quitarDelCarrito(quitar.dataset.quitar); return; }
 
-    // Talleres
-    const tallerBtn = t.closest('[data-taller]');
-    if (tallerBtn) { abrirTaller(tallerBtn.dataset.taller); return; }
-
     // Navegación del checkout
     const ir = t.closest('[data-ir]');
     if (ir) { irPaso(Number(ir.dataset.ir)); return; }
 
-    // Pausa/reanuda del banner de destacados
-    if (t.closest('#destPausa')) { alternarPausaDestacado(); return; }
+    // Chatbot: chips de respuesta rápida
+    const chip2 = t.closest('.chat-chip');
+    if (chip2) { chatBurbuja(chip2.textContent, 'yo'); chatResponder(chip2.textContent.toLowerCase()); chatOpciones([]); return; }
   });
 
   // Selección de envío / pago / región (funciona con teclado vía labels + radios)
@@ -891,6 +866,19 @@ function init() {
   // Requerimiento
   $('#formReq').addEventListener('submit', enviarRequerimiento);
 
+  // Chatbot guía
+  $('#chatFab').addEventListener('click', abrirChat);
+  $('#chatCerrar').addEventListener('click', cerrarChat);
+  $('#chatForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const val = $('#chatInput').value.trim();
+    if (!val) return;
+    chatBurbuja(val, 'yo');
+    $('#chatInput').value = '';
+    chatOpciones([]);
+    chatInterpretar(val);
+  });
+
   // Menú móvil
   const nav = $('#nav'), btnMenu = $('#btnMenu');
   btnMenu.addEventListener('click', () => {
@@ -907,6 +895,7 @@ function init() {
     else if ($('#modalGenerico').classList.contains('ver')) cerrarModal('#modalGenerico');
     else if ($('#modalCheckout').classList.contains('ver')) cerrarModal('#modalCheckout');
     else if ($('#carritoPanel').classList.contains('ver')) cerrarCarrito();
+    else if ($('#chatbot').classList.contains('ver')) cerrarChat();
   });
 
   // Trampa de foco dentro del diálogo activo (Tab / Shift+Tab)

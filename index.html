@@ -7,8 +7,9 @@
 <meta name="description" content="Alma Bordado: bordados listos para venta, pedidos personalizados, kits de bordado y talleres presenciales y virtuales. Hecho a mano, con cariño.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#fbfaf6">
-<link rel="icon" type="image/png" href="iconobordados192.png">
-<link rel="apple-touch-icon" href="iconobordados180.png">
+<link rel="icon" type="image/svg+xml" href="logo-alma.svg">
+<link rel="icon" type="image/png" href="iconalma192.png">
+<link rel="apple-touch-icon" href="iconalma180.png">
 <meta name="apple-mobile-web-app-title" content="Alma Bordado">
 
 <!-- Open Graph -->
@@ -108,18 +109,13 @@
     <use href="#euca" transform="translate(80,11) scale(-0.45,0.45)"/>
     <circle cx="80" cy="11" r="2.6" fill="#cbb088"/>
   </g>
-  <!-- logo: bastidor con flor (igual al ícono de la app) -->
+  <!-- logo de marca: sheaf de tres espigas de trigo en círculo crema (como el de Instagram) -->
   <g id="logoAro">
-    <circle cx="40" cy="42" r="33" fill="none" stroke="#cf8f8f" stroke-width="8"/>
-    <rect x="35.5" y="2" width="9" height="16" rx="2.5" fill="#b97777"/>
-    <g transform="translate(40,44) scale(1.02)">
-      <g fill="#8a9a7e">
-        <circle cx="0" cy="-13" r="9.5"/><circle cx="12.4" cy="-4" r="9.5"/>
-        <circle cx="7.6" cy="10.5" r="9.5"/><circle cx="-7.6" cy="10.5" r="9.5"/>
-        <circle cx="-12.4" cy="-4" r="9.5"/>
-      </g>
-      <path d="M0 -3 L5 1 L3 7 L-3 7 L-5 1 Z" fill="#e3c860"/>
-    </g>
+    <circle cx="40" cy="40" r="38" fill="#f7f1e6"/>
+    <circle cx="40" cy="40" r="37.2" fill="none" stroke="#e3d8c2" stroke-width="1.6"/>
+    <use href="#espiga" transform="translate(40,70) scale(0.45) rotate(-17)"/>
+    <use href="#espiga" transform="translate(40,71) scale(0.52)"/>
+    <use href="#espiga" transform="translate(40,70) scale(0.45) rotate(17)"/>
   </g>
 </defs></svg>
 
@@ -127,6 +123,8 @@
   <svg class="flor-deco flor-tr" viewBox="0 0 240 180"><use href="#ramoAlma"/></svg>
   <svg class="flor-deco flor-bl" viewBox="0 0 240 180"><use href="#ramoAlma"/></svg>
   <svg class="flor-deco flor-md" viewBox="0 0 240 180"><use href="#ramoAlma"/></svg>
+  <svg class="flor-deco flor-md2" viewBox="0 0 80 80"><use href="#margaritaRosa" transform="translate(40,40)"/></svg>
+  <svg class="flor-deco flor-bl2" viewBox="0 0 80 80"><use href="#margaritaSalvia" transform="translate(40,40)"/></svg>
 </div>
 
 <!-- ============ Barra superior ============ -->
@@ -139,14 +137,13 @@
       <svg class="logo" viewBox="0 0 80 80" aria-hidden="true"><use href="#logoAro"/></svg>
       <div>
         <h1>Alma Bordado</h1>
-        <p class="lema">Bordados hechos con amor</p>
+        <p class="lema">Bordar para sanar con amor</p>
       </div>
     </a>
     <nav class="nav" id="nav" aria-label="Navegación principal">
       <a href="#tienda">Tienda</a>
       <a href="#kits">Kits</a>
       <a href="#personalizado">Personalizado</a>
-      <a href="#talleres">Talleres</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <button class="icono-btn menu-toggle" id="btnMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">☰</button>
@@ -180,24 +177,18 @@
     </div>
   </section>
 
-  <!-- ============ Banner de destacados ============ -->
-  <section class="destacados contenedor" aria-label="Productos destacados">
-    <div class="banner-dest">
-      <div class="estrella" aria-hidden="true">✨</div>
-      <div class="dest-txt">
-        <div class="dest-kicker">Producto destacado</div>
-        <div class="dest-nombre" id="destNombre">—</div>
-        <div class="dest-desc" id="destDesc">—</div>
-        <div class="dest-precio" id="destPrecio"></div>
-      </div>
-      <div class="dest-acciones">
-        <button class="btn btn-rosa" id="destAgregar">Agregar al carrito</button>
-        <a class="btn btn-sec" id="destVer" href="#tienda">Ver más</a>
-      </div>
+  <!-- ============ Banner rotativo (destacados / ofertas / novedades) ============ -->
+  <section class="destacados contenedor" aria-label="Destacados y novedades">
+    <div class="banner-dest" id="bannerDest">
+      <span class="banner-flor banner-flor-1" aria-hidden="true"><svg viewBox="0 0 80 80"><use href="#margaritaRosa" transform="translate(40,40)"/></svg></span>
+      <span class="banner-flor banner-flor-2" aria-hidden="true"><svg viewBox="0 0 80 80"><use href="#margaritaSalvia" transform="translate(40,40)"/></svg></span>
+      <button class="banner-flecha prev" id="bannerPrev" aria-label="Banner anterior">‹</button>
+      <div class="banner-slide" id="bannerSlide"></div>
+      <button class="banner-flecha next" id="bannerNext" aria-label="Banner siguiente">›</button>
     </div>
     <div class="dest-controles">
-      <button class="dest-pausa" id="destPausa" aria-pressed="false" aria-label="Pausar el cambio automático de destacados">⏸</button>
-      <div class="dest-puntos" id="destPuntos" role="group" aria-label="Elegir destacado"></div>
+      <button class="dest-pausa" id="destPausa" aria-pressed="false" aria-label="Pausar el cambio automático del banner">⏸</button>
+      <div class="dest-puntos" id="destPuntos" role="group" aria-label="Elegir banner"></div>
     </div>
   </section>
 
@@ -266,6 +257,7 @@
     </div>
 
     <form class="tarjeta-grande" id="formReq" novalidate>
+      <svg class="flor-tarjeta" viewBox="0 0 80 80" aria-hidden="true"><use href="#margaritaRosa" transform="translate(40,40)"/></svg>
       <div class="aviso-info">
         <span class="ico">🌷</span>
         <span>Cuéntanos tu idea sin compromiso. Te respondemos con una propuesta a medida; recién con tu visto bueno comenzamos a bordar.</span>
@@ -309,32 +301,14 @@
         <div class="msg-error">Cuéntanos un poco más de lo que imaginas.</div>
       </div>
 
-      <div class="fila">
-        <div class="campo">
-          <label for="reqPresupuesto">Presupuesto aproximado</label>
-          <input type="text" id="reqPresupuesto" name="presupuesto" placeholder="Opcional, ej: $20.000 – $40.000">
-        </div>
-        <div class="campo">
-          <label for="reqArchivo">Imagen de referencia</label>
-          <input type="file" id="reqArchivo" name="archivo" accept="image/*">
-          <div class="ayuda">Opcional. Una foto o boceto nos ayuda muchísimo. Recuerda adjuntarla al abrir WhatsApp o el correo (no se envía sola).</div>
-        </div>
+      <div class="campo full">
+        <label for="reqArchivo">Imagen de referencia</label>
+        <input type="file" id="reqArchivo" name="archivo" accept="image/*">
+        <div class="ayuda">Opcional. Una foto o boceto nos ayuda muchísimo.</div>
       </div>
 
       <button type="submit" class="btn btn-primario btn-bloque btn-grande" style="margin-top:8px;">💌 Enviar requerimiento</button>
-      <p class="ayuda" style="text-align:center; margin-top:10px;">Al enviar, abriremos tu app de correo o WhatsApp con el resumen listo para que llegue a Alma Bordado.</p>
     </form>
-  </section>
-
-  <!-- ============ Talleres ============ -->
-  <section class="bloque contenedor" id="talleres">
-    <div class="seccion-cab">
-      <span class="eyebrow">Talleres de bordado</span>
-      <h2>Aprende y comparte bordando</h2>
-      <p>Cada cierto tiempo organizamos talleres presenciales y virtuales para aprender, desarrollar habilidades y pasar un momento lindo entre bordadoras. Reserva tu cupo.</p>
-      <svg class="divisor" viewBox="0 0 160 22"><use href="#divisorBot"/></svg>
-    </div>
-    <div class="talleres" id="listaTalleres"></div>
   </section>
 
   <!-- ============ Contacto ============ -->
@@ -379,7 +353,6 @@
       <a href="#tienda">Tienda</a>
       <a href="#kits">Kits</a>
       <a href="#personalizado">Personalizado</a>
-      <a href="#talleres">Talleres</a>
       <a href="#contacto">Contacto</a>
     </nav>
   </div>
@@ -522,6 +495,30 @@
     <div id="genContenido"></div>
   </div>
 </div>
+
+<!-- ============ Chatbot guía ============ -->
+<button class="chat-fab" id="chatFab" aria-label="Abrir el asistente de Alma Bordado">
+  <span class="chat-fab-ico" aria-hidden="true">🌸</span>
+  <span class="chat-fab-txt">¿Te ayudo?</span>
+</button>
+<section class="chatbot" id="chatbot" aria-label="Asistente de Alma Bordado" aria-hidden="true">
+  <header class="chat-cab">
+    <div class="chat-cab-info">
+      <svg class="chat-logo" viewBox="0 0 80 80" aria-hidden="true"><use href="#logoAro"/></svg>
+      <div class="chat-cab-txt">
+        <strong>Alma</strong>
+        <span>Te guío en la página 🌷</span>
+      </div>
+    </div>
+    <button class="chat-cerrar" id="chatCerrar" aria-label="Cerrar el chat">✕</button>
+  </header>
+  <div class="chat-cuerpo" id="chatCuerpo" aria-live="polite"></div>
+  <div class="chat-rapidas" id="chatRapidas"></div>
+  <form class="chat-entrada" id="chatForm">
+    <input type="text" id="chatInput" placeholder="Escríbeme tu duda…" autocomplete="off" aria-label="Escribe tu mensaje para Alma">
+    <button type="submit" class="chat-enviar" aria-label="Enviar mensaje">➤</button>
+  </form>
+</section>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
