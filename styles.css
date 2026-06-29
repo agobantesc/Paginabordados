@@ -474,6 +474,13 @@ section { scroll-margin-top: 124px; }
 .afiche-bar-cta .precio { font-size: 1.35rem; font-weight: 700; color: var(--titulo); }
 .afiche-bar-cta .nota { font-size: .78rem; color: var(--tinta-suave); max-width: 26ch; }
 @media (max-width: 600px) {
+  /* En celular el afiche completo encoge demasiado el bordado y su texto se vuelve
+     ilegible: enfocamos el bordado (que está a la derecha/centro de cada afiche)
+     con un recorte cómodo, para que se vea grande y claro como un producto. */
+  .afiche-card .afiche-img-wrap { aspect-ratio: 1 / 1; }
+  .afiche-card .afiche-img { object-position: 74% center; }
+  .afiche-card.taller-afiche .afiche-img-wrap { aspect-ratio: 4 / 3; }
+  .afiche-card.taller-afiche .afiche-img { object-position: 50% center; }
   .afiche-bar { flex-direction: column; align-items: stretch; }
   .afiche-bar-cta { justify-content: space-between; }
   .afiche-card.taller-afiche .afiche-bar-cta { flex-direction: column; align-items: stretch; gap: 8px; }
@@ -683,8 +690,12 @@ section { scroll-margin-top: 124px; }
 /* ---------------------------------------------------------------------
    Chatbot guía
    --------------------------------------------------------------------- */
+/* Columna de botones flotantes (WhatsApp + asistente), abajo a la izquierda */
+.fab-col {
+  position: fixed; left: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 50;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+}
 .chat-fab {
-  position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 50;
   display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px 12px 14px;
   border: none; border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 700; font-size: .95rem;
   background: linear-gradient(135deg, var(--rosa), var(--rosa-osc));
@@ -692,14 +703,9 @@ section { scroll-margin-top: 124px; }
 }
 .chat-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(176,122,146,.46); }
 .chat-fab .chat-fab-ico { font-size: 1.25rem; }
-.chat-fab.oculto { opacity: 0; pointer-events: none; transform: scale(.8); }
-@media (max-width: 480px) { .chat-fab .chat-fab-txt { display: none; } .chat-fab { padding: 14px; } }
+.chat-fab.oculto { display: none; }
 
-/* ---------------------------------------------------------------------
-   Botón flotante de WhatsApp (abajo a la izquierda, lejos del chat)
-   --------------------------------------------------------------------- */
 .wa-fab {
-  position: fixed; left: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 50;
   display: inline-flex; align-items: center; gap: 9px; padding: 12px 18px 12px 15px;
   border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 700; font-size: .95rem;
   text-decoration: none; background: linear-gradient(135deg, #2bd566, #1aa85a);
@@ -708,14 +714,17 @@ section { scroll-margin-top: 124px; }
 .wa-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(20,140,75,.48); }
 .wa-fab:focus-visible { outline: 3px solid var(--marron-osc); outline-offset: 3px; }
 .wa-fab-ico { width: 24px; height: 24px; flex-shrink: 0; }
-@media (max-width: 480px) { .wa-fab .wa-fab-txt { display: none; } .wa-fab { padding: 14px; } }
+@media (max-width: 480px) {
+  .chat-fab .chat-fab-txt, .wa-fab .wa-fab-txt { display: none; }
+  .chat-fab, .wa-fab { padding: 14px; }
+}
 
 .chatbot {
-  position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 58;
+  position: fixed; left: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 58;
   width: min(360px, calc(100vw - 36px)); max-height: min(70vh, 560px);
   display: flex; flex-direction: column; background: var(--papel); border: 1px solid var(--borde);
   border-radius: var(--radio-lg); box-shadow: 0 18px 50px rgba(74,66,57,.28); overflow: hidden;
-  opacity: 0; visibility: hidden; transform: translateY(16px) scale(.98); transform-origin: bottom right;
+  opacity: 0; visibility: hidden; transform: translateY(16px) scale(.98); transform-origin: bottom left;
   transition: opacity .22s, transform .22s, visibility .22s;
 }
 .chatbot.ver { opacity: 1; visibility: visible; transform: none; }
