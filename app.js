@@ -37,14 +37,18 @@ const REGIONES = [
 // Bordados listos para venta
 // (cada producto admite "img": 'fotos/archivo.jpg' para mostrar una foto real en vez del emoji)
 const PRODUCTOS = [
-  { id:'p_cumplemes', nombre:'«Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', cat:'Bebé',
+  { id:'p_cumplemes', nombre:'«Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', cat:'Bebé', img:'fotos/cumple-mes.jpg',
     desc:'Set de 12 bordados listos para registrar mes a mes el primer año del bebé, del 1 al 12. Hechos a mano: el regalo perfecto para un nacimiento.', destacado:true, insignia:'Destacado' },
   { id:'r1', nombre:'Bastidor «Maggie»', precio:14990, emoji:'💛', tono:'trigo', cat:'Cuadros', img:'fotos/maggie.jpg',
     desc:'Bordado a mano de Maggie en bastidor de 10 cm. Un guiño tierno y divertido para tu pared.' },
   { id:'r2', nombre:'Bastidor «Pantera Rosa»', precio:19990, emoji:'🐾', tono:'rosa', cat:'Cuadros', img:'fotos/pantera-rosa.jpg',
     desc:'La Pantera Rosa bordada a mano con mucho detalle, en bastidor rosado. Pieza única.' },
-  { id:'r3', nombre:'Cuadro «Nombre en flores»', precio:34990, emoji:'🌷', tono:'salvia', cat:'Cuadros', img:'fotos/nombre-flores.jpg',
-    desc:'Cuadro enmarcado con el nombre que tú quieras, rodeado de flores silvestres. Personalizable: nos dices el nombre al comprar.', insignia:'Personalizable' },
+  { id:'r4', nombre:'Bastidor «Calavera mexicana»', precio:29990, emoji:'💀', tono:'trigo', cat:'Cuadros', img:'fotos/calavera.jpg',
+    desc:'Calavera estilo Día de Muertos, llena de color y flores, bordada sobre tela negra. Una pieza vibrante y única.' },
+  { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.jpg',
+    desc:'Mandala de flores y hojas bordada a mano con mucho detalle. Delicada y llena de vida.' },
+  { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.jpg',
+    desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' },
   { id:'b1', nombre:'Bastidor «Jardín de primavera»', precio:24990, emoji:'🌷', tono:'rosa', cat:'Cuadros',
     desc:'Cuadro circular de 20 cm con flores silvestres bordadas a mano, listo para colgar.', destacado:true, insignia:'' },
   { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros', img:'fotos/ballenas.jpg',
