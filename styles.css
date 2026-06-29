@@ -291,6 +291,13 @@ section { scroll-margin-top: 88px; }
 .banner-flor-1 { top: -16px; right: 34%; transform: rotate(14deg); }
 .banner-flor-2 { bottom: -20px; left: 28%; transform: rotate(-18deg); }
 
+/* Banner con afiche propio (imagen completa) */
+.banner-link { display: block; line-height: 0; }
+.banner-img { width: 100%; height: auto; display: block; }
+.banner-dest.con-afiche { background: none; min-height: 0; }
+.banner-dest.con-afiche .banner-slide { padding: 0; display: block; }
+.banner-dest.con-afiche .banner-flor { display: none; }
+
 .dest-controles { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 14px; }
 .dest-puntos { display: flex; gap: 6px; justify-content: center; }
 .dest-pausa {

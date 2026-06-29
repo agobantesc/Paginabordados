@@ -70,15 +70,17 @@ const porId = (id) => CATALOGO.find(p => p.id === id);
 //  - "tipo" define el color y la etiqueta (kicker).
 //  - Pueden destacar un producto (productId) u ofrecer info (titulo/desc/cta/href).
 //  - "precioAntes" muestra el precio tachado para ofertas.
+// Banner = 3 afiches propios que rotan. Cada uno muestra una imagen completa
+// (fotos/bannerN.png) y enlaza a una sección. Mientras no se suba el afiche, se
+// muestra el texto de respaldo (kicker/titulo/desc/cta).
 const BANNERS = [
-  { tipo:'destacado', kicker:'Bordado destacado', icono:'🌼', productId:'p_cumplemes' },
-  { tipo:'nuevo', kicker:'Recién llegado', icono:'✨', productId:'r4' },     // Calavera
-  { tipo:'kit', kicker:'Kit destacado', icono:'🎁', productId:'k_flores' },  // Kit Flores Silvestres
-  { tipo:'oferta', kicker:'Favorito', icono:'💗', productId:'r5' },          // Mandala floral
-  { tipo:'envio', kicker:'Envío gratis', icono:'🚚', titulo:'Envío gratis sobre $50.000',
-    desc:'En tus compras con despacho a domicilio. ¡Date un gusto! 🌸', cta:'Ver la tienda', href:'#tienda' }
+  { tipo:'destacado', afiche:'fotos/banner1.png', href:'#tienda', icono:'🌼', alt:'Bordados destacados',
+    kicker:'Bordado destacado', titulo:'Bordados hechos a mano', desc:'Descubre nuestras piezas únicas.', cta:'Ver la tienda' },
+  { tipo:'oferta', afiche:'fotos/banner2.png', href:'#tienda', icono:'🏷️', alt:'Ofertas de Alma Bordado',
+    kicker:'Ofertas', titulo:'Ofertas de Alma Bordado', desc:'Aprovecha nuestros precios especiales.', cta:'Ver la tienda' },
+  { tipo:'kit', afiche:'fotos/banner3.png', href:'#kits', icono:'🎁', alt:'Kits y novedades',
+    kicker:'Novedades', titulo:'Kits y novedades', desc:'Todo listo para bordar en casa.', cta:'Ver los kits' }
 ];
-// Para una OFERTA real con precio tachado: { tipo:'oferta', kicker:'Oferta', icono:'🏷️', productId:'<id>', precioAntes:<precio anterior> }
 
 /* ----------------------------------------------------------------------
    3) HELPERS
@@ -274,12 +276,8 @@ function pintarKits() {
 let bannerIdx = 0, bannerTimer, bannerPausaManual = false, bannerHover = false;
 const prefiereMenosMovimiento = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-function pintarBanner(i) {
-  if (!BANNERS.length) return;
-  bannerIdx = (i + BANNERS.length) % BANNERS.length;
-  const b = BANNERS[bannerIdx];
-  $('#bannerDest').className = 'banner-dest tipo-' + b.tipo;
-
+// Layout de TEXTO de un banner (también es el respaldo si su afiche aún no se sube)
+function slideTextoHTML(b) {
   let titulo, desc, precioHtml = '', acciones;
   if (b.productId) {
     const p = porId(b.productId);
@@ -294,17 +292,35 @@ function pintarBanner(i) {
     titulo = b.titulo; desc = b.desc;
     acciones = `<a class="btn btn-rosa" href="${b.href || '#tienda'}">${esc(b.cta || 'Ver más')}</a>`;
   }
-
-  const slide = $('#bannerSlide');
-  slide.innerHTML = `
+  return `
     <div class="estrella" aria-hidden="true">${b.icono || '✨'}</div>
     <div class="dest-txt">
-      <div class="dest-kicker">${esc(b.kicker)}</div>
-      <div class="dest-nombre">${esc(titulo)}</div>
-      <div class="dest-desc">${esc(desc)}</div>
+      <div class="dest-kicker">${esc(b.kicker || '')}</div>
+      <div class="dest-nombre">${esc(titulo || '')}</div>
+      <div class="dest-desc">${esc(desc || '')}</div>
       ${precioHtml}
     </div>
     <div class="dest-acciones">${acciones}</div>`;
+}
+// Respaldo: si el afiche aún no está subido, muestra el texto del banner
+function bannerFallback(img, idx) {
+  $('#bannerDest').classList.remove('con-afiche');
+  $('#bannerSlide').innerHTML = slideTextoHTML(BANNERS[idx]);
+}
+
+function pintarBanner(i) {
+  if (!BANNERS.length) return;
+  bannerIdx = (i + BANNERS.length) % BANNERS.length;
+  const b = BANNERS[bannerIdx];
+  $('#bannerDest').className = 'banner-dest tipo-' + b.tipo + (b.afiche ? ' con-afiche' : '');
+
+  const slide = $('#bannerSlide');
+  if (b.afiche) {
+    slide.innerHTML = `<a class="banner-link" href="${b.href || '#tienda'}">`
+      + `<img class="banner-img" src="${esc(b.afiche)}" alt="${esc(b.alt || b.titulo || 'Banner de Alma Bordado')}" onerror="bannerFallback(this, ${bannerIdx})"></a>`;
+  } else {
+    slide.innerHTML = slideTextoHTML(b);
+  }
 
   if (!prefiereMenosMovimiento) {        // efecto de entrada (se omite con "reducir movimiento")
     slide.classList.remove('entra');
