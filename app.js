@@ -35,30 +35,30 @@ const REGIONES = [
    2) CATÁLOGO
    ---------------------------------------------------------------------- */
 // Bordados listos para venta
-// (cada producto admite "img": 'fotos/archivo.jpg' para mostrar una foto real en vez del emoji)
+// (cada producto admite "img": 'fotos/archivo.png' para mostrar una foto real en vez del emoji)
 const PRODUCTOS = [
-  { id:'p_cumplemes', nombre:'«Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', cat:'Bebé', img:'fotos/cumple-mes.jpg',
+  { id:'p_cumplemes', nombre:'«Cumple mes bebé» (1 a 12)', precio:32990, emoji:'🍼', tono:'azul', cat:'Bebé', img:'fotos/cumple-mes.png',
     desc:'Set de 12 bordados listos para registrar mes a mes el primer año del bebé, del 1 al 12. Hechos a mano: el regalo perfecto para un nacimiento.', destacado:true, insignia:'Destacado' },
-  { id:'r1', nombre:'Bastidor «Maggie»', precio:14990, emoji:'💛', tono:'trigo', cat:'Cuadros', img:'fotos/maggie.jpg',
+  { id:'r1', nombre:'Bastidor «Maggie»', precio:14990, emoji:'💛', tono:'trigo', cat:'Cuadros', img:'fotos/maggie.png',
     desc:'Bordado a mano de Maggie en bastidor de 10 cm. Un guiño tierno y divertido para tu pared.' },
-  { id:'r2', nombre:'Bastidor «Pantera Rosa»', precio:19990, emoji:'🐾', tono:'rosa', cat:'Cuadros', img:'fotos/pantera-rosa.jpg',
+  { id:'r2', nombre:'Bastidor «Pantera Rosa»', precio:19990, emoji:'🐾', tono:'rosa', cat:'Cuadros', img:'fotos/pantera-rosa.png',
     desc:'La Pantera Rosa bordada a mano con mucho detalle, en bastidor rosado. Pieza única.' },
-  { id:'r4', nombre:'Bastidor «Calavera mexicana»', precio:29990, emoji:'💀', tono:'trigo', cat:'Cuadros', img:'fotos/calavera.jpg',
+  { id:'r4', nombre:'Bastidor «Calavera mexicana»', precio:29990, emoji:'💀', tono:'trigo', cat:'Cuadros', img:'fotos/calavera.png',
     desc:'Calavera estilo Día de Muertos, llena de color y flores, bordada sobre tela negra. Una pieza vibrante y única.' },
-  { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.jpg',
+  { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.png',
     desc:'Mandala de flores y hojas bordada a mano con mucho detalle. Delicada y llena de vida.' },
-  { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.jpg',
+  { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.png',
     desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' },
-  { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros', img:'fotos/ballenas.jpg',
+  { id:'b2', nombre:'Bastidor «Mar y ballenas»', precio:22990, emoji:'🐋', tono:'azul', cat:'Cuadros', img:'fotos/ballenas.png',
     desc:'Trío de ballenas bordadas a mano en azules suaves. Una escena marina llena de calma.' }
 ];
 
 // Kits de bordado (incluyen insumos + manual)
 const KITS = [
-  { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:30000, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.jpg',
+  { id:'k_flores', nombre:'Kit «Flores Silvestres»', precio:30000, emoji:'🌷', tono:'salvia', kit:true, img:'fotos/kit-flores.png',
     desc:'Todo lo que necesitas para bordar un ramo de flores silvestres, paso a paso. Ideal para empezar.',
     incluye:['Diseño','6 hilos','Agujas','Bastidor','Tela','Guía paso a paso'], insignia:'Principiantes' },
-  { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:35000, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.jpg',
+  { id:'k_calavera', nombre:'Kit «Calavera Floral»', precio:35000, emoji:'💀', tono:'trigo', kit:true, img:'fotos/kit-calavera.png',
     desc:'Borda una calavera floral llena de color sobre tela negra. Para principiantes y avanzados.',
     incluye:['Diseño','10 hilos','6 agujas','Bastidor 15 cm','Tela negra','Guía de puntos'], insignia:'Todo nivel' }
 ];
