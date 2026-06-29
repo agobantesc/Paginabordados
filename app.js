@@ -102,7 +102,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '12';
+const ASSET_V = '13';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
@@ -266,7 +266,7 @@ function tarjetaProducto(p) {
   const foto = p.img
     ? `<img class="foto-img" src="${esc(ver(p.img))}" alt="${esc(p.nombre)}" loading="lazy" data-emoji="${p.emoji}" onerror="fotoFallback(this)">`
     : `<span class="foto-emoji" aria-hidden="true">${p.emoji}</span>`;
-  return `<article class="producto tono-${p.tono}${p.img ? ' con-foto' : ''}">
+  return `<article class="producto tono-${p.tono}${p.img ? ' con-foto' : ''}${p.kit ? ' es-kit' : ''}">
       <div class="foto">${foto}<span class="etiqueta">${esc(p.cat || (p.kit ? 'Kit' : ''))}</span>${insignia}</div>
       <div class="cuerpo">
         <h3>${esc(p.nombre)}</h3>
