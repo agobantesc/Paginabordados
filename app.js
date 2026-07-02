@@ -82,12 +82,12 @@ const porId = (id) => CATALOGO.find(p => p.id === id);
 // (fotos/bannerN.webp) y enlaza a una sección. Mientras no se suba el afiche,
 // se muestra el texto de respaldo (kicker/titulo/desc/cta).
 const BANNERS = [
-  { tipo:'destacado', afiche:'fotos/banner1.webp', href:'#tienda', icono:'🌼', alt:'Bordados destacados',
-    kicker:'Bordado destacado', titulo:'Bordados hechos a mano', desc:'Descubre nuestras piezas únicas.', cta:'Ver la tienda' },
-  { tipo:'oferta', afiche:'fotos/banner2.webp', href:'#tienda', icono:'🏷️', alt:'Ofertas de Alma Bordado',
-    kicker:'Ofertas', titulo:'Ofertas de Alma Bordado', desc:'Aprovecha nuestros precios especiales.', cta:'Ver la tienda' },
-  { tipo:'kit', afiche:'fotos/banner3.webp', href:'#kits', icono:'🎁', alt:'Kits y novedades',
-    kicker:'Novedades', titulo:'Kits y novedades', desc:'Todo listo para bordar en casa.', cta:'Ver los kits' }
+  { tipo:'destacado', afiche:'fotos/banner1.webp', href:'#personalizado', icono:'💌', alt:'Bordados personalizados a pedido',
+    kicker:'Bordado personalizado', titulo:'Hecho a mano, para ti', desc:'Cuadros bordados personalizados, a pedido.', cta:'Pedir el mío' },
+  { tipo:'oferta', afiche:'fotos/banner2.webp', href:'#personalizado', icono:'🎀', alt:'Bolsitas bordadas personalizadas',
+    kicker:'Bolsitas bordadas', titulo:'Pequeños detalles, grandes sonrisas', desc:'Personalizadas con el nombre que elijas.', cta:'Pedir a medida' },
+  { tipo:'kit', afiche:'fotos/banner3.webp', href:'#personalizado', icono:'🎁', alt:'Kit cumple mes para bebé, a pedido',
+    kicker:'Cumple mes', titulo:'Kit cumple mes del bebé', desc:'12 bordados, uno para cada mes de su primer año.', cta:'Encargar el mío' }
 ];
 
 /* ----------------------------------------------------------------------
@@ -102,7 +102,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '13';
+const ASSET_V = '14';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
@@ -253,7 +253,7 @@ function tarjetaAfiche(p) {
         </div>
         <div class="afiche-bar-cta">
           <span class="precio">${precio(p.precio)}</span>
-          <button class="btn btn-primario" data-agregar="${p.id}">Agregar 🛒</button>
+          <button class="btn btn-primario" data-agregar="${p.id}">Agregar al carrito</button>
         </div>
       </div>
     </article>`;
@@ -274,7 +274,7 @@ function tarjetaProducto(p) {
         ${incluye}
         <div class="pie-prod">
           <span class="precio">${precio(p.precio)}</span>
-          <button class="btn btn-primario btn-mini" data-agregar="${p.id}">Agregar 🛒</button>
+          <button class="btn btn-primario btn-mini" data-agregar="${p.id}">Agregar</button>
         </div>
       </div>
     </article>`;
@@ -370,7 +370,7 @@ function slideTextoHTML(b) {
     precioHtml = (b.precioAntes && b.precioAntes > p.precio)
       ? `<div class="dest-precio"><span class="antes">${precio(b.precioAntes)}</span> ${precio(p.precio)}</div>`
       : `<div class="dest-precio">${precio(p.precio)}</div>`;
-    acciones = `<button class="btn btn-rosa" data-agregar="${p.id}">Agregar al carrito 🛒</button>
+    acciones = `<button class="btn btn-rosa" data-agregar="${p.id}">Agregar al carrito</button>
                 <a class="btn btn-sec" href="${p.kit ? '#kits' : '#tienda'}">Ver más</a>`;
   } else {
     titulo = b.titulo; desc = b.desc;
@@ -959,6 +959,12 @@ function aplicarContacto() {
   const wa = $('#waFab');
   if (wa) wa.href = 'https://wa.me/' + CONFIG.telWhatsapp
     + '?text=' + encodeURIComponent('¡Hola Alma Bordado! 🌸 Me gustaría hacerles una consulta.');
+  // Contacto del pie de página
+  const pieIg = $('#pieIg'), pieMail = $('#pieMail'), pieTel = $('#pieTel'), pieLugar = $('#pieLugar');
+  if (pieIg) { pieIg.href = CONFIG.instagramUrl; pieIg.textContent = 'Instagram · @' + CONFIG.instagram; }
+  if (pieMail) { pieMail.href = 'mailto:' + CONFIG.email; pieMail.textContent = CONFIG.email; }
+  if (pieTel) { pieTel.href = 'https://wa.me/' + CONFIG.telWhatsapp; pieTel.textContent = 'WhatsApp · ' + CONFIG.telDisplay; }
+  if (pieLugar) pieLugar.textContent = CONFIG.tallerLugar;
   if (CONFIG.email === 'contacto@almabordado.cl' || CONFIG.telWhatsapp === '56912345678') {
     console.info('%cAlma Bordado:%c recuerda reemplazar los datos de contacto de ejemplo (Instagram, correo y teléfono) en el objeto CONFIG de app.js.',
       'font-weight:bold;color:#9a567a', 'color:inherit');
@@ -1136,18 +1142,42 @@ function init() {
     }
   });
 
-  // Resaltar enlace activo según la sección visible
+  // Resaltar enlace activo según la sección visible (el hero limpia la selección)
   const enlaces = $$('.nav a');
   const secciones = enlaces.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const heroSec = document.querySelector('#inicio');
   if ('IntersectionObserver' in window && secciones.length) {
     const obs = new IntersectionObserver((entradas) => {
       entradas.forEach(en => {
-        if (en.isIntersecting) {
-          enlaces.forEach(a => a.classList.toggle('activo', a.getAttribute('href') === '#' + en.target.id));
-        }
+        if (!en.isIntersecting) return;
+        if (en.target === heroSec) { enlaces.forEach(a => a.classList.remove('activo')); return; }
+        enlaces.forEach(a => a.classList.toggle('activo', a.getAttribute('href') === '#' + en.target.id));
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
     secciones.forEach(s => obs.observe(s));
+    if (heroSec) obs.observe(heroSec);
+  }
+
+  // Aparición suave de los bloques al hacer scroll (se omite con "reducir movimiento";
+  // las clases se agregan por JS, así que sin JS todo queda visible)
+  if (!prefiereMenosMovimiento && 'IntersectionObserver' in window) {
+    const revelables = $$('.seccion-cab, .pilares .tarjeta, .grilla > *, .pasos-mini, .tarjeta-grande, .contacto-grid .contacto-card');
+    const obsReveal = new IntersectionObserver((entradas) => {
+      entradas.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        el.classList.add('visible');
+        obsReveal.unobserve(el);
+        // Terminada la entrada, se retira la clase para devolverle al elemento
+        // sus transiciones de hover normales (y se limpia el delay escalonado)
+        setTimeout(() => { el.classList.remove('reveal', 'visible'); el.style.transitionDelay = ''; }, 850);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+    revelables.forEach((el, i) => {
+      el.classList.add('reveal');
+      el.style.transitionDelay = ((i % 3) * 70) + 'ms';   // leve escalonado dentro de cada fila
+      obsReveal.observe(el);
+    });
   }
 }
 
