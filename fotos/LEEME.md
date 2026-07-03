@@ -11,7 +11,7 @@ Tienda con 3 bordados por ahora (mandala, girasoles y hongos):
 | `mandala.png`             | Bordado «Mandala floral»                |
 | `girasoles.png`           | Bordado «Girasoles»                     |
 | `hongos.png`              | Bordado «Hongos de colores»             |
-| `taller-nuevas-mamas.png` | Afiche del taller «Nuevas Mamás»        |
+| `taller-nuevas-mamas.png` | Afiche del taller «Nuevas Mamás» (taller EN PAUSA; el .webp queda guardado para reactivarlo) |
 | `kit-flores.png`          | Kit «Flores Silvestres»                 |
 | `kit-calavera.png`        | Kit «Calavera Floral»                   |
 | `banner1.png`             | Afiche del banner 1 (rota en el carrusel) |

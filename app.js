@@ -65,14 +65,14 @@ const KITS = [
     incluye:['Diseño','10 hilos','Agujas','Bastidor','Tela','Manual'], insignia:'Todo nivel' }
 ];
 
-// Talleres de bordado: cada uno tiene una TEMÁTICA. Se pueden hacer en grupo o
-// personales; el cupo se coordina por WhatsApp/correo (no se cobra en la web).
-// Para mostrar el afiche real, sube la imagen con el nombre indicado en "img".
+// Talleres de bordado — EN PAUSA por ahora. Para reactivarlos: descomenta el
+// taller de abajo y restaura la sección #talleres del index.html (y su enlace
+// en el menú). Todo el flujo de reserva sigue funcionando.
 const TALLERES = [
-  { id:'t_mamas', tema:'Nuevas Mamás', nombre:'Taller «Nuevas Mamás»', emoji:'🤍', tono:'rosa',
-    img:'fotos/taller-nuevas-mamas.webp', modalidad:'Personal o en grupo',
-    desc:'Borda algo único para tu bebé recién nacido. Un espacio cálido para crear, a tu ritmo, un recuerdo hecho a mano que durará para siempre.',
-    incluye:['Materiales incluidos','Técnicas básicas','Proyecto personalizado','Un momento para ti'] }
+  // { id:'t_mamas', tema:'Nuevas Mamás', nombre:'Taller «Nuevas Mamás»', emoji:'🤍', tono:'rosa',
+  //   img:'fotos/taller-nuevas-mamas.webp', modalidad:'Personal o en grupo',
+  //   desc:'Borda algo único para tu bebé recién nacido. Un espacio cálido para crear, a tu ritmo, un recuerdo hecho a mano que durará para siempre.',
+  //   incluye:['Materiales incluidos','Técnicas básicas','Proyecto personalizado','Un momento para ti'] }
 ];
 
 const CATALOGO = [...PRODUCTOS, ...KITS];
@@ -102,7 +102,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '14';
+const ASSET_V = '15';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
@@ -351,6 +351,7 @@ function tarjetaTaller(t) {
 }
 function pintarTalleres() {
   const grilla = $('#grillaTalleres');
+  if (!grilla) return;                       // sección en pausa (sin HTML)
   if (!TALLERES.length) { grilla.innerHTML = ''; return; }
   grilla.classList.toggle('es-afiches', TALLERES.every(t => t.img));
   grilla.innerHTML = TALLERES.map(tarjetaTaller).join('');
@@ -742,7 +743,7 @@ function enviarRequerimiento(e) {
     <div class="confirma">
       <div class="check-grande" aria-hidden="true">✓</div>
       <h2>¡Tu requerimiento fue enviado! 🌸</h2>
-      <p class="sub">Gracias, ${esc(nombrePila)}. Lo revisaremos con mucho cariño y te enviaremos la propuesta y el precio a la brevedad. 💛</p>
+      <p class="sub">Gracias, ${esc(nombrePila)}. Lo revisaremos con mucho cariño y te enviaremos la propuesta y el precio a la brevedad. Cuando la aceptes y realices el pago, ¡comenzamos a bordar! 💛</p>
       <p class="confirma-extra">¿Quieres adelantárnoslo? También puedes escribirnos directo:</p>
       <div class="modal-acciones">
         <button class="btn btn-sec" id="reqWa">Por WhatsApp</button>
@@ -860,23 +861,23 @@ function enviarReservaTaller(t) {
 const CHAT_RESPUESTAS = {
   inicio: {
     msg: '¡Hola! 🌸 Soy Alma, te ayudo a encontrar lo que buscas. ¿Qué te gustaría hacer?',
-    opciones: ['Ver bordados listos', 'Ver kits', 'Talleres', 'Pedido personalizado', 'Envíos y pagos', 'Contacto']
+    opciones: ['Ver kits', 'Ver bordados listos', 'Pedido personalizado', 'Envíos y pagos', 'Contacto']
   },
   'ver bordados listos': {
     msg: 'Tenemos bordados hechos a mano listos para enviar 🪡 Te llevo a la tienda. Puedes filtrarlos por categoría y agregarlos al carrito.',
-    accion: { tipo: 'scroll', destino: '#tienda' }, opciones: ['Ver kits', 'Talleres', 'Contacto']
+    accion: { tipo: 'scroll', destino: '#tienda' }, opciones: ['Ver kits', 'Envíos y pagos', 'Contacto']
   },
   'ver kits': {
-    msg: 'Los kits traen el diseño + todos los insumos (hilos, aguja, bastidor) y un manual detallado 🎁 Ideales para empezar o regalar. ¡Te llevo!',
-    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Ver bordados listos', 'Talleres', 'Contacto']
+    msg: 'Nuestros kits son el favorito de la casa 🎁 Traen el diseño + todos los insumos (hilos, aguja, bastidor) y un manual detallado. Ideales para empezar o regalar. ¡Te llevo!',
+    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Ver bordados listos', 'Pedido personalizado', 'Contacto']
   },
   talleres: {
-    msg: 'Hacemos talleres de bordado con una temática especial 🌷 personales o en grupo, sin necesidad de experiencia. Te llevo para que veas el detalle y reserves tu cupo.',
-    accion: { tipo: 'scroll', destino: '#talleres' }, opciones: ['Ver bordados listos', 'Ver kits', 'Contacto']
+    msg: 'Por ahora no tenemos talleres con fecha abierta 🌷 Pero escríbenos por WhatsApp o Instagram y te avisamos apenas abramos uno nuevo. Te llevo a contacto.',
+    accion: { tipo: 'scroll', destino: '#contacto' }, opciones: ['Ver kits', 'Ver bordados listos']
   },
   'pedido personalizado': {
-    msg: 'Bordamos lo que tú imagines 💌 Cuéntanos tu idea en el formulario y te enviamos una propuesta con precio antes de empezar. Nada se borda sin tu confirmación.',
-    accion: { tipo: 'scroll', destino: '#personalizado' }, opciones: ['Ver bordados listos', 'Envíos y pagos', 'Contacto']
+    msg: 'Bordamos lo que tú imagines 💌 Cuéntanos tu idea en el formulario y te enviamos una propuesta con precio y plazo. Una vez que la aceptas y realizas el pago, comenzamos a bordar tu pedido.',
+    accion: { tipo: 'scroll', destino: '#personalizado' }, opciones: ['Ver kits', 'Envíos y pagos', 'Contacto']
   },
   'envíos y pagos': {
     msg: 'Puedes retirar en el taller (gratis) o pedir despacho a domicilio. 🚚 ¡El envío es gratis en compras sobre $50.000! El pago se simula en la web y coordinamos contigo al confirmar.',
@@ -965,6 +966,9 @@ function aplicarContacto() {
   if (pieMail) { pieMail.href = 'mailto:' + CONFIG.email; pieMail.textContent = CONFIG.email; }
   if (pieTel) { pieTel.href = 'https://wa.me/' + CONFIG.telWhatsapp; pieTel.textContent = 'WhatsApp · ' + CONFIG.telDisplay; }
   if (pieLugar) pieLugar.textContent = CONFIG.tallerLugar;
+  // Franja "síguenos en Instagram"
+  const ig = $('#igStrip');
+  if (ig) { ig.href = CONFIG.instagramUrl; ig.textContent = 'Seguir a @' + CONFIG.instagram; }
   if (CONFIG.email === 'contacto@almabordado.cl' || CONFIG.telWhatsapp === '56912345678') {
     console.info('%cAlma Bordado:%c recuerda reemplazar los datos de contacto de ejemplo (Instagram, correo y teléfono) en el objeto CONFIG de app.js.',
       'font-weight:bold;color:#9a567a', 'color:inherit');
@@ -1157,6 +1161,14 @@ function init() {
     secciones.forEach(s => obs.observe(s));
     if (heroSec) obs.observe(heroSec);
   }
+
+  // Header compacto al hacer scroll (solo escritorio; en móvil ya es pequeño)
+  const appbar = document.querySelector('header.appbar');
+  let appbarCompacta = false;
+  window.addEventListener('scroll', () => {
+    const c = window.scrollY > 70;
+    if (c !== appbarCompacta) { appbarCompacta = c; appbar.classList.toggle('compacta', c); }
+  }, { passive: true });
 
   // Aparición suave de los bloques al hacer scroll (se omite con "reducir movimiento";
   // las clases se agregan por JS, así que sin JS todo queda visible)

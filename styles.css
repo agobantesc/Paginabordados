@@ -146,10 +146,16 @@ img { max-width: 100%; display: block; }
   width: 96px; height: 96px; flex-shrink: 0; object-fit: contain; border-radius: 50%;
   background: #fffdf8; border: 2.5px solid #cbb088;
   box-shadow: 0 4px 14px rgba(111,97,81,.22); filter: saturate(1.12) contrast(1.05);
-  transition: transform .25s ease;
+  transition: transform .25s ease, width .3s ease, height .3s ease;
 }
 .marca:hover .logo { transform: rotate(-4deg) scale(1.02); }
-.marca h1 { font-size: 2.25rem; font-weight: 700; color: var(--titulo); line-height: 1; letter-spacing: .3px; }
+.marca h1 { font-size: 2.25rem; font-weight: 700; color: var(--titulo); line-height: 1; letter-spacing: .3px; transition: font-size .3s ease; }
+/* Al scrollear, el header se compacta (gana espacio de lectura sin perder la marca) */
+@media (min-width: 861px) {
+  .appbar.compacta .logo { width: 62px; height: 62px; }
+  .appbar.compacta .marca h1 { font-size: 1.7rem; }
+  .appbar.compacta .marca .lema { display: none; }
+}
 .marca .lema { font-size: .9rem; color: var(--tinta-suave); margin-top: 4px; letter-spacing: .3px; }
 @media (max-width: 860px) { .logo { width: 76px; height: 76px; } .marca h1 { font-size: 1.9rem; } html { scroll-padding-top: 106px; } section { scroll-margin-top: 106px; } }
 @media (max-width: 520px) { .marca .lema { display: none; } .marca h1 { font-size: 1.65rem; } .logo { width: 62px; height: 62px; border-width: 2px; } html { scroll-padding-top: 92px; } section { scroll-margin-top: 92px; } }
@@ -433,6 +439,14 @@ section { scroll-margin-top: 124px; }
 .pilar-1 .pilar-ico { background: var(--rosa-claro); border-color: #ecd2dc; color: var(--rosa-texto); }
 .pilar-2 .pilar-ico { background: #eef0e6; border-color: #d8e0cd; color: var(--salvia-texto); }
 .pilar-3 .pilar-ico { background: #eef2f5; border-color: #d2dee6; color: var(--azul-texto); }
+/* Badge del pilar destacado (los kits, el favorito) */
+.pilar-badge {
+  position: absolute; top: 14px; right: 16px;
+  font-size: .72rem; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+  color: var(--rosa-texto); background: var(--rosa-claro); border: 1px solid #ecd2dc;
+  padding: 4px 11px; border-radius: 999px;
+}
+.tarjeta.estrella-pilar { border-color: #e3cfa8; box-shadow: 0 8px 24px rgba(184,154,106,.16); }
 .tarjeta h3 { font-size: 1.55rem; color: var(--titulo); font-weight: 700; margin-bottom: 8px; }
 .tarjeta p { color: var(--tinta-suave); font-size: .95rem; margin-bottom: 18px; line-height: 1.6; }
 .tarjeta .pilar-link {
@@ -457,8 +471,8 @@ section { scroll-margin-top: 124px; }
 .grilla { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 @media (max-width: 880px) { .grilla { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .grilla { grid-template-columns: 1fr; } }
-/* Kits: pocas tarjetas → columnas de ancho fijo centradas (sin hueco a la derecha) */
-#grillaKits { grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 356px)); justify-content: center; }
+/* Kits (producto estrella): tarjetas centradas y un poco más generosas */
+#grillaKits { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 390px)); justify-content: center; gap: 24px; }
 
 .producto {
   position: relative; display: flex; flex-direction: column; background: var(--superficie);
@@ -656,6 +670,31 @@ section { scroll-margin-top: 124px; }
   color: #7a5d28; padding: 14px 16px; border-radius: var(--radio-sm); font-size: .92rem; line-height: 1.5; margin: 4px 0 20px;
 }
 .aviso-info .ico { font-size: 1.2rem; flex-shrink: 0; }
+
+/* ---------------------------------------------------------------------
+   Franja "síguenos en Instagram"
+   --------------------------------------------------------------------- */
+.ig-strip {
+  margin-top: clamp(30px, 4vw, 48px);
+  background: linear-gradient(135deg, #f7ede2, #f3e2e8 55%, #eef0e6);
+  border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde);
+}
+.ig-inner {
+  display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;
+  padding-top: 26px; padding-bottom: 26px; text-align: left;
+}
+.ig-ico {
+  flex-shrink: 0; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center;
+  background: linear-gradient(135deg, #f3e2e8, #ecd3da); color: var(--rosa-texto);
+  border: 1px solid #ecd2dc; box-shadow: var(--sombra-sutil);
+}
+.ig-ico svg { width: 28px; height: 28px; }
+.ig-txt strong { display: block; font-family: var(--serif); font-size: 1.45rem; color: var(--titulo); line-height: 1.15; }
+.ig-txt p { font-size: .92rem; color: var(--tinta-suave); margin-top: 2px; }
+@media (max-width: 620px) {
+  .ig-inner { flex-direction: column; text-align: center; gap: 12px; }
+  .ig-inner .btn { width: 100%; max-width: 340px; }
+}
 
 /* ---------------------------------------------------------------------
    Contacto
