@@ -34,15 +34,16 @@ const REGIONES = [
 /* ----------------------------------------------------------------------
    2) CATÁLOGO
    ---------------------------------------------------------------------- */
-// Bordados listos para venta
-// (cada producto admite "img": 'fotos/archivo.png' para mostrar una foto real en vez del emoji)
+// Bordados listos para venta — EN PAUSA por ahora (el foco son los kits y los
+// bordados a pedido). Para reactivarlos: descomenta los productos y restaura la
+// sección #tienda del index.html (y su enlace en el menú). Los .webp siguen en fotos/.
 const PRODUCTOS = [
-  { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.webp', afiche:true,
-    desc:'Mandala de flores y hojas bordada a mano con mucho detalle. Delicada y llena de vida.' },
-  { id:'r3', nombre:'Bastidor «Girasoles y lavanda»', precio:24990, emoji:'🌻', tono:'trigo', cat:'Cuadros', img:'fotos/girasoles.webp', afiche:true,
-    desc:'Campo de girasoles y lavanda bordado a mano en tonos cálidos. Un rincón de sol para alegrar cualquier pared.' },
-  { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.webp', afiche:true,
-    desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' }
+  // { id:'r5', nombre:'Bastidor «Mandala floral»', precio:32990, emoji:'🌸', tono:'rosa', cat:'Cuadros', img:'fotos/mandala.webp', afiche:true,
+  //   desc:'Mandala de flores y hojas bordada a mano con mucho detalle. Delicada y llena de vida.' },
+  // { id:'r3', nombre:'Bastidor «Girasoles y lavanda»', precio:24990, emoji:'🌻', tono:'trigo', cat:'Cuadros', img:'fotos/girasoles.webp', afiche:true,
+  //   desc:'Campo de girasoles y lavanda bordado a mano en tonos cálidos. Un rincón de sol para alegrar cualquier pared.' },
+  // { id:'r6', nombre:'Bastidor «Hongos de colores»', precio:26990, emoji:'🍄', tono:'salvia', cat:'Cuadros', img:'fotos/hongos.webp', afiche:true,
+  //   desc:'Hongos de colores entre hojas y estrellas, bordados sobre tela negra. Mágico y alegre.' }
 ];
 
 // Bordados en pausa "por ahora". Para reactivar uno, muévelo al arreglo PRODUCTOS de arriba.
@@ -102,7 +103,7 @@ const precio = (n) => fmt.format(n);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // Versión de assets: fuerza recarga de imágenes al actualizarlas (evita caché). Súbela al cambiar fotos.
-const ASSET_V = '15';
+const ASSET_V = '16';
 const ver = (u) => u ? u + (u.indexOf('?') >= 0 ? '&' : '?') + 'v=' + ASSET_V : u;
 
 function leer(clave, def) {
@@ -281,16 +282,19 @@ function tarjetaProducto(p) {
 }
 
 function pintarTienda(cat = 'Todos') {
-  const items = cat === 'Todos' ? PRODUCTOS : PRODUCTOS.filter(p => p.cat === cat);
   const grilla = $('#grillaTienda');
+  if (!grilla) return;                       // tienda en pausa (sin HTML)
+  const items = cat === 'Todos' ? PRODUCTOS : PRODUCTOS.filter(p => p.cat === cat);
   grilla.classList.toggle('es-afiches', items.length > 0 && items.every(p => p.afiche));
   grilla.innerHTML = items.map(tarjetaProducto).join('');
 }
 function pintarFiltros() {
+  const cont = $('#filtrosTienda');
+  if (!cont) return;                         // tienda en pausa (sin HTML)
   const cats = ['Todos', ...Array.from(new Set(PRODUCTOS.map(p => p.cat)))];
   // Si solo hay una categoría, el filtro no aporta: lo ocultamos
-  if (cats.length <= 2) { $('#filtrosTienda').innerHTML = ''; return; }
-  $('#filtrosTienda').innerHTML = cats.map((c, i) =>
+  if (cats.length <= 2) { cont.innerHTML = ''; return; }
+  cont.innerHTML = cats.map((c, i) =>
     `<button class="chip${i === 0 ? ' activo' : ''}" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
 }
 function pintarKits() {
@@ -861,38 +865,40 @@ function enviarReservaTaller(t) {
 const CHAT_RESPUESTAS = {
   inicio: {
     msg: '¡Hola! 🌸 Soy Alma, te ayudo a encontrar lo que buscas. ¿Qué te gustaría hacer?',
-    opciones: ['Ver kits', 'Ver bordados listos', 'Pedido personalizado', 'Envíos y pagos', 'Contacto']
+    opciones: ['Ver kits', 'Bordado a pedido', 'Envíos y pagos', 'Contacto']
   },
   'ver bordados listos': {
-    msg: 'Tenemos bordados hechos a mano listos para enviar 🪡 Te llevo a la tienda. Puedes filtrarlos por categoría y agregarlos al carrito.',
-    accion: { tipo: 'scroll', destino: '#tienda' }, opciones: ['Ver kits', 'Envíos y pagos', 'Contacto']
+    msg: 'Por ahora pausamos la tienda de bordados listos 🌷 Lo nuestro hoy son los kits para bordar en casa y los bordados a pedido hechos a tu medida. ¡Te llevo a los kits!',
+    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Bordado a pedido', 'Envíos y pagos', 'Contacto']
   },
   'ver kits': {
-    msg: 'Nuestros kits son el favorito de la casa 🎁 Traen el diseño + todos los insumos (hilos, aguja, bastidor) y un manual detallado. Ideales para empezar o regalar. ¡Te llevo!',
-    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Ver bordados listos', 'Pedido personalizado', 'Contacto']
+    msg: 'Nuestros kits son el favorito de la casa 🎁 Traen el diseño + todos los insumos (hilos, aguja, bastidor, tela) y un manual detallado paso a paso. Ideales para empezar o regalar. ¡Te llevo!',
+    accion: { tipo: 'scroll', destino: '#kits' }, opciones: ['Bordado a pedido', 'Envíos y pagos', 'Contacto']
   },
   talleres: {
     msg: 'Por ahora no tenemos talleres con fecha abierta 🌷 Pero escríbenos por WhatsApp o Instagram y te avisamos apenas abramos uno nuevo. Te llevo a contacto.',
-    accion: { tipo: 'scroll', destino: '#contacto' }, opciones: ['Ver kits', 'Ver bordados listos']
+    accion: { tipo: 'scroll', destino: '#contacto' }, opciones: ['Ver kits', 'Bordado a pedido']
   },
-  'pedido personalizado': {
+  'bordado a pedido': {
     msg: 'Bordamos lo que tú imagines 💌 Cuéntanos tu idea en el formulario y te enviamos una propuesta con precio y plazo. Una vez que la aceptas y realizas el pago, comenzamos a bordar tu pedido.',
     accion: { tipo: 'scroll', destino: '#personalizado' }, opciones: ['Ver kits', 'Envíos y pagos', 'Contacto']
   },
   'envíos y pagos': {
-    msg: 'Puedes retirar en el taller (gratis) o pedir despacho a domicilio. 🚚 ¡El envío es gratis en compras sobre $50.000! El pago se simula en la web y coordinamos contigo al confirmar.',
-    opciones: ['Ver bordados listos', 'Pedido personalizado', 'Contacto']
+    msg: 'Puedes retirar en el taller (gratis) o pedir despacho a domicilio. 🚚 ¡El envío es gratis en compras sobre $50.000! Al confirmar tu pedido te contactamos para coordinar el pago contigo.',
+    opciones: ['Ver kits', 'Bordado a pedido', 'Contacto']
   },
   contacto: {
     msg: 'Escríbenos cuando quieras 💛 Estamos en Instagram (@' + CONFIG.instagram + '), por correo y por WhatsApp. Te llevo a la sección de contacto.',
-    accion: { tipo: 'scroll', destino: '#contacto' }, opciones: ['Ver bordados listos', 'Ver kits']
+    accion: { tipo: 'scroll', destino: '#contacto' }, opciones: ['Ver kits', 'Bordado a pedido']
   }
 };
+// Alias: el nombre anterior sigue funcionando (palabras clave y chips antiguos)
+CHAT_RESPUESTAS['pedido personalizado'] = CHAT_RESPUESTAS['bordado a pedido'];
 const CHAT_PALABRAS = [
   { claves: ['hola', 'buenas', 'saludos', 'hey'], key: 'inicio' },
   { claves: ['kit', 'kits', 'insumo', 'material'], key: 'ver kits' },
   { claves: ['taller', 'talleres', 'clase', 'clases', 'curso', 'aprender', 'empezar', 'grupo', 'tematica', 'temática'], key: 'talleres' },
-  { claves: ['personaliz', 'medida', 'encargo', 'pedido especial', 'a pedido', 'quiero bordar', 'requerimiento'], key: 'pedido personalizado' },
+  { claves: ['personaliz', 'medida', 'encargo', 'pedido especial', 'a pedido', 'quiero bordar', 'requerimiento'], key: 'bordado a pedido' },
   { claves: ['envio', 'envío', 'despacho', 'entrega', 'pago', 'pagar', 'precio', 'cuanto', 'cuánto', 'retiro'], key: 'envíos y pagos' },
   { claves: ['contacto', 'instagram', 'correo', 'mail', 'telefono', 'teléfono', 'whatsapp', 'escribir'], key: 'contacto' },
   { claves: ['bordado', 'listo', 'tienda', 'comprar', 'producto', 'cuadro', 'bastidor', 'cojin', 'cojín', 'bebe', 'bebé'], key: 'ver bordados listos' }
@@ -925,7 +931,7 @@ function chatInterpretar(texto) {
   const m = CHAT_PALABRAS.find(p => p.claves.some(c => t.includes(c)));
   if (m) return chatResponder(m.key);
   setTimeout(() => {
-    chatBurbuja('Puedo ayudarte con la tienda, los kits, pedidos a medida, envíos o contacto. ¿Cuál te interesa? 🌷', 'alma');
+    chatBurbuja('Puedo ayudarte con los kits, los bordados a pedido, envíos y pagos o contacto. ¿Cuál te interesa? 🌷', 'alma');
     chatOpciones(CHAT_RESPUESTAS.inicio.opciones);
   }, 280);
 }
@@ -1173,7 +1179,7 @@ function init() {
   // Aparición suave de los bloques al hacer scroll (se omite con "reducir movimiento";
   // las clases se agregan por JS, así que sin JS todo queda visible)
   if (!prefiereMenosMovimiento && 'IntersectionObserver' in window) {
-    const revelables = $$('.seccion-cab, .pilares .tarjeta, .grilla > *, .pasos-mini, .tarjeta-grande, .contacto-grid .contacto-card');
+    const revelables = $$('.seccion-cab, .pilares .tarjeta, .grilla > *, .pasos-mini, .tarjeta-grande, .contacto-grid .contacto-card, .conf-item, .faq-item');
     const obsReveal = new IntersectionObserver((entradas) => {
       entradas.forEach(en => {
         if (!en.isIntersecting) return;

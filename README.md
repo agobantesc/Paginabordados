@@ -9,11 +9,14 @@ de Bordados: paleta pastel, motivos botánicos y tipografía Cormorant Garamond.
 - **Hero** cálido con el logo de marca (espigas de trigo) y el ramo "Alma".
 - **Banner rotativo** con varios tipos (Bordado destacado, Oferta, Kit destacado,
   Recién llegado, Envío gratis), con flechas, puntos y pausa.
-- **Tres pilares**: kits de bordado (el producto estrella), bordados listos y
-  pedidos personalizados.
-- **Kits de bordado** (producto principal, primera sección de productos) con el
-  detalle de lo que incluye cada uno.
-- **Tienda** de bordados listos con filtros por categoría (admite fotos reales).
+- **Dos pilares**: kits de bordado (el producto estrella) y bordados a pedido.
+- **Kits de bordado** (producto principal) con el detalle de lo que incluye cada
+  uno y la fila "cada kit incluye" bajo el título.
+- **Franja de confianza** (hecho a mano en Santiago, envíos, atención cercana,
+  sin sorpresas) y **preguntas frecuentes** con `<details>` nativo.
+- **Tienda de bordados listos**: EN PAUSA. Para reactivarla, descomenta los
+  productos del arreglo `PRODUCTOS` en `app.js` y restaura la sección `#tienda`
+  del `index.html` (y su enlace en el menú).
 - **Talleres de bordado**: EN PAUSA. El flujo de reserva sigue en el código;
   para reactivarlos, descomenta el arreglo `TALLERES` en `app.js` y restaura la
   sección `#talleres` del `index.html` (y su enlace en el menú).
